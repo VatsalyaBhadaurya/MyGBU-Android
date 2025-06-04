@@ -57,24 +57,36 @@ class LeaveRequestsActivity : AppCompatActivity() {
         rvApprovedRequests.layoutManager = LinearLayoutManager(this)
         
         // Sample data for pending requests
-        val pendingRequests = listOf(
-            LeaveRequest("Vatsalya", "Medical", "pending", R.drawable.ic_profile),
-            LeaveRequest("Yaduraj", "Family Emergency", "pending", R.drawable.ic_profile)
+        val pendingRequests = mutableListOf(
+            LeaveRequest("Vatsalya", "Medical Emergency", "pending", R.drawable.ic_profile, "Dec 21-23, 2024"),
+            LeaveRequest("Yaduraj", "Family Function", "pending", R.drawable.ic_profile, "Dec 25-27, 2024"),
+            LeaveRequest("Mayank", "Personal Work", "pending", R.drawable.ic_profile, "Dec 28-30, 2024")
         )
         
         // Sample data for approved requests
         val approvedRequests = listOf(
-            LeaveRequest("Raj", "Vacation", "approved", R.drawable.ic_profile),
-            LeaveRequest("Simran", "Personal", "approved", R.drawable.ic_profile)
+            LeaveRequest("Yuvraj", "Vacation", "approved", R.drawable.ic_profile, "Dec 15-17, 2024"),
+            LeaveRequest("Anshul", "Medical", "approved", R.drawable.ic_profile, "Dec 18-19, 2024"),
+            LeaveRequest("Sunahi", "Personal", "approved", R.drawable.ic_profile, "Dec 20, 2024")
         )
         
-        rvPendingRequests.adapter = LeaveRequestAdapter(pendingRequests) { request ->
-            Toast.makeText(this, "View ${request.studentName} request", Toast.LENGTH_SHORT).show()
-        }
+        rvPendingRequests.adapter = LeaveRequestAdapter(pendingRequests, 
+            onItemClick = { request ->
+                Toast.makeText(this, "View ${request.studentName} request details", Toast.LENGTH_SHORT).show()
+            },
+            onApprovalChange = { request, isApproved ->
+                if (isApproved) {
+                    Toast.makeText(this, "${request.studentName}'s leave request approved", Toast.LENGTH_SHORT).show()
+                    // Here you would typically move the request to approved list
+                }
+            }
+        )
         
-        rvApprovedRequests.adapter = LeaveRequestAdapter(approvedRequests) { request ->
-            Toast.makeText(this, "View ${request.studentName} request", Toast.LENGTH_SHORT).show()
-        }
+        rvApprovedRequests.adapter = LeaveRequestAdapter(approvedRequests,
+            onItemClick = { request ->
+                Toast.makeText(this, "View ${request.studentName} request details", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
     
     private fun setupBottomNavigation() {
@@ -113,5 +125,6 @@ data class LeaveRequest(
     val studentName: String,
     val reason: String,
     val status: String,
-    val avatarRes: Int
+    val avatarRes: Int,
+    val dates: String? = null
 ) 

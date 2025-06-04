@@ -48,6 +48,9 @@
         <activity
             android:name=".MessagesActivity"
             android:exported="false" />
+        <activity
+            android:name=".ScheduleActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

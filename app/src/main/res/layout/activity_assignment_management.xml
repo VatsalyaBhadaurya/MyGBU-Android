@@ -53,86 +53,148 @@
         </LinearLayout>
 
         <!-- Upload Assignment Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create New Assignment"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="20dp" />
+
+                <!-- Assignment Title -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:boxStrokeColor="@color/primary"
+                    app:hintTextColor="@color/primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_assignment_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Assignment Title" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Assignment Description -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:boxStrokeColor="@color/primary"
+                    app:hintTextColor="@color/primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_assignment_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:gravity="top|start"
+                        android:hint="Assignment Description"
+                        android:inputType="textMultiLine"
+                        android:lines="5" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Due Date -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:boxStrokeColor="@color/primary"
+                    app:hintTextColor="@color/primary"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_calendar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_due_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Due Date"
+                        android:focusable="false"
+                        android:clickable="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- File Attachment Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <!-- Attach File Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_attach_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📎 Attach File"
+                        android:textColor="@color/primary"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        app:strokeColor="@color/primary" />
+
+                    <!-- Attached File Display -->
+                    <TextView
+                        android:id="@+id/tv_attached_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"
+                        android:textSize="14sp"
+                        android:textColor="@color/success_green"
+                        android:background="@drawable/rounded_background"
+                        android:padding="8dp" />
+
+                </LinearLayout>
+
+                <!-- Save Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_assignment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Save Assignment"
+                    android:backgroundTint="@color/primary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Saved Assignments Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upload Assignment"
-                android:textSize="24sp"
+                android:text="Your Assignments"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
-                android:layout_marginBottom="20dp" />
+                android:layout_marginBottom="16dp" />
 
-            <!-- Assignment Title -->
-            <com.google.android.material.textfield.TextInputLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_saved_assignments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:boxStrokeColor="@color/primary"
-                app:hintTextColor="@color/primary">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_assignment_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Assignment Title" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Assignment Description -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:boxStrokeColor="@color/primary"
-                app:hintTextColor="@color/primary">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_assignment_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:gravity="top|start"
-                    android:hint="Assignment Description"
-                    android:inputType="textMultiLine"
-                    android:lines="5" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Due Date -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:boxStrokeColor="@color/primary"
-                app:hintTextColor="@color/primary"
-                app:endIconMode="custom"
-                app:endIconDrawable="@drawable/ic_calendar">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_due_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Due Date"
-                    android:focusable="false"
-                    android:clickable="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Attach File Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_attach_file"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="📎 Attach File"
-                android:textColor="@color/text_primary"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                app:strokeColor="@color/primary"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="16dp" />
 
         </LinearLayout>
 
@@ -141,12 +203,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Review Submissions"
+                android:text="Quick Actions"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -193,7 +256,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Submitted: 10/12"
+                            android:text="Review pending submissions"
                             android:textSize="14sp"
                             android:textColor="@color/text_secondary" />
 
@@ -209,30 +272,11 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
-
-        <!-- Feedback & Grades Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Feedback &amp; Grades"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="16dp" />
-
             <!-- Graded Assignments Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_graded_assignments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
                 android:foreground="?android:attr/selectableItemBackground">
@@ -248,7 +292,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_grades"
-                        app:tint="@color/card_grades"
+                        app:tint="@color/success_green"
                         android:layout_marginEnd="16dp" />
 
                     <LinearLayout
@@ -268,7 +312,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Graded: 8/12"
+                            android:text="View completed grading"
                             android:textSize="14sp"
                             android:textColor="@color/text_secondary" />
 
@@ -283,23 +327,6 @@
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-        <!-- Save Assignment Button -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save_assignment"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Save Assignment"
-                android:textSize="16sp"
-                android:backgroundTint="@color/primary"
-                android:textColor="@color/white" />
 
         </LinearLayout>
 

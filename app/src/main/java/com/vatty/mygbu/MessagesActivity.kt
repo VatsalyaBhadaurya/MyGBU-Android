@@ -1,5 +1,6 @@
 package com.vatty.mygbu
 
+import android.app.Dialog
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
@@ -10,6 +11,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import com.vatty.mygbu.viewmodel.MessagesViewModel
 
 class MessagesActivity : AppCompatActivity() {
@@ -72,12 +75,44 @@ class MessagesActivity : AppCompatActivity() {
     
     private fun setupClickListeners() {
         findViewById<MaterialCardView>(R.id.card_compose_message).setOnClickListener {
-            viewModel.onComposeMessageClicked()
+            showComposeMessageDialog()
+        }
+    }
+    
+    private fun showComposeMessageDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_compose_message)
+        dialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.9).toInt(),
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        
+        val etRecipient = dialog.findViewById<TextInputEditText>(R.id.et_recipient)
+        val etSubject = dialog.findViewById<TextInputEditText>(R.id.et_subject)
+        val etMessage = dialog.findViewById<TextInputEditText>(R.id.et_message)
+        val btnSend = dialog.findViewById<MaterialButton>(R.id.btn_send)
+        val btnCancel = dialog.findViewById<MaterialButton>(R.id.btn_cancel)
+        
+        btnSend.setOnClickListener {
+            val recipient = etRecipient.text.toString().trim()
+            val subject = etSubject.text.toString().trim()
+            val message = etMessage.text.toString().trim()
+            
+            if (recipient.isEmpty() || subject.isEmpty() || message.isEmpty()) {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
+            // Here you would implement the actual message sending logic
+            Toast.makeText(this, "Message sent to $recipient", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
         
-        findViewById<MaterialCardView>(R.id.card_broadcast_announcement).setOnClickListener {
-            viewModel.onBroadcastAnnouncementClicked()
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
         }
+        
+        dialog.show()
     }
 }
 

@@ -122,7 +122,7 @@ class FacultyDashboardActivity : AppCompatActivity() {
         
         // Additional Features (Compact Cards)
         findViewById<MaterialCardView>(R.id.card_schedule).setOnClickListener {
-            startActivity(Intent(this, CoursesActivity::class.java))
+            startActivity(Intent(this, ScheduleActivity::class.java))
         }
         
         findViewById<MaterialCardView>(R.id.card_reports).setOnClickListener {
