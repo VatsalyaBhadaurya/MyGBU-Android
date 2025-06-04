@@ -58,14 +58,14 @@ class LeaveRequestsActivity : AppCompatActivity() {
         
         // Sample data for pending requests
         val pendingRequests = listOf(
-            LeaveRequest("Alex Turner", "Medical", "pending", R.drawable.ic_profile),
-            LeaveRequest("Olivia Bennett", "Family Emergency", "pending", R.drawable.ic_profile)
+            LeaveRequest("Vatsalya", "Medical", "pending", R.drawable.ic_profile),
+            LeaveRequest("Yaduraj", "Family Emergency", "pending", R.drawable.ic_profile)
         )
         
         // Sample data for approved requests
         val approvedRequests = listOf(
-            LeaveRequest("Ethan Carter", "Vacation", "approved", R.drawable.ic_profile),
-            LeaveRequest("Sophia Clark", "Personal", "approved", R.drawable.ic_profile)
+            LeaveRequest("Raj", "Vacation", "approved", R.drawable.ic_profile),
+            LeaveRequest("Simran", "Personal", "approved", R.drawable.ic_profile)
         )
         
         rvPendingRequests.adapter = LeaveRequestAdapter(pendingRequests) { request ->

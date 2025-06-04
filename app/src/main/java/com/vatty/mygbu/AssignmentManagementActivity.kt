@@ -3,12 +3,12 @@ package com.vatty.mygbu
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.card.MaterialCardView
@@ -23,6 +23,7 @@ class AssignmentManagementActivity : AppCompatActivity() {
     private lateinit var btnSaveAssignment: MaterialButton
     private lateinit var cardStudentSubmissions: MaterialCardView
     private lateinit var cardGradedAssignments: MaterialCardView
+    private lateinit var ivBack: ImageView
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,19 +36,14 @@ class AssignmentManagementActivity : AppCompatActivity() {
             insets
         }
         
-        setupToolbar()
         initializeViews()
+        setupBackButton()
         setupClickListeners()
     }
     
-    private fun setupToolbar() {
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = "Assignment Management"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        
-        toolbar.setNavigationOnClickListener {
-            onBackPressed()
+    private fun setupBackButton() {
+        ivBack.setOnClickListener {
+            finish()
         }
     }
     
@@ -59,6 +55,7 @@ class AssignmentManagementActivity : AppCompatActivity() {
         btnSaveAssignment = findViewById(R.id.btn_save_assignment)
         cardStudentSubmissions = findViewById(R.id.card_student_submissions)
         cardGradedAssignments = findViewById(R.id.card_graded_assignments)
+        ivBack = findViewById(R.id.iv_back)
     }
     
     private fun setupClickListeners() {

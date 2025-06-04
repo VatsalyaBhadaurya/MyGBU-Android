@@ -2,6 +2,7 @@ package com.vatty.mygbu
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +10,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CoursesActivity : AppCompatActivity() {
@@ -17,6 +17,7 @@ class CoursesActivity : AppCompatActivity() {
     private lateinit var rvAssignedCourses: RecyclerView
     private lateinit var rvTimetable: RecyclerView
     private lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var ivBack: ImageView
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,20 +30,15 @@ class CoursesActivity : AppCompatActivity() {
             insets
         }
         
-        setupToolbar()
         initializeViews()
+        setupBackButton()
         setupRecyclerViews()
         setupBottomNavigation()
     }
     
-    private fun setupToolbar() {
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.title = "Courses"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        
-        toolbar.setNavigationOnClickListener {
-            onBackPressed()
+    private fun setupBackButton() {
+        ivBack.setOnClickListener {
+            finish()
         }
     }
     
@@ -50,6 +46,7 @@ class CoursesActivity : AppCompatActivity() {
         rvAssignedCourses = findViewById(R.id.rv_assigned_courses)
         rvTimetable = findViewById(R.id.rv_timetable)
         bottomNavigation = findViewById(R.id.bottom_navigation)
+        ivBack = findViewById(R.id.iv_back)
     }
     
     private fun setupRecyclerViews() {

@@ -19,6 +19,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- GBU Logo -->
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/download"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="24dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,13 +34,22 @@
             android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="@color/primary"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome to Gautam Buddha University"
-            android:textSize="16sp"
+            android:text="Gautam Buddha University"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="School of Information &amp; Communication Technology"
+            android:textSize="14sp"
             android:textColor="@color/text_secondary"
             android:textAlignment="center"
             android:layout_marginBottom="32dp" />
