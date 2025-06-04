@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Primary Colors -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="primary_light">#BBDEFB</color>
+    
+    <!-- Background Colors -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="background_dark">#303030</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    
+    <!-- Dashboard Card Colors -->
+    <color name="card_courses">#4CAF50</color>
+    <color name="card_attendance">#FF9800</color>
+    <color name="card_students">#2196F3</color>
+    <color name="card_grades">#9C27B0</color>
+    <color name="card_schedule">#00BCD4</color>
+    <color name="card_announcements">#FF5722</color>
+    <color name="card_reports">#795548</color>
+    <color name="card_profile">#607D8B</color>
 </resources>

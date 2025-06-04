@@ -21,6 +21,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".FacultyDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssignmentManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CoursesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentPerformanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LeaveRequestsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FacultyHubActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
