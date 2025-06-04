@@ -70,6 +70,7 @@
             android:paddingBottom="24dp">
 
             <TextView
+                android:id="@+id/tv_greeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Good Morning,"
@@ -132,6 +133,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_todays_classes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -169,6 +171,7 @@
                     android:padding="16dp">
 
                     <TextView
+                        android:id="@+id/tv_pending_tasks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7"
@@ -206,6 +209,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/tv_total_students"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="124"

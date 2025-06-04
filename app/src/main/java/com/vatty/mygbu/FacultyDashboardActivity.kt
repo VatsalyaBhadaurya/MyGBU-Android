@@ -6,16 +6,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import com.google.android.material.card.MaterialCardView
+import com.vatty.mygbu.viewmodel.FacultyDashboardViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 
 class FacultyDashboardActivity : AppCompatActivity() {
     
+    private val viewModel: FacultyDashboardViewModel by viewModels()
+    
     private lateinit var tvFacultyName: TextView
+    private lateinit var tvGreeting: TextView
+    private lateinit var tvTodaysClasses: TextView
+    private lateinit var tvPendingTasks: TextView
+    private lateinit var tvTotalStudents: TextView
     private lateinit var ivNotification: ImageView
     private lateinit var ivProfileMini: CircleImageView
     
@@ -31,19 +39,61 @@ class FacultyDashboardActivity : AppCompatActivity() {
         }
         
         initializeViews()
+        setupObservers()
         setupDashboardCards()
         setupHeaderActions()
     }
     
     private fun initializeViews() {
         tvFacultyName = findViewById(R.id.tv_faculty_name)
+        tvGreeting = findViewById(R.id.tv_greeting)
+        tvTodaysClasses = findViewById(R.id.tv_todays_classes)
+        tvPendingTasks = findViewById(R.id.tv_pending_tasks) 
+        tvTotalStudents = findViewById(R.id.tv_total_students)
         ivNotification = findViewById(R.id.iv_notification)
         ivProfileMini = findViewById(R.id.iv_profile_mini)
     }
     
+    private fun setupObservers() {
+        // Observe faculty data
+        viewModel.faculty.observe(this, Observer { faculty ->
+            faculty?.let {
+                tvFacultyName.text = it.name
+            }
+        })
+        
+        // Observe greeting
+        viewModel.greeting.observe(this, Observer { greeting ->
+            greeting?.let {
+                tvGreeting.text = it
+            }
+        })
+        
+        // Observe dashboard stats
+        viewModel.dashboardStats.observe(this, Observer { stats ->
+            stats?.let {
+                tvTodaysClasses.text = it.todaysClasses.toString()
+                tvPendingTasks.text = it.pendingTasks.toString()
+                tvTotalStudents.text = it.totalStudents.toString()
+            }
+        })
+        
+        // Observe loading state
+        viewModel.isLoading.observe(this, Observer { isLoading ->
+            // Handle loading state (show/hide progress bar)
+        })
+        
+        // Observe errors
+        viewModel.error.observe(this, Observer { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    
     private fun setupHeaderActions() {
         ivNotification.setOnClickListener {
-            Toast.makeText(this, "Notifications: 3 new updates", Toast.LENGTH_SHORT).show()
+            viewModel.onNotificationClicked()
         }
         
         ivProfileMini.setOnClickListener {
@@ -80,7 +130,7 @@ class FacultyDashboardActivity : AppCompatActivity() {
         }
         
         findViewById<MaterialCardView>(R.id.card_announcements).setOnClickListener {
-            startActivity(Intent(this, AssignmentManagementActivity::class.java))
+            startActivity(Intent(this, MessagesActivity::class.java))
         }
         
         findViewById<MaterialCardView>(R.id.card_profile).setOnClickListener {
