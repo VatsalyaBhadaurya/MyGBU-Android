@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.vatty.mygbu.data.model.StudentAttendance
 
 class StudentsAttendanceAdapter(
     private val students: List<StudentAttendance>,
@@ -50,7 +51,7 @@ class StudentsAttendanceAdapter(
         holder.switchAttendance.setOnCheckedChangeListener { _, _ ->
             // Post the update to avoid modifying adapter during layout
             holder.itemView.post {
-                onAttendanceToggle(holder.adapterPosition)
+                onAttendanceToggle(holder.bindingAdapterPosition)
             }
         }
         
@@ -62,12 +63,12 @@ class StudentsAttendanceAdapter(
             
             // Post the update to avoid modifying adapter during layout
             holder.itemView.post {
-                onAttendanceToggle(holder.adapterPosition)
+                onAttendanceToggle(holder.bindingAdapterPosition)
                 
                 // Restore listener
                 holder.switchAttendance.setOnCheckedChangeListener { _, _ ->
                     holder.itemView.post {
-                        onAttendanceToggle(holder.adapterPosition)
+                        onAttendanceToggle(holder.bindingAdapterPosition)
                     }
                 }
             }

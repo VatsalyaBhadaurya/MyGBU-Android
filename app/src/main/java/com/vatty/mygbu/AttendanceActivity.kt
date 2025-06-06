@@ -1,51 +1,39 @@
 package com.vatty.mygbu
 
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import java.text.SimpleDateFormat
-import java.util.*
+import com.vatty.mygbu.data.model.StudentAttendance
+import com.vatty.mygbu.databinding.ActivityAttendanceBinding
+import com.vatty.mygbu.enums.AttendanceStatus
+import com.vatty.mygbu.utils.DateUtils
 
 class AttendanceActivity : AppCompatActivity() {
     
-    private lateinit var ivBack: ImageView
-    private lateinit var tvCourseName: TextView
-    private lateinit var tvClassDate: TextView
-    private lateinit var tvTotalStudents: TextView
-    private lateinit var tvPresentCount: TextView
-    private lateinit var tvAbsentCount: TextView
-    private lateinit var etTopicsCovered: TextInputEditText
-    private lateinit var etRemarks: TextInputEditText
-    private lateinit var btnMarkAllPresent: MaterialButton
-    private lateinit var btnMarkAllAbsent: MaterialButton
-    private lateinit var btnSubmitAttendance: MaterialButton
-    private lateinit var rvStudents: RecyclerView
-    
+    private lateinit var binding: ActivityAttendanceBinding
     private lateinit var studentsAdapter: StudentsAttendanceAdapter
     private val studentsList = mutableListOf<StudentAttendance>()
     
+    companion object {
+        private const val TAG = "AttendanceActivity"
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_attendance)
+        binding = ActivityAttendanceBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         
-        initializeViews()
-        setupBackButton()
+        setupToolbar()
         setupStudentsList()
         setupRecyclerView()
         setupClickListeners()
@@ -53,77 +41,61 @@ class AttendanceActivity : AppCompatActivity() {
         setupCurrentDate()
     }
     
-    private fun initializeViews() {
-        ivBack = findViewById(R.id.iv_back)
-        tvCourseName = findViewById(R.id.tv_course_name)
-        tvClassDate = findViewById(R.id.tv_class_date)
-        tvTotalStudents = findViewById(R.id.tv_total_students)
-        tvPresentCount = findViewById(R.id.tv_present_count)
-        tvAbsentCount = findViewById(R.id.tv_absent_count)
-        etTopicsCovered = findViewById(R.id.et_topics_covered)
-        etRemarks = findViewById(R.id.et_remarks)
-        btnMarkAllPresent = findViewById(R.id.btn_mark_all_present)
-        btnMarkAllAbsent = findViewById(R.id.btn_mark_all_absent)
-        btnSubmitAttendance = findViewById(R.id.btn_submit_attendance)
-        rvStudents = findViewById(R.id.rv_students)
-    }
-    
-    private fun setupBackButton() {
-        ivBack.setOnClickListener {
+    private fun setupToolbar() {
+        binding.ivBack.setOnClickListener {
             finish()
         }
     }
     
     private fun setupCurrentDate() {
-        val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        tvClassDate.text = dateFormat.format(Date())
+        binding.tvClassDate.text = getString(R.string.today_date, DateUtils.getCurrentDateFormatted())
     }
     
     private fun setupStudentsList() {
-        // Sample realistic student data
+        // Sample realistic student data using the new model
         studentsList.addAll(listOf(
-            StudentAttendance("2021001", "Aarav Sharma", true),
-            StudentAttendance("2021002", "Aditi Patel", true),
-            StudentAttendance("2021003", "Arjun Singh", false),
-            StudentAttendance("2021004", "Diya Gupta", true),
-            StudentAttendance("2021005", "Ishaan Kumar", true),
-            StudentAttendance("2021006", "Kavya Reddy", true),
-            StudentAttendance("2021007", "Manas Verma", false),
-            StudentAttendance("2021008", "Nisha Jain", true),
-            StudentAttendance("2021009", "Priya Iyer", true),
-            StudentAttendance("2021010", "Rohan Mehta", true),
-            StudentAttendance("2021011", "Saanvi Agarwal", false),
-            StudentAttendance("2021012", "Tanishq Bansal", true),
-            StudentAttendance("2021013", "Urvi Shah", true),
-            StudentAttendance("2021014", "Vihaan Nair", true),
-            StudentAttendance("2021015", "Zara Khan", false),
-            StudentAttendance("2021016", "Aditya Saxena", true),
-            StudentAttendance("2021017", "Bhumika Tiwari", true),
-            StudentAttendance("2021018", "Chirag Malhotra", true),
-            StudentAttendance("2021019", "Devika Pillai", true),
-            StudentAttendance("2021020", "Eshan Rao", true),
-            StudentAttendance("2021021", "Falguni Desai", true),
-            StudentAttendance("2021022", "Gaurav Kohli", true),
-            StudentAttendance("2021023", "Harini Srinivasan", true),
-            StudentAttendance("2021024", "Ishan Chopra", true),
-            StudentAttendance("2021025", "Janhvi Thakur", true),
-            StudentAttendance("2021026", "Karthik Bose", true),
-            StudentAttendance("2021027", "Lavanya Mishra", true),
-            StudentAttendance("2021028", "Mridul Das", true),
-            StudentAttendance("2021029", "Navya Kapoor", true),
-            StudentAttendance("2021030", "Om Pandey", true),
-            StudentAttendance("2021031", "Parineeti Bhatt", true),
-            StudentAttendance("2021032", "Quincy D'Souza", true),
-            StudentAttendance("2021033", "Rhea Chandra", true),
-            StudentAttendance("2021034", "Siddharth Joshi", true),
-            StudentAttendance("2021035", "Tanya Srivastava", true),
-            StudentAttendance("2021036", "Ujjwal Goyal", true),
-            StudentAttendance("2021037", "Vidhi Ahluwalia", true),
-            StudentAttendance("2021038", "Yash Singhal", true),
-            StudentAttendance("2021039", "Zoya Bajaj", true),
-            StudentAttendance("2021040", "Arnav Kulkarni", true),
-            StudentAttendance("2021041", "Bhavya Randhawa", true),
-            StudentAttendance("2021042", "Chinmay Ghosh", true)
+            StudentAttendance("ST001", "Aarav Sharma", rollNumber = "2021001"),
+            StudentAttendance("ST002", "Aditi Patel", rollNumber = "2021002"),
+            StudentAttendance("ST003", "Arjun Singh", rollNumber = "2021003", status = AttendanceStatus.ABSENT),
+            StudentAttendance("ST004", "Diya Gupta", rollNumber = "2021004"),
+            StudentAttendance("ST005", "Ishaan Kumar", rollNumber = "2021005"),
+            StudentAttendance("ST006", "Kavya Reddy", rollNumber = "2021006"),
+            StudentAttendance("ST007", "Manas Verma", rollNumber = "2021007", status = AttendanceStatus.ABSENT),
+            StudentAttendance("ST008", "Nisha Jain", rollNumber = "2021008"),
+            StudentAttendance("ST009", "Priya Iyer", rollNumber = "2021009"),
+            StudentAttendance("ST010", "Rohan Mehta", rollNumber = "2021010"),
+            StudentAttendance("ST011", "Saanvi Agarwal", rollNumber = "2021011", status = AttendanceStatus.ABSENT),
+            StudentAttendance("ST012", "Tanishq Bansal", rollNumber = "2021012"),
+            StudentAttendance("ST013", "Urvi Shah", rollNumber = "2021013"),
+            StudentAttendance("ST014", "Vihaan Nair", rollNumber = "2021014"),
+            StudentAttendance("ST015", "Zara Khan", rollNumber = "2021015", status = AttendanceStatus.ABSENT),
+            StudentAttendance("ST016", "Aditya Saxena", rollNumber = "2021016"),
+            StudentAttendance("ST017", "Bhumika Tiwari", rollNumber = "2021017"),
+            StudentAttendance("ST018", "Chirag Malhotra", rollNumber = "2021018"),
+            StudentAttendance("ST019", "Devika Pillai", rollNumber = "2021019"),
+            StudentAttendance("ST020", "Eshan Rao", rollNumber = "2021020"),
+            StudentAttendance("ST021", "Falguni Desai", rollNumber = "2021021"),
+            StudentAttendance("ST022", "Gaurav Kohli", rollNumber = "2021022"),
+            StudentAttendance("ST023", "Harini Srinivasan", rollNumber = "2021023"),
+            StudentAttendance("ST024", "Ishan Chopra", rollNumber = "2021024"),
+            StudentAttendance("ST025", "Janhvi Thakur", rollNumber = "2021025"),
+            StudentAttendance("ST026", "Karthik Bose", rollNumber = "2021026"),
+            StudentAttendance("ST027", "Lavanya Mishra", rollNumber = "2021027"),
+            StudentAttendance("ST028", "Mridul Das", rollNumber = "2021028"),
+            StudentAttendance("ST029", "Navya Kapoor", rollNumber = "2021029"),
+            StudentAttendance("ST030", "Om Pandey", rollNumber = "2021030"),
+            StudentAttendance("ST031", "Parineeti Bhatt", rollNumber = "2021031"),
+            StudentAttendance("ST032", "Quincy D'Souza", rollNumber = "2021032"),
+            StudentAttendance("ST033", "Rhea Chandra", rollNumber = "2021033"),
+            StudentAttendance("ST034", "Siddharth Joshi", rollNumber = "2021034"),
+            StudentAttendance("ST035", "Tanya Srivastava", rollNumber = "2021035"),
+            StudentAttendance("ST036", "Ujjwal Goyal", rollNumber = "2021036"),
+            StudentAttendance("ST037", "Vidhi Ahluwalia", rollNumber = "2021037"),
+            StudentAttendance("ST038", "Yash Singhal", rollNumber = "2021038"),
+            StudentAttendance("ST039", "Zoya Bajaj", rollNumber = "2021039"),
+            StudentAttendance("ST040", "Arnav Kulkarni", rollNumber = "2021040"),
+            StudentAttendance("ST041", "Bhavya Randhawa", rollNumber = "2021041"),
+            StudentAttendance("ST042", "Chinmay Ghosh", rollNumber = "2021042")
         ))
     }
     
@@ -132,44 +104,52 @@ class AttendanceActivity : AppCompatActivity() {
             // Check if position is valid
             if (position >= 0 && position < studentsList.size) {
                 // Toggle attendance status
-                studentsList[position].isPresent = !studentsList[position].isPresent
+                val student = studentsList[position]
+                student.updateAttendance(!student.isPresent)
+                
+                Log.d(TAG, "Attendance toggled for ${student.name}: ${student.status}")
                 
                 // Post the adapter update to avoid RecyclerView layout issues
-                rvStudents.post {
+                binding.rvStudents.post {
                     studentsAdapter.notifyItemChanged(position)
                     updateStats()
                 }
             }
         }
-        rvStudents.layoutManager = LinearLayoutManager(this)
-        rvStudents.adapter = studentsAdapter
+        binding.rvStudents.layoutManager = LinearLayoutManager(this)
+        binding.rvStudents.adapter = studentsAdapter
     }
     
     private fun setupClickListeners() {
-        btnMarkAllPresent.setOnClickListener {
+        binding.btnMarkAllPresent.setOnClickListener {
             markAllStudents(true)
         }
         
-        btnMarkAllAbsent.setOnClickListener {
+        binding.btnMarkAllAbsent.setOnClickListener {
             markAllStudents(false)
         }
         
-        btnSubmitAttendance.setOnClickListener {
+        binding.btnSubmitAttendance.setOnClickListener {
             submitAttendance()
         }
     }
     
     private fun markAllStudents(isPresent: Boolean) {
-        studentsList.forEach { it.isPresent = isPresent }
+        studentsList.forEach { it.updateAttendance(isPresent) }
         
         // Post the update to avoid RecyclerView layout issues
-        rvStudents.post {
+        binding.rvStudents.post {
             studentsAdapter.notifyDataSetChanged()
             updateStats()
         }
         
-        val message = if (isPresent) "All students marked present" else "All students marked absent"
+        val message = if (isPresent) {
+            "All students marked present"
+        } else {
+            "All students marked absent"
+        }
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "Marked all students: $isPresent")
     }
     
     private fun updateStats() {
@@ -177,13 +157,13 @@ class AttendanceActivity : AppCompatActivity() {
         val presentCount = studentsList.count { it.isPresent }
         val absentCount = totalStudents - presentCount
         
-        tvTotalStudents.text = totalStudents.toString()
-        tvPresentCount.text = presentCount.toString()
-        tvAbsentCount.text = absentCount.toString()
+        binding.tvTotalStudents.text = totalStudents.toString()
+        binding.tvPresentCount.text = presentCount.toString()
+        binding.tvAbsentCount.text = absentCount.toString()
     }
     
     private fun submitAttendance() {
-        val topicsCovered = etTopicsCovered.text.toString().trim()
+        val topicsCovered = binding.etTopicsCovered.text.toString().trim()
         
         if (topicsCovered.isEmpty()) {
             Toast.makeText(this, "Please enter topics covered", Toast.LENGTH_SHORT).show()
@@ -196,20 +176,17 @@ class AttendanceActivity : AppCompatActivity() {
         
         Toast.makeText(
             this, 
-            "Attendance submitted successfully!\n$presentCount/$totalStudents present ($attendancePercentage%)", 
+            getString(R.string.attendance_marked_successfully) + 
+            "\n$presentCount/$totalStudents present ($attendancePercentage%)", 
             Toast.LENGTH_LONG
         ).show()
         
+        Log.d(TAG, "Attendance submitted: $presentCount/$totalStudents present ($attendancePercentage%)")
+        
         // Clear form
-        etTopicsCovered.setText("")
-        etRemarks.setText("")
+        binding.etTopicsCovered.setText("")
+        binding.etRemarks.setText("")
         
         finish()
     }
-}
-
-data class StudentAttendance(
-    val rollNumber: String,
-    val name: String,
-    var isPresent: Boolean
-) 
+} 

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.vatty.mygbu.data.model.Course
 
 class CourseAdapter(
     private val courses: List<Course>,
@@ -32,9 +33,9 @@ class CourseAdapter(
         private val tvSemester: TextView = itemView.findViewById(R.id.tv_course_semester)
 
         fun bind(course: Course) {
-            ivIcon.setImageResource(course.iconRes)
-            tvTitle.text = course.title
-            tvSemester.text = course.semester
+            ivIcon.setImageResource(R.drawable.ic_courses) // Default icon
+            tvTitle.text = "${course.courseCode} - ${course.courseName}"
+            tvSemester.text = "${course.credits} Credits • ${course.enrolledStudents} Students • ${course.schedule}"
         }
     }
 } 

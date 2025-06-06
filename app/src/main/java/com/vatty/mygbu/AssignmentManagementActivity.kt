@@ -4,38 +4,31 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.TextView
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.card.MaterialCardView
+import com.vatty.mygbu.data.model.SavedAssignment
+import com.vatty.mygbu.databinding.ActivityAssignmentManagementBinding
+import com.vatty.mygbu.enums.AssignmentStatus
+import com.vatty.mygbu.utils.DateUtils
 import java.util.*
 
 class AssignmentManagementActivity : AppCompatActivity() {
     
-    private lateinit var etAssignmentTitle: TextInputEditText
-    private lateinit var etAssignmentDescription: TextInputEditText
-    private lateinit var etDueDate: TextInputEditText
-    private lateinit var btnAttachFile: MaterialButton
-    private lateinit var btnSaveAssignment: MaterialButton
-    private lateinit var cardStudentSubmissions: MaterialCardView
-    private lateinit var cardGradedAssignments: MaterialCardView
-    private lateinit var ivBack: ImageView
-    private lateinit var tvAttachedFile: TextView
-    private lateinit var rvSavedAssignments: RecyclerView
-    
+    private lateinit var binding: ActivityAssignmentManagementBinding
     private var attachedFileUri: Uri? = null
     private var attachedFileName: String? = null
     private val savedAssignments = mutableListOf<SavedAssignment>()
     private lateinit var assignmentsAdapter: SavedAssignmentsAdapter
+    
+    companion object {
+        private const val TAG = "AssignmentManagement"
+    }
     
     // File picker launcher
     private val filePickerLauncher = registerForActivityResult(
@@ -44,69 +37,55 @@ class AssignmentManagementActivity : AppCompatActivity() {
         uri?.let {
             attachedFileUri = it
             attachedFileName = getFileName(it)
-            tvAttachedFile.text = "📎 ${attachedFileName ?: "Unknown file"}"
-            tvAttachedFile.visibility = android.view.View.VISIBLE
-            Toast.makeText(this, "File attached successfully", Toast.LENGTH_SHORT).show()
+            binding.tvAttachedFile.text = getString(R.string.file_attached, attachedFileName ?: getString(R.string.unknown_file))
+            binding.tvAttachedFile.isVisible = true
+            Toast.makeText(this, getString(R.string.file_attached, attachedFileName ?: getString(R.string.unknown_file)), Toast.LENGTH_SHORT).show()
         }
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_assignment_management)
+        binding = ActivityAssignmentManagementBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         
-        initializeViews()
-        setupBackButton()
+        setupToolbar()
         setupClickListeners()
         setupRecyclerView()
         loadSampleAssignments()
     }
     
-    private fun setupBackButton() {
-        ivBack.setOnClickListener {
+    private fun setupToolbar() {
+        binding.ivBack.setOnClickListener {
             finish()
         }
     }
     
-    private fun initializeViews() {
-        etAssignmentTitle = findViewById(R.id.et_assignment_title)
-        etAssignmentDescription = findViewById(R.id.et_assignment_description)
-        etDueDate = findViewById(R.id.et_due_date)
-        btnAttachFile = findViewById(R.id.btn_attach_file)
-        btnSaveAssignment = findViewById(R.id.btn_save_assignment)
-        cardStudentSubmissions = findViewById(R.id.card_student_submissions)
-        cardGradedAssignments = findViewById(R.id.card_graded_assignments)
-        ivBack = findViewById(R.id.iv_back)
-        tvAttachedFile = findViewById(R.id.tv_attached_file)
-        rvSavedAssignments = findViewById(R.id.rv_saved_assignments)
-    }
-    
     private fun setupClickListeners() {
-        etDueDate.setOnClickListener {
+        binding.etDueDate.setOnClickListener {
             showDatePicker()
         }
         
-        btnAttachFile.setOnClickListener {
+        binding.btnAttachFile.setOnClickListener {
             // Launch file picker for documents
             filePickerLauncher.launch("*/*")
         }
         
-        btnSaveAssignment.setOnClickListener {
+        binding.btnSaveAssignment.setOnClickListener {
             saveAssignment()
         }
         
-        cardStudentSubmissions.setOnClickListener {
+        binding.cardStudentSubmissions.setOnClickListener {
             // Navigate to student submissions
-            Toast.makeText(this, "View Student Submissions - 15 submitted, 8 pending", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.view_student_submissions, 15, 8), Toast.LENGTH_SHORT).show()
         }
         
-        cardGradedAssignments.setOnClickListener {
+        binding.cardGradedAssignments.setOnClickListener {
             // Navigate to graded assignments
             Toast.makeText(this, "View Graded Assignments - 12 graded", Toast.LENGTH_SHORT).show()
         }
@@ -114,27 +93,25 @@ class AssignmentManagementActivity : AppCompatActivity() {
     
     private fun setupRecyclerView() {
         assignmentsAdapter = SavedAssignmentsAdapter(savedAssignments)
-        rvSavedAssignments.layoutManager = LinearLayoutManager(this)
-        rvSavedAssignments.adapter = assignmentsAdapter
+        binding.rvSavedAssignments.layoutManager = LinearLayoutManager(this)
+        binding.rvSavedAssignments.adapter = assignmentsAdapter
     }
     
     private fun loadSampleAssignments() {
         savedAssignments.addAll(listOf(
             SavedAssignment(
-                "Data Structures Assignment 1",
-                "Implement Binary Search Tree with insertion and deletion operations",
-                "25/12/2024",
-                "assignment1.pdf",
-                "Published",
-                "CS201"
+                title = "Data Structures Assignment 1",
+                courseCode = "CS201",
+                dueDate = "25/12/2024",
+                status = AssignmentStatus.ACTIVE,
+                attachmentName = "assignment1.pdf"
             ),
             SavedAssignment(
-                "Programming Lab Exercise",
-                "Create a GUI application using Java Swing",
-                "20/12/2024",
-                "lab_exercise.docx",
-                "Draft",
-                "CS101"
+                title = "Programming Lab Exercise",
+                courseCode = "CS101",
+                dueDate = "20/12/2024",
+                status = AssignmentStatus.DRAFT,
+                attachmentName = "lab_exercise.docx"
             )
         ))
         assignmentsAdapter.notifyDataSetChanged()
@@ -145,8 +122,12 @@ class AssignmentManagementActivity : AppCompatActivity() {
         val datePickerDialog = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                val selectedDate = "$dayOfMonth/${month + 1}/$year"
-                etDueDate.setText(selectedDate)
+                val selectedDate = DateUtils.formatDate(
+                    Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }.time
+                )
+                binding.etDueDate.setText(selectedDate)
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -156,42 +137,52 @@ class AssignmentManagementActivity : AppCompatActivity() {
     }
     
     private fun saveAssignment() {
-        val title = etAssignmentTitle.text.toString().trim()
-        val description = etAssignmentDescription.text.toString().trim()
-        val dueDate = etDueDate.text.toString().trim()
+        val title = binding.etAssignmentTitle.text.toString().trim()
+        val description = binding.etAssignmentDescription.text.toString().trim()
+        val dueDate = binding.etDueDate.text.toString().trim()
         
-        if (title.isEmpty() || description.isEmpty() || dueDate.isEmpty()) {
-            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
-            return
+        when {
+            title.isEmpty() -> {
+                Toast.makeText(this, getString(R.string.please_enter_assignment_title), Toast.LENGTH_SHORT).show()
+                return
+            }
+            description.isEmpty() -> {
+                Toast.makeText(this, getString(R.string.please_enter_assignment_description), Toast.LENGTH_SHORT).show()
+                return
+            }
+            dueDate.isEmpty() -> {
+                Toast.makeText(this, getString(R.string.please_select_due_date), Toast.LENGTH_SHORT).show()
+                return
+            }
         }
         
         // Create new assignment
         val newAssignment = SavedAssignment(
             title = title,
-            description = description,
+            courseCode = "CS101", // Default course
             dueDate = dueDate,
-            attachedFile = attachedFileName ?: "No file attached",
-            status = "Draft",
-            courseCode = "CS101" // Default course
+            status = AssignmentStatus.DRAFT,
+            attachmentName = attachedFileName
         )
         
         // Add to saved assignments
         savedAssignments.add(0, newAssignment) // Add at top
         assignmentsAdapter.notifyItemInserted(0)
         
-        Toast.makeText(this, "Assignment saved successfully!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, getString(R.string.assignment_created_successfully), Toast.LENGTH_SHORT).show()
+        Log.d(TAG, "Assignment created: $title")
         
         // Clear form
         clearForm()
     }
     
     private fun clearForm() {
-        etAssignmentTitle.setText("")
-        etAssignmentDescription.setText("")
-        etDueDate.setText("")
+        binding.etAssignmentTitle.setText("")
+        binding.etAssignmentDescription.setText("")
+        binding.etDueDate.setText("")
         attachedFileUri = null
         attachedFileName = null
-        tvAttachedFile.visibility = android.view.View.GONE
+        binding.tvAttachedFile.isVisible = false
     }
     
     private fun getFileName(uri: Uri): String? {
@@ -200,20 +191,12 @@ class AssignmentManagementActivity : AppCompatActivity() {
             cursor?.use {
                 if (it.moveToFirst()) {
                     val nameIndex = it.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
-                    if (nameIndex >= 0) it.getString(nameIndex) else "Unknown file"
-                } else "Unknown file"
+                    if (nameIndex >= 0) it.getString(nameIndex) else getString(R.string.unknown_file)
+                } else getString(R.string.unknown_file)
             }
         } catch (e: Exception) {
-            "Unknown file"
+            Log.e(TAG, "Error getting file name", e)
+            getString(R.string.unknown_file)
         }
     }
-}
-
-data class SavedAssignment(
-    val title: String,
-    val description: String,
-    val dueDate: String,
-    val attachedFile: String,
-    val status: String,
-    val courseCode: String
-) 
+} 

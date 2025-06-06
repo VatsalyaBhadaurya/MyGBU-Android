@@ -2,62 +2,71 @@ package com.vatty.mygbu
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.data.model.Course
+import com.vatty.mygbu.data.model.TimetableItem
+import com.vatty.mygbu.databinding.ActivityCoursesBinding
 
 class CoursesActivity : AppCompatActivity() {
     
-    private lateinit var rvAssignedCourses: RecyclerView
-    private lateinit var rvTimetable: RecyclerView
-    private lateinit var bottomNavigation: BottomNavigationView
-    private lateinit var ivBack: ImageView
+    private lateinit var binding: ActivityCoursesBinding
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_courses)
+        binding = ActivityCoursesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         
-        initializeViews()
-        setupBackButton()
+        setupToolbar()
         setupRecyclerViews()
         setupBottomNavigation()
     }
     
-    private fun setupBackButton() {
-        ivBack.setOnClickListener {
+    private fun setupToolbar() {
+        binding.ivBack.setOnClickListener {
             finish()
         }
     }
     
-    private fun initializeViews() {
-        rvAssignedCourses = findViewById(R.id.rv_assigned_courses)
-        rvTimetable = findViewById(R.id.rv_timetable)
-        bottomNavigation = findViewById(R.id.bottom_navigation)
-        ivBack = findViewById(R.id.iv_back)
-    }
-    
     private fun setupRecyclerViews() {
-        rvAssignedCourses.layoutManager = LinearLayoutManager(this)
-        rvTimetable.layoutManager = LinearLayoutManager(this)
+        binding.rvAssignedCourses.layoutManager = LinearLayoutManager(this)
+        binding.rvTimetable.layoutManager = LinearLayoutManager(this)
         
-        // Sample data for assigned courses
+        // Sample data for assigned courses using the new model
         val assignedCourses = listOf(
-            Course("Introduction to Programming", "Semester 1, 2024", R.drawable.ic_courses),
-            Course("Data Structures and Algorithms", "Semester 1, 2024", R.drawable.ic_courses),
-            Course("Database Management Systems", "Semester 1, 2024", R.drawable.ic_courses)
+            Course(
+                courseCode = "CS101",
+                courseName = "Introduction to Programming",
+                credits = 4,
+                enrolledStudents = 45,
+                schedule = "Mon, Wed, Fri 9:00-10:00 AM",
+                room = "Lab-201"
+            ),
+            Course(
+                courseCode = "CS201",
+                courseName = "Data Structures and Algorithms",
+                credits = 4,
+                enrolledStudents = 38,
+                schedule = "Tue, Thu 11:00 AM-12:30 PM",
+                room = "Room-302"
+            ),
+            Course(
+                courseCode = "CS301",
+                courseName = "Database Management Systems",
+                credits = 3,
+                enrolledStudents = 42,
+                schedule = "Wed, Fri 2:00-3:30 PM",
+                room = "Lab-105"
+            )
         )
         
         // Sample data for timetable
@@ -67,19 +76,19 @@ class CoursesActivity : AppCompatActivity() {
             TimetableItem("Database Management Systems", "Wednesday, 2:00 PM - 3:00 PM", R.drawable.ic_schedule)
         )
         
-        rvAssignedCourses.adapter = CourseAdapter(assignedCourses) { course ->
-            Toast.makeText(this, "Selected: ${course.title}", Toast.LENGTH_SHORT).show()
+        binding.rvAssignedCourses.adapter = CourseAdapter(assignedCourses) { course ->
+            Toast.makeText(this, getString(R.string.course_details, course.courseName), Toast.LENGTH_SHORT).show()
         }
         
-        rvTimetable.adapter = TimetableAdapter(timetableItems) { item ->
+        binding.rvTimetable.adapter = TimetableAdapter(timetableItems) { item ->
             Toast.makeText(this, "Selected: ${item.title}", Toast.LENGTH_SHORT).show()
         }
     }
     
     private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_courses
+        binding.bottomNavigation.selectedItemId = R.id.nav_courses
         
-        bottomNavigation.setOnItemSelectedListener { item ->
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
                     startActivity(Intent(this, FacultyDashboardActivity::class.java))
@@ -101,16 +110,4 @@ class CoursesActivity : AppCompatActivity() {
             }
         }
     }
-}
-
-data class Course(
-    val title: String,
-    val semester: String,
-    val iconRes: Int
-)
-
-data class TimetableItem(
-    val title: String,
-    val time: String,
-    val iconRes: Int
-) 
+} 
