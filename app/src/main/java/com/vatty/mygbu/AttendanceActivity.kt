@@ -184,6 +184,7 @@ class AttendanceActivity : AppCompatActivity() {
     
     private fun submitAttendance() {
         val topicsCovered = etTopicsCovered.text.toString().trim()
+        val remarks = etRemarks.text.toString().trim()
         
         if (topicsCovered.isEmpty()) {
             Toast.makeText(this, "Please enter topics covered", Toast.LENGTH_SHORT).show()

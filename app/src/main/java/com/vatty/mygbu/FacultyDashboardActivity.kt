@@ -6,13 +6,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import com.google.android.material.card.MaterialCardView
+import com.vatty.mygbu.viewmodel.FacultyDashboardViewModel
 import de.hdodenhof.circleimageview.CircleImageView
 
 class FacultyDashboardActivity : AppCompatActivity() {
+    
+    private val viewModel: FacultyDashboardViewModel by viewModels()
     
     private lateinit var tvFacultyName: TextView
     private lateinit var tvGreeting: TextView
@@ -34,9 +39,9 @@ class FacultyDashboardActivity : AppCompatActivity() {
         }
         
         initializeViews()
+        setupObservers()
         setupDashboardCards()
         setupHeaderActions()
-        loadDashboardData()
     }
     
     private fun initializeViews() {
@@ -49,18 +54,46 @@ class FacultyDashboardActivity : AppCompatActivity() {
         ivProfileMini = findViewById(R.id.iv_profile_mini)
     }
     
-    private fun loadDashboardData() {
-        // Load static data for now - in production this would come from API/database
-        tvFacultyName.text = "Dr. Ethan Carter"
-        tvGreeting.text = "Good afternoon"
-        tvTodaysClasses.text = "3"
-        tvPendingTasks.text = "7"
-        tvTotalStudents.text = "128"
+    private fun setupObservers() {
+        // Observe faculty data
+        viewModel.faculty.observe(this, Observer { faculty ->
+            faculty?.let {
+                tvFacultyName.text = it.name
+            }
+        })
+        
+        // Observe greeting
+        viewModel.greeting.observe(this, Observer { greeting ->
+            greeting?.let {
+                tvGreeting.text = it
+            }
+        })
+        
+        // Observe dashboard stats
+        viewModel.dashboardStats.observe(this, Observer { stats ->
+            stats?.let {
+                tvTodaysClasses.text = it.todaysClasses.toString()
+                tvPendingTasks.text = it.pendingTasks.toString()
+                tvTotalStudents.text = it.totalStudents.toString()
+            }
+        })
+        
+        // Observe loading state
+        viewModel.isLoading.observe(this, Observer { isLoading ->
+            // Handle loading state (show/hide progress bar)
+        })
+        
+        // Observe errors
+        viewModel.error.observe(this, Observer { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        })
     }
     
     private fun setupHeaderActions() {
         ivNotification.setOnClickListener {
-            Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show()
+            viewModel.onNotificationClicked()
         }
         
         ivProfileMini.setOnClickListener {
