@@ -6,19 +6,19 @@
         android:title="Home" />
     
     <item
-        android:id="@+id/nav_courses"
-        android:icon="@drawable/ic_courses"
-        android:title="Courses" />
+        android:id="@+id/nav_quick_actions"
+        android:icon="@drawable/ic_quick_actions"
+        android:title="Quick Actions" />
     
     <item
-        android:id="@+id/nav_attendance"
-        android:icon="@drawable/ic_attendance"
-        android:title="Attendance" />
+        android:id="@+id/nav_analytics"
+        android:icon="@drawable/ic_chart"
+        android:title="Analytics" />
     
     <item
-        android:id="@+id/nav_students"
-        android:icon="@drawable/ic_students"
-        android:title="Students" />
+        android:id="@+id/nav_messages"
+        android:icon="@drawable/ic_message"
+        android:title="Messages" />
     
     <item
         android:id="@+id/nav_profile"

@@ -6,19 +6,14 @@
         android:title="Home" />
     
     <item
-        android:id="@+id/nav_courses"
-        android:icon="@drawable/ic_courses"
-        android:title="Courses" />
+        android:id="@+id/nav_messages"
+        android:icon="@drawable/ic_message"
+        android:title="Messages" />
     
     <item
-        android:id="@+id/nav_attendance"
-        android:icon="@drawable/ic_attendance"
-        android:title="Attendance" />
-    
-    <item
-        android:id="@+id/nav_students"
-        android:icon="@drawable/ic_students"
-        android:title="Students" />
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/ic_notification"
+        android:title="Notifications" />
     
     <item
         android:id="@+id/nav_profile"
