@@ -1,21 +1,20 @@
 package com.vatty.mygbu
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.card.MaterialCardView
 
 class StudentPerformanceActivity : AppCompatActivity() {
     
-    private lateinit var etFeedback: TextInputEditText
-    private lateinit var etFlagNotes: TextInputEditText
-    private lateinit var etCommunication: TextInputEditText
-    private lateinit var btnSubmit: MaterialButton
+    private lateinit var bottomNavigation: BottomNavigationView
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +30,8 @@ class StudentPerformanceActivity : AppCompatActivity() {
         setupToolbar()
         initializeViews()
         setupClickListeners()
+        setupBottomNavigation()
+        setupBackPressedHandler()
     }
     
     private fun setupToolbar() {
@@ -40,35 +41,60 @@ class StudentPerformanceActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         
         toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            finish()
         }
+    }
+    
+    private fun setupBackPressedHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
     
     private fun initializeViews() {
-        etFeedback = findViewById(R.id.et_feedback)
-        etFlagNotes = findViewById(R.id.et_flag_notes)
-        etCommunication = findViewById(R.id.et_communication)
-        btnSubmit = findViewById(R.id.btn_submit)
+        bottomNavigation = findViewById(R.id.bottom_navigation)
     }
     
     private fun setupClickListeners() {
-        btnSubmit.setOnClickListener {
-            val feedback = etFeedback.text.toString().trim()
-            val flagNotes = etFlagNotes.text.toString().trim()
-            val communication = etCommunication.text.toString().trim()
-            
-            if (feedback.isNotEmpty() || flagNotes.isNotEmpty() || communication.isNotEmpty()) {
-                Toast.makeText(this, "Student performance data submitted!", Toast.LENGTH_SHORT).show()
-                clearForm()
-            } else {
-                Toast.makeText(this, "Please fill at least one field", Toast.LENGTH_SHORT).show()
-            }
+        findViewById<MaterialCardView>(R.id.card_feedback).setOnClickListener {
+            Toast.makeText(this, "Student Feedback System", Toast.LENGTH_SHORT).show()
+        }
+        
+        findViewById<MaterialCardView>(R.id.card_communication).setOnClickListener {
+            Toast.makeText(this, "Communication Tools", Toast.LENGTH_SHORT).show()
         }
     }
     
-    private fun clearForm() {
-        etFeedback.setText("")
-        etFlagNotes.setText("")
-        etCommunication.setText("")
+    private fun setupBottomNavigation() {
+        bottomNavigation.selectedItemId = R.id.nav_students
+        
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_courses -> {
+                    startActivity(Intent(this, CoursesActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_attendance -> {
+                    startActivity(Intent(this, AttendanceActivity::class.java))
+                    finish()
+                    true
+                }
+                R.id.nav_students -> true
+                R.id.nav_profile -> {
+                    startActivity(Intent(this, FacultyHubActivity::class.java))
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 } 

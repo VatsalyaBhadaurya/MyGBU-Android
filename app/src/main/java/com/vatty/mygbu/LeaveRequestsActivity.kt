@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +34,7 @@ class LeaveRequestsActivity : AppCompatActivity() {
         initializeViews()
         setupRecyclerViews()
         setupBottomNavigation()
+        setupBackPressedHandler()
     }
     
     private fun setupToolbar() {
@@ -42,8 +44,16 @@ class LeaveRequestsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         
         toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            finish()
         }
+    }
+    
+    private fun setupBackPressedHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
     }
     
     private fun initializeViews() {
@@ -58,16 +68,16 @@ class LeaveRequestsActivity : AppCompatActivity() {
         
         // Sample data for pending requests
         val pendingRequests = mutableListOf(
-            LeaveRequest("Vatsalya", "Medical Emergency", "pending", R.drawable.ic_profile, "Dec 21-23, 2024"),
-            LeaveRequest("Yaduraj", "Family Function", "pending", R.drawable.ic_profile, "Dec 25-27, 2024"),
-            LeaveRequest("Mayank", "Personal Work", "pending", R.drawable.ic_profile, "Dec 28-30, 2024")
+            LeaveRequest("Alex Turner", "Medical Emergency", "pending", R.drawable.ic_profile, "Dec 21-23, 2024"),
+            LeaveRequest("Olivia Bennett", "Family Function", "pending", R.drawable.ic_profile, "Dec 25-27, 2024"),
+            LeaveRequest("Marcus Chen", "Personal Work", "pending", R.drawable.ic_profile, "Dec 28-30, 2024")
         )
         
         // Sample data for approved requests
         val approvedRequests = listOf(
-            LeaveRequest("Yuvraj", "Vacation", "approved", R.drawable.ic_profile, "Dec 15-17, 2024"),
-            LeaveRequest("Anshul", "Medical", "approved", R.drawable.ic_profile, "Dec 18-19, 2024"),
-            LeaveRequest("Sunahi", "Personal", "approved", R.drawable.ic_profile, "Dec 20, 2024")
+            LeaveRequest("Emma Wilson", "Vacation", "approved", R.drawable.ic_profile, "Dec 15-17, 2024"),
+            LeaveRequest("James Rodriguez", "Medical", "approved", R.drawable.ic_profile, "Dec 18-19, 2024"),
+            LeaveRequest("Sophie Anderson", "Personal", "approved", R.drawable.ic_profile, "Dec 20, 2024")
         )
         
         rvPendingRequests.adapter = LeaveRequestAdapter(pendingRequests, 
