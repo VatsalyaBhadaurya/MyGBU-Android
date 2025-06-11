@@ -54,6 +54,7 @@ class FacultyHubActivity : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.nav_courses -> {
                     startActivity(Intent(this, CoursesActivity::class.java))
                     finish()

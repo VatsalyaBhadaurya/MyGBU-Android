@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import de.hdodenhof.circleimageview.CircleImageView
+import com.vatty.mygbu.utils.TelegramLogger
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,6 +63,9 @@ class FacultyDashboardActivity : AppCompatActivity() {
         loadDashboardData()
         startTimeUpdates()
         setupDynamicContent()
+        
+        // Test TelegramLogger (remove this after testing)
+        testTelegramLogger()
     }
     
     override fun onDestroy() {
@@ -268,5 +272,26 @@ class FacultyDashboardActivity : AppCompatActivity() {
         findViewById<MaterialCardView>(R.id.card_profile).setOnClickListener {
             startActivity(Intent(this, FacultyHubActivity::class.java))
         }
+    }
+    
+    // Test function for TelegramLogger - Remove after testing
+    private fun testTelegramLogger() {
+        // Test basic logging
+        TelegramLogger.log("Faculty Dashboard Activity started successfully!")
+        
+        // Test error logging
+        try {
+            // Simulate some operation that might fail
+            val result = 10 / 1 // Change to 0 to test error logging
+            TelegramLogger.logDebug("Division result: $result")
+        } catch (e: Exception) {
+            TelegramLogger.logError("Error in calculation", e)
+        }
+        
+        // Test warning
+        TelegramLogger.logWarning("This is a test warning message")
+        
+        // Test connection
+        TelegramLogger.testConnection()
     }
 } 
