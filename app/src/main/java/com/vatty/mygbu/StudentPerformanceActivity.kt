@@ -11,10 +11,15 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class StudentPerformanceActivity : AppCompatActivity() {
     
     private lateinit var bottomNavigation: BottomNavigationView
+    
+    companion object {
+        private const val TAG = "StudentPerformanceActivity"
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,9 @@ class StudentPerformanceActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "StudentPerformanceActivity started - student analytics and performance tracking active")
         
         setupToolbar()
         initializeViews()

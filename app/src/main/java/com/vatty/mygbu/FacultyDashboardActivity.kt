@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -18,11 +17,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import de.hdodenhof.circleimageview.CircleImageView
 import com.vatty.mygbu.utils.TelegramLogger
 import com.vatty.mygbu.utils.TelegramLoggerTest
-import com.vatty.mygbu.utils.LogWrapper
 import com.vatty.mygbu.utils.SystemErrorMonitor
 import com.vatty.mygbu.utils.ComprehensiveLogMonitor
 import java.text.SimpleDateFormat
 import java.util.*
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class FacultyDashboardActivity : AppCompatActivity() {
     

@@ -10,10 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vatty.mygbu.data.model.Course
 import com.vatty.mygbu.data.model.TimetableItem
 import com.vatty.mygbu.databinding.ActivityCoursesBinding
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class CoursesActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityCoursesBinding
+    
+    companion object {
+        private const val TAG = "CoursesActivity"
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +30,9 @@ class CoursesActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "CoursesActivity started - faculty courses management active")
         
         setupToolbar()
         setupRecyclerViews()

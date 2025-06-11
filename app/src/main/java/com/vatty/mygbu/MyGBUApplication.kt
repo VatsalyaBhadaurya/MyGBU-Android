@@ -1,10 +1,10 @@
 package com.vatty.mygbu
 
 import android.app.Application
-import android.util.Log
 import com.vatty.mygbu.utils.TelegramLogger
 import com.vatty.mygbu.utils.SystemErrorMonitor
 import com.vatty.mygbu.utils.ComprehensiveLogMonitor
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 /**
  * Custom Application class for MyGBU

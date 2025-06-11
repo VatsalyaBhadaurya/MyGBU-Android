@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class ScheduleActivity : AppCompatActivity() {
     
@@ -15,6 +16,10 @@ class ScheduleActivity : AppCompatActivity() {
     private lateinit var rvSchedule: RecyclerView
     private lateinit var scheduleAdapter: ScheduleAdapter
     private val scheduleList = mutableListOf<ScheduleItem>()
+    
+    companion object {
+        private const val TAG = "ScheduleActivity"
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,9 @@ class ScheduleActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "ScheduleActivity started - faculty schedule and timetable management active")
         
         initializeViews()
         setupBackButton()

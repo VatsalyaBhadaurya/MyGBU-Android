@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class AnalyticsActivity : AppCompatActivity() {
 
@@ -19,10 +20,17 @@ class AnalyticsActivity : AppCompatActivity() {
     private lateinit var assignmentStatsChart: BarChart
     private lateinit var courseDistributionChart: PieChart
     private lateinit var bottomNavigation: BottomNavigationView
+    
+    companion object {
+        private const val TAG = "AnalyticsActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_analytics)
+
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "AnalyticsActivity started - faculty analytics dashboard active")
 
         setupViews()
         setupCharts()

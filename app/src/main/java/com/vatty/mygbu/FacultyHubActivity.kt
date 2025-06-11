@@ -8,11 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class FacultyHubActivity : AppCompatActivity() {
     
     private lateinit var ivMenu: ImageView
     private lateinit var bottomNavigation: BottomNavigationView
+    
+    companion object {
+        private const val TAG = "FacultyHubActivity"
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +29,9 @@ class FacultyHubActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "FacultyHubActivity started - faculty profile hub active")
         
         initializeViews()
         setupClickListeners()

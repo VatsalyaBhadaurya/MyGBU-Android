@@ -7,16 +7,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class NotificationsActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var notificationsAdapter: NotificationsAdapter
     private lateinit var bottomNavigation: BottomNavigationView
+    
+    companion object {
+        private const val TAG = "NotificationsActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
+
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "NotificationsActivity started - faculty notifications active")
 
         setupViews()
         setupRecyclerView()

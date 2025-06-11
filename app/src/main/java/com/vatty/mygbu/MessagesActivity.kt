@@ -13,12 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class MessagesActivity : AppCompatActivity() {
     
     private lateinit var ivBack: ImageView
     private lateinit var btnCompose: MaterialButton
     private lateinit var rvConversations: RecyclerView
+    
+    companion object {
+        private const val TAG = "MessagesActivity"
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +35,9 @@ class MessagesActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "MessagesActivity started - faculty messaging system active")
         
         initializeViews()
         setupBackButton()
@@ -85,10 +93,23 @@ class MessagesActivity : AppCompatActivity() {
                 val subject = etSubject.text.toString().trim()
                 val message = etMessage.text.toString().trim()
                 
-                if (recipient.isNotEmpty() && subject.isNotEmpty() && message.isNotEmpty()) {
-                    Toast.makeText(this, "Message sent to $recipient", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                when {
+                    recipient.isEmpty() -> {
+                        Log.w(TAG, "User tried to send message without recipient")
+                        Toast.makeText(this, "Please enter recipient", Toast.LENGTH_SHORT).show()
+                    }
+                    subject.isEmpty() -> {
+                        Log.w(TAG, "User tried to send message without subject")
+                        Toast.makeText(this, "Please enter subject", Toast.LENGTH_SHORT).show()
+                    }
+                    message.isEmpty() -> {
+                        Log.w(TAG, "User tried to send empty message")
+                        Toast.makeText(this, "Please enter message content", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Log.i(TAG, "Message sent successfully to: $recipient, subject: $subject")
+                        Toast.makeText(this, "Message sent to $recipient", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             .setNegativeButton("Cancel", null)

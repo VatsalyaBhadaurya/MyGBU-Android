@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +15,7 @@ import com.vatty.mygbu.data.model.SavedAssignment
 import com.vatty.mygbu.databinding.ActivityAssignmentManagementBinding
 import com.vatty.mygbu.enums.AssignmentStatus
 import com.vatty.mygbu.utils.DateUtils
+import com.vatty.mygbu.utils.LogWrapper as Log
 import java.util.*
 
 class AssignmentManagementActivity : AppCompatActivity() {
@@ -53,6 +53,9 @@ class AssignmentManagementActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        
+        // Test LogWrapper - this will now be sent to Telegram automatically!
+        Log.i(TAG, "AssignmentManagementActivity started - app-wide monitoring active!")
         
         setupToolbar()
         setupClickListeners()

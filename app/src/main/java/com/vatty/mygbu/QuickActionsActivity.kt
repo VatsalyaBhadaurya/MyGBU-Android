@@ -7,16 +7,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.utils.LogWrapper as Log
 
 class QuickActionsActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var quickActionsAdapter: QuickActionsAdapter
     private lateinit var bottomNavigation: BottomNavigationView
+    
+    companion object {
+        private const val TAG = "QuickActionsActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quick_actions)
+
+        // Log activity startup - this will be sent to Telegram!
+        Log.i(TAG, "QuickActionsActivity started - faculty quick actions and shortcuts active")
 
         setupViews()
         setupRecyclerView()
