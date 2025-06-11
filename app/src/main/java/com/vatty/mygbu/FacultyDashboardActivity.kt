@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,10 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import de.hdodenhof.circleimageview.CircleImageView
 import com.vatty.mygbu.utils.TelegramLogger
+import com.vatty.mygbu.utils.TelegramLoggerTest
+import com.vatty.mygbu.utils.LogWrapper
+import com.vatty.mygbu.utils.SystemErrorMonitor
+import com.vatty.mygbu.utils.ComprehensiveLogMonitor
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,6 +71,9 @@ class FacultyDashboardActivity : AppCompatActivity() {
         
         // Test TelegramLogger (remove this after testing)
         testTelegramLogger()
+
+        // Test TelegramLogger with improved timeout handling - just call the test function
+        testImprovedTelegramLogger()
     }
     
     override fun onDestroy() {
@@ -274,24 +282,34 @@ class FacultyDashboardActivity : AppCompatActivity() {
         }
     }
     
-    // Test function for TelegramLogger - Remove after testing
+    // Test function for Enhanced TelegramLogger - Remove after testing
     private fun testTelegramLogger() {
-        // Test basic logging
-        TelegramLogger.log("Faculty Dashboard Activity started successfully!")
+        Log.d("FacultyDashboard", "Testing TelegramLogger (rate-limited)...")
         
-        // Test error logging
-        try {
-            // Simulate some operation that might fail
-            val result = 10 / 1 // Change to 0 to test error logging
-            TelegramLogger.logDebug("Division result: $result")
-        } catch (e: Exception) {
-            TelegramLogger.logError("Error in calculation", e)
-        }
+        // Test the enhanced TelegramLogger with a single message
+        TelegramLogger.log("🧪 Faculty Dashboard started with rate-limited monitoring", "FacultyDashboard")
         
-        // Test warning
-        TelegramLogger.logWarning("This is a test warning message")
+        // Don't run comprehensive tests immediately to avoid rate limiting
+        Log.d("FacultyDashboard", "TelegramLogger basic test completed. Real monitoring is active.")
+    }
+    
+    private fun testSystemErrorCapture() {
+        Log.d("FacultyDashboard", "System error monitoring is active in background...")
         
-        // Test connection
-        TelegramLogger.testConnection()
+        // System monitoring runs automatically - no need to spam with tests
+        // Just send one test to confirm it's working
+        SystemErrorMonitor.reportNotificationServiceError("com.vatty.mygbu", 5)
+        
+        Log.d("FacultyDashboard", "Comprehensive error monitoring is running. Real errors will be captured automatically.")
+    }
+    
+    private fun testImprovedTelegramLogger() {
+        Log.d("FacultyDashboard", "Enhanced TelegramLogger is active...")
+        
+        // Show queue stats instead of sending multiple messages
+        val stats = TelegramLogger.getNetworkStats()
+        Log.d("FacultyDashboard", "Current queue stats: $stats")
+        
+        Toast.makeText(this, "Enhanced monitoring is active! Real errors will be captured without overwhelming Telegram API.", Toast.LENGTH_LONG).show()
     }
 } 
