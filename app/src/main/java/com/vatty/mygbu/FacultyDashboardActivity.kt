@@ -22,6 +22,9 @@ import com.vatty.mygbu.utils.ComprehensiveLogMonitor
 import java.text.SimpleDateFormat
 import java.util.*
 import com.vatty.mygbu.utils.LogWrapper as Log
+import androidx.lifecycle.ViewModelProvider
+import android.widget.ProgressBar
+import com.vatty.mygbu.viewmodel.FacultyDashboardViewModel
 
 class FacultyDashboardActivity : AppCompatActivity() {
     
@@ -31,15 +34,10 @@ class FacultyDashboardActivity : AppCompatActivity() {
     private lateinit var tvTodaysClasses: TextView
     private lateinit var tvPendingTasks: TextView
     private lateinit var tvTotalStudents: TextView
-    private lateinit var tvNotificationBadge: TextView
-    private lateinit var ivNotification: ImageView
-    private lateinit var ivProfileMini: CircleImageView
     private lateinit var bottomNavigation: BottomNavigationView
     
     // Dynamic content containers
     private lateinit var quickStatsContainer: View
-    private lateinit var upcomingClassCard: MaterialCardView
-    private lateinit var urgentTasksCard: MaterialCardView
     
     private val timeHandler = Handler(Looper.getMainLooper())
     private val timeUpdateRunnable = object : Runnable {
@@ -49,10 +47,27 @@ class FacultyDashboardActivity : AppCompatActivity() {
         }
     }
     
+    private val TAG = "FacultyDashboardActivity"
+    private lateinit var viewModel: FacultyDashboardViewModel
+    
+    private lateinit var loadingIndicator: ProgressBar
+    private lateinit var facultyName: TextView
+    private lateinit var facultyDesignation: TextView
+    private lateinit var facultyJoiningDate: TextView
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_faculty_dashboard)
+        
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this)[FacultyDashboardViewModel::class.java]
+        
+        // Setup observers
+        setupObservers()
+        
+        // Load faculty data
+        viewModel.loadFacultyList()
         
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -81,34 +96,27 @@ class FacultyDashboardActivity : AppCompatActivity() {
     }
     
     private fun initializeViews() {
+        loadingIndicator = findViewById(R.id.loadingIndicator)
+        facultyName = findViewById(R.id.facultyName)
+        facultyDesignation = findViewById(R.id.facultyDesignation)
+        facultyJoiningDate = findViewById(R.id.facultyJoiningDate)
         tvFacultyName = findViewById(R.id.tv_faculty_name)
         tvGreeting = findViewById(R.id.tv_greeting)
         tvCurrentTime = findViewById(R.id.tv_current_time)
         tvTodaysClasses = findViewById(R.id.tv_todays_classes)
         tvPendingTasks = findViewById(R.id.tv_pending_tasks) 
         tvTotalStudents = findViewById(R.id.tv_total_students)
-        tvNotificationBadge = findViewById(R.id.tv_notification_badge)
-        ivNotification = findViewById(R.id.iv_notification)
-        ivProfileMini = findViewById(R.id.iv_profile_mini)
         bottomNavigation = findViewById(R.id.bottom_navigation)
         
         quickStatsContainer = findViewById(R.id.quick_stats_container)
-        upcomingClassCard = findViewById(R.id.card_upcoming_class)
-        urgentTasksCard = findViewById(R.id.card_urgent_tasks)
     }
     
     private fun loadDashboardData() {
         // Dynamic greeting based on time
         updateGreeting()
         
-        // Faculty info
-        tvFacultyName.text = "Dr. Gaurav Kumar"
-        
-        // Real-time stats
+        // Real-time stats - these could be updated from a different API endpoint
         updateDashboardStats()
-        
-        // Notification badge
-        updateNotificationBadge(5) // Example: 5 unread notifications
     }
     
     private fun updateGreeting() {
@@ -155,66 +163,13 @@ class FacultyDashboardActivity : AppCompatActivity() {
             .start()
     }
     
-    private fun updateNotificationBadge(count: Int) {
-        if (count > 0) {
-            tvNotificationBadge.visibility = View.VISIBLE
-            tvNotificationBadge.text = if (count > 99) "99+" else count.toString()
-        } else {
-            tvNotificationBadge.visibility = View.GONE
-        }
-    }
-    
     private fun setupDynamicContent() {
-        // Setup upcoming class card
-        setupUpcomingClassCard()
-        
-        // Setup urgent tasks card
-        setupUrgentTasksCard()
-    }
-    
-    private fun setupUpcomingClassCard() {
-        upcomingClassCard.setOnClickListener {
-            startActivity(Intent(this, ScheduleActivity::class.java))
-        }
-        
-        // You can populate with real upcoming class data
-        val nextClass = getNextClass()
-        if (nextClass != null) {
-            upcomingClassCard.visibility = View.VISIBLE
-            // Update UI with next class info
-        } else {
-            upcomingClassCard.visibility = View.GONE
-        }
-    }
-    
-    private fun setupUrgentTasksCard() {
-        urgentTasksCard.setOnClickListener {
-            // Navigate to urgent tasks or quick actions
-            startActivity(Intent(this, QuickActionsActivity::class.java))
-        }
-    }
-    
-    private fun getNextClass(): String? {
-        // Mock data - in production, fetch from calendar/schedule
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        
-        return when {
-            hour < 9 -> "CS101 - 09:00 AM"
-            hour < 11 -> "CS201 - 11:00 AM" 
-            hour < 14 -> "CS301 - 02:00 PM"
-            else -> null
-        }
+        // Update dynamic content setup
+        updateDashboardStats()
     }
     
     private fun setupHeaderActions() {
-        ivNotification.setOnClickListener {
-            startActivity(Intent(this, NotificationsActivity::class.java))
-        }
-        
-        ivProfileMini.setOnClickListener {
-            startActivity(Intent(this, FacultyHubActivity::class.java))
-        }
+        // Remove this method as the notification icon no longer exists
     }
     
     private fun setupBottomNavigation() {
@@ -279,6 +234,35 @@ class FacultyDashboardActivity : AppCompatActivity() {
         findViewById<MaterialCardView>(R.id.card_profile).setOnClickListener {
             startActivity(Intent(this, FacultyHubActivity::class.java))
         }
+    }
+    
+    private fun setupObservers() {
+        viewModel.isLoading.observe(this) { isLoading ->
+            loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.error.observe(this) { error ->
+            if (error != null) {
+                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.facultyList.observe(this) { facultyList ->
+            if (facultyList.isNotEmpty()) {
+                val faculty = facultyList[0] // Get the first faculty member
+                updateFacultyInfo(faculty)
+            }
+        }
+    }
+    
+    private fun updateFacultyInfo(faculty: com.vatty.mygbu.data.model.Faculty) {
+        // Update the faculty info card
+        facultyName.text = faculty.name
+        facultyDesignation.text = faculty.designation
+        facultyJoiningDate.text = "Joined: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(faculty.joiningDate)}"
+        
+        // Update the header section
+        tvFacultyName.text = faculty.name
     }
     
     // Test function for Enhanced TelegramLogger - Remove after testing

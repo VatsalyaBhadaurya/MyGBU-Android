@@ -103,16 +103,13 @@ class AttendanceActivity : AppCompatActivity() {
     }
     
     private fun setupRecyclerView() {
-        studentsAdapter = StudentsAttendanceAdapter(studentsList) { position ->
-            // Check if position is valid
+        studentsAdapter = StudentsAttendanceAdapter(studentsList) { position, isChecked ->
             if (position >= 0 && position < studentsList.size) {
-                // Toggle attendance status
                 val student = studentsList[position]
-                student.updateAttendance(!student.isPresent)
+                student.updateAttendance(isChecked)
                 
                 Log.d(TAG, "Attendance toggled for ${student.name}: ${student.status}")
                 
-                // Post the adapter update to avoid RecyclerView layout issues
                 binding.rvStudents.post {
                     studentsAdapter.notifyItemChanged(position)
                     updateStats()

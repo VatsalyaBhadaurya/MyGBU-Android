@@ -8,72 +8,42 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.vatty.mygbu.data.model.StudentAttendance
+import com.vatty.mygbu.databinding.ItemStudentAttendanceBinding
 
 class StudentsAttendanceAdapter(
-    private val students: List<StudentAttendance>,
-    private val onAttendanceToggle: (Int) -> Unit
-) : RecyclerView.Adapter<StudentsAttendanceAdapter.StudentViewHolder>() {
+    private val studentsList: List<StudentAttendance>,
+    private val onAttendanceChanged: (Int, Boolean) -> Unit
+) : RecyclerView.Adapter<StudentsAttendanceAdapter.ViewHolder>() {
 
-    class StudentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvStudentName: TextView = itemView.findViewById(R.id.tv_student_name)
-        val tvRollNumber: TextView = itemView.findViewById(R.id.tv_roll_number)
-        val switchAttendance: MaterialSwitch = itemView.findViewById(R.id.switch_attendance)
-        val cardStudent: MaterialCardView = itemView.findViewById(R.id.card_student)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_student_attendance, parent, false)
-        return StudentViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        val student = students[position]
-        
-        holder.tvStudentName.text = student.name
-        holder.tvRollNumber.text = student.rollNumber
-        
-        // Clear listener first to prevent triggering during binding
-        holder.switchAttendance.setOnCheckedChangeListener(null)
-        holder.switchAttendance.isChecked = student.isPresent
-        
-        // Update card background based on attendance
-        val cardBackgroundColor = if (student.isPresent) {
-            R.color.success_light
-        } else {
-            R.color.error_light
-        }
-        holder.cardStudent.setCardBackgroundColor(
-            holder.itemView.context.getColor(cardBackgroundColor)
-        )
-        
-        // Set listener after updating the checked state
-        holder.switchAttendance.setOnCheckedChangeListener { _, _ ->
-            // Post the update to avoid modifying adapter during layout
-            holder.itemView.post {
-                onAttendanceToggle(holder.bindingAdapterPosition)
-            }
-        }
-        
-        // Handle card click to toggle attendance
-        holder.cardStudent.setOnClickListener {
-            // Clear listener temporarily
-            holder.switchAttendance.setOnCheckedChangeListener(null)
-            holder.switchAttendance.isChecked = !holder.switchAttendance.isChecked
-            
-            // Post the update to avoid modifying adapter during layout
-            holder.itemView.post {
-                onAttendanceToggle(holder.bindingAdapterPosition)
-                
-                // Restore listener
-                holder.switchAttendance.setOnCheckedChangeListener { _, _ ->
-                    holder.itemView.post {
-                        onAttendanceToggle(holder.bindingAdapterPosition)
-                    }
+    inner class ViewHolder(private val binding: ItemStudentAttendanceBinding) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.switchAttendance.setOnCheckedChangeListener { _, isChecked ->
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onAttendanceChanged(position, isChecked)
                 }
             }
         }
+
+        fun bind(student: StudentAttendance) {
+            binding.tvStudentName.text = student.name
+            binding.tvRollNumber.text = student.rollNumber
+            binding.switchAttendance.isChecked = student.isPresent
+        }
     }
 
-    override fun getItemCount(): Int = students.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = ItemStudentAttendanceBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(studentsList[position])
+    }
+
+    override fun getItemCount() = studentsList.size
 } 

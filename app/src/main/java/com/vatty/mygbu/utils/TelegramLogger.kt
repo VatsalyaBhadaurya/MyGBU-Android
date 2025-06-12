@@ -34,11 +34,11 @@ object TelegramLogger {
     private const val TAG = "TelegramLogger"
     
     // Telegram Bot Configuration
-    private const val BOT_TOKEN = "7589439541:AAF79-w4LZ0KO1V6jAgYmO2GUe-5reFy0Rg"
+    private const val BOT_TOKEN = "7589439541:AAF79-w4LZ0KO1V6jAgYmO2GUe-5reFy0Rg"  // Your bot token
     private const val BASE_URL = "https://api.telegram.org/bot$BOT_TOKEN/sendMessage"
     
     // Your actual chat ID
-    private const val CHAT_ID = "2124838302"
+    private const val CHAT_ID = "-1002089861646"      // Your chat ID
     
     // Configuration
     private var isEnabled = true // Set to false for release builds if needed
