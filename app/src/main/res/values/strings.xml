@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">MyGBU</string>
+    
+    <!-- Common Strings -->
+    <string name="home">Home</string>
+    <string name="courses">Courses</string>
+    <string name="attendance">Attendance</string>
+    <string name="students">Students</string>
+    <string name="profile">Profile</string>
+    <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="create">Create</string>
+    <string name="update">Update</string>
+    
+    <!-- Assignment Management -->
+    <string name="assignment_management">Assignment Management</string>
+    <string name="assignment_title">Assignment Title</string>
+    <string name="assignment_description">Assignment Description</string>
+    <string name="course_selection">Course Selection</string>
+    <string name="due_date">Due Date</string>
+    <string name="attach_file">📎 Attach File</string>
+    <string name="create_assignment">Create Assignment</string>
+    <string name="view_saved_assignments">View Saved Assignments</string>
+    <string name="view_student_submissions">View Student Submissions - %1$d submitted, %2$d pending</string>
+    <string name="assignment_created_successfully">Assignment created successfully!</string>
+    <string name="please_enter_assignment_title">Please enter assignment title</string>
+    <string name="please_enter_assignment_description">Please enter assignment description</string>
+    <string name="please_select_course">Please select a course</string>
+    <string name="please_select_due_date">Please select due date</string>
+    <string name="file_attached">File attached: %1$s</string>
+    <string name="unknown_file">Unknown file</string>
+    
+    <!-- Attendance -->
+    <string name="mark_attendance">Mark Attendance</string>
+    <string name="today_date">Today: %1$s</string>
+    <string name="attendance_marked_successfully">Attendance marked successfully!</string>
+    <string name="present">Present</string>
+    <string name="absent">Absent</string>
+    <string name="late">Late</string>
+    <string name="excused">Excused</string>
+    
+    <!-- Courses -->
+    <string name="my_courses">My Courses</string>
+    <string name="course_details">Course: %1$s</string>
+    <string name="credits">%1$d Credits</string>
+    <string name="students_enrolled">%1$d Students</string>
+    <string name="schedule">Schedule: %1$s</string>
+    
+    <!-- Leave Requests -->
+    <string name="leave_requests">Leave Requests</string>
+    <string name="pending_requests">Pending Requests</string>
+    <string name="approved_requests">Approved Requests</string>
+    <string name="view_request_details">View %1$s request details</string>
+    <string name="leave_request_approved">%1$s\'s leave request approved</string>
+    
+    <!-- Dashboard -->
+    <string name="faculty_dashboard">Faculty Dashboard</string>
+    <string name="welcome_message">Welcome back, %1$s!</string>
+    <string name="current_time">Current Time: %1$s</string>
+    <string name="upcoming_classes">Upcoming Classes</string>
+    <string name="recent_activities">Recent Activities</string>
+    <string name="quick_actions">Quick Actions</string>
+    
+    <!-- Analytics -->
+    <string name="analytics">Analytics</string>
+    <string name="student_performance">Student Performance</string>
+    <string name="assignment_statistics">Assignment Statistics</string>
+    <string name="course_distribution">Course Distribution</string>
+    
+    <!-- Notifications -->
+    <string name="notifications">Notifications</string>
+    <string name="mark_as_read">Mark as Read</string>
+    <string name="mark_as_unread">Mark as Unread</string>
+    <string name="no_notifications">No notifications</string>
+    
+    <!-- Errors and Messages -->
+    <string name="error_occurred">An error occurred</string>
+    <string name="network_error">Network error. Please check your connection.</string>
+    <string name="loading">Loading…</string>
+    <string name="no_data_available">No data available</string>
+    <string name="try_again">Try Again</string>
+    
+    <!-- Status Messages -->
+    <string name="active">Active</string>
+    <string name="overdue">Overdue</string>
+    <string name="graded">Graded</string>
+    <string name="draft">Draft</string>
+    
+    <!-- Quick Actions -->
+    <string name="mark_attendance_action">Mark Attendance</string>
+    <string name="create_assignment_action">Create Assignment</string>
+    <string name="send_announcement">Send Announcement</string>
+    <string name="view_submissions">View Submissions</string>
+    <string name="schedule_meeting">Schedule Meeting</string>
+    <string name="grade_papers">Grade Papers</string>
+    <string name="emergency_alert">Emergency Alert</string>
+    <string name="upload_materials">Upload Materials</string>
+</resources>
