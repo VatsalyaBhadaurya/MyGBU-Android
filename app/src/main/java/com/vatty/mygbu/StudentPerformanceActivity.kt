@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
+import com.vatty.mygbu.utils.BottomNavigationHelper
 import com.vatty.mygbu.utils.LogWrapper as Log
 
 class StudentPerformanceActivity : AppCompatActivity() {
@@ -76,33 +77,10 @@ class StudentPerformanceActivity : AppCompatActivity() {
     }
     
     private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_students
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_courses -> {
-                    startActivity(Intent(this, CoursesActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_attendance -> {
-                    startActivity(Intent(this, AttendanceActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_students -> true
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, FacultyHubActivity::class.java))
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(
+            activity = this,
+            bottomNav = bottomNavigation,
+            currentItemId = R.id.nav_quick_actions
+        )
     }
 } 

@@ -31,19 +31,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vatty.mygbu.adapter.RecentMessagesAdapter
 import com.vatty.mygbu.data.model.Message
+import com.vatty.mygbu.utils.BottomNavigationHelper
+import com.vatty.mygbu.databinding.ActivityFacultyDashboardBinding
+import com.vatty.mygbu.utils.ErrorHandler
+import com.vatty.mygbu.utils.ValidationError
 
 class FacultyDashboardActivity : AppCompatActivity() {
     
-    // Message data class
-    data class Message(
-        val id: String,
-        val senderId: String,
-        val senderName: String,
-        val content: String,
-        val timestamp: Long,
-        val isRead: Boolean = false
-    )
-
     // Recent Messages Adapter
     private inner class RecentMessagesAdapter(
         private var messages: List<Message> = emptyList(),
@@ -86,20 +80,10 @@ class FacultyDashboardActivity : AppCompatActivity() {
     }
     
     // View references
-    private lateinit var loadingIndicator: ProgressBar
-    private lateinit var facultyName: TextView
-    private lateinit var facultyDesignation: TextView
-    private lateinit var facultyJoiningDate: TextView
-    private lateinit var tvGreeting: TextView
-    private lateinit var tvCurrentTime: TextView
-    private lateinit var tvTodaysClasses: TextView
-    private lateinit var tvPendingTasks: TextView
-    private lateinit var tvTotalStudents: TextView
-    private lateinit var bottomNavigation: BottomNavigationView
-    private lateinit var rvRecentMessages: RecyclerView
-    private lateinit var tvNoMessages: TextView
+    private lateinit var binding: ActivityFacultyDashboardBinding
+    private lateinit var viewModel: FacultyDashboardViewModel
+    private lateinit var errorHandler: ErrorHandler
     private lateinit var recentMessagesAdapter: RecentMessagesAdapter
-    private lateinit var quickStatsContainer: View
 
     private val timeHandler = Handler(Looper.getMainLooper())
     private val timeUpdateRunnable = object : Runnable {
@@ -110,43 +94,38 @@ class FacultyDashboardActivity : AppCompatActivity() {
     }
     
     private val TAG = "FacultyDashboardActivity"
-    private lateinit var viewModel: FacultyDashboardViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityFacultyDashboardBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        errorHandler = ErrorHandler(this)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_faculty_dashboard)
         
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[FacultyDashboardViewModel::class.java]
         
-        // Setup observers
+        // Setup views and observers
+        setupViews()
         setupObservers()
         
         // Load faculty data
         viewModel.loadFacultyList()
         
         // Handle window insets
-        val rootView = findViewById<View>(android.R.id.content)
-        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         
-        initializeViews()
         setupDashboardCards()
         setupHeaderActions()
         setupBottomNavigation()
         loadDashboardData()
         startTimeUpdates()
         setupDynamicContent()
-        
-        // Test TelegramLogger (remove this after testing)
-        testTelegramLogger()
-
-        // Test TelegramLogger with improved timeout handling - just call the test function
-        testImprovedTelegramLogger()
     }
     
     override fun onDestroy() {
@@ -154,40 +133,25 @@ class FacultyDashboardActivity : AppCompatActivity() {
         timeHandler.removeCallbacks(timeUpdateRunnable)
     }
     
-    private fun initializeViews() {
-        // Initialize all views
-        loadingIndicator = findViewById(R.id.loadingIndicator)
-        facultyName = findViewById(R.id.facultyName)
-        facultyDesignation = findViewById(R.id.facultyDesignation)
-        facultyJoiningDate = findViewById(R.id.facultyJoiningDate)
-        tvGreeting = findViewById(R.id.tv_greeting)
-        tvCurrentTime = findViewById(R.id.tv_current_time)
-        tvTodaysClasses = findViewById(R.id.tv_todays_classes)
-        tvPendingTasks = findViewById(R.id.tv_pending_tasks) 
-        tvTotalStudents = findViewById(R.id.tv_total_students)
-        bottomNavigation = findViewById(R.id.bottom_navigation)
-        rvRecentMessages = findViewById(R.id.rvRecentMessages)
-        tvNoMessages = findViewById(R.id.tvNoMessages)
-        quickStatsContainer = findViewById(R.id.quick_stats_container)
-        
+    private fun setupViews() {
         setupRecentMessages()
+        updateGreeting()
+        updateCurrentTime()
     }
     
     private fun setupRecentMessages() {
-        recentMessagesAdapter = RecentMessagesAdapter(
-            onMessageClick = { message ->
-                // TODO: Navigate to message detail or chat screen
-                Toast.makeText(this, "Opening message from ${message.senderName}", Toast.LENGTH_SHORT).show()
-            }
-        )
+        recentMessagesAdapter = RecentMessagesAdapter { message ->
+            // TODO: Navigate to message detail or chat screen
+            Toast.makeText(this, "Opening message from ${message.senderName}", Toast.LENGTH_SHORT).show()
+        }
         
-        rvRecentMessages.apply {
+        binding.rvRecentMessages.apply {
             layoutManager = LinearLayoutManager(this@FacultyDashboardActivity)
             adapter = recentMessagesAdapter
             setHasFixedSize(true)
         }
         
-        findViewById<View>(R.id.btnViewAllMessages).setOnClickListener {
+        binding.btnViewAllMessages.setOnClickListener {
             // TODO: Navigate to all messages screen
             Toast.makeText(this, "Opening all messages", Toast.LENGTH_SHORT).show()
         }
@@ -224,7 +188,7 @@ class FacultyDashboardActivity : AppCompatActivity() {
         )
         
         recentMessagesAdapter.updateMessages(sampleMessages)
-        tvNoMessages.visibility = if (sampleMessages.isEmpty()) View.VISIBLE else View.GONE
+        binding.tvNoMessages.visibility = if (sampleMessages.isEmpty()) View.VISIBLE else View.GONE
     }
     
     private fun loadDashboardData() {
@@ -240,172 +204,98 @@ class FacultyDashboardActivity : AppCompatActivity() {
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         
         val greeting = when (hour) {
-            in 5..11 -> "Good Morning"
+            in 0..11 -> "Good Morning"
             in 12..16 -> "Good Afternoon"
             in 17..20 -> "Good Evening"
             else -> "Good Night"
         }
         
-        tvGreeting.text = greeting
+        binding.tvGreeting.text = greeting
     }
     
     private fun updateCurrentTime() {
-        val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
-        val currentDate = SimpleDateFormat("EEEE, MMM dd", Locale.getDefault()).format(Date())
-        tvCurrentTime.text = "$currentTime • $currentDate"
+        val sdf = SimpleDateFormat("h:mm a", Locale.getDefault())
+        binding.tvCurrentTime.text = sdf.format(Date())
     }
     
     private fun startTimeUpdates() {
-        updateCurrentTime()
         timeHandler.post(timeUpdateRunnable)
     }
     
     private fun updateDashboardStats() {
-        // Simulate real-time data updates
-        tvTodaysClasses.text = "3"
-        tvPendingTasks.text = "7"
-        tvTotalStudents.text = "128"
-        
-        // Animate stats update (you can add CountUp animation here)
-        animateStatsUpdate()
-    }
-    
-    private fun animateStatsUpdate() {
-        // Simple fade animation for stats
-        quickStatsContainer.alpha = 0f
-        quickStatsContainer.animate()
-            .alpha(1f)
-            .setDuration(500)
-            .start()
-    }
-    
-    private fun setupDynamicContent() {
-        // Update dynamic content setup
-        updateDashboardStats()
-    }
-    
-    private fun setupHeaderActions() {
-        // Remove this method as the notification icon no longer exists
-    }
-    
-    private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_home
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> true
-                R.id.nav_quick_actions -> {
-                    startActivity(Intent(this, QuickActionsActivity::class.java))
-                    true
-                }
-                R.id.nav_analytics -> {
-                    startActivity(Intent(this, AnalyticsActivity::class.java))
-                    true
-                }
-                R.id.nav_messages -> {
-                    startActivity(Intent(this, MessagesActivity::class.java))
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, FacultyHubActivity::class.java))
-                    true
-                }
-                else -> false
-            }
+        // TODO: Replace with real data from API
+        with(binding) {
+            tvTodaysClasses.text = "4"
+            tvPendingTasks.text = "7"
+            tvTotalStudents.text = "120"
         }
     }
     
     private fun setupDashboardCards() {
-        // Primary Actions (Large Cards)
-        findViewById<MaterialCardView>(R.id.card_courses)?.setOnClickListener {
-            startActivity(Intent(this, CoursesActivity::class.java))
+        with(binding) {
+            cardCourses.setOnClickListener {
+                startActivity(Intent(this@FacultyDashboardActivity, CoursesActivity::class.java))
+            }
+            
+            cardGrades.setOnClickListener {
+                startActivity(Intent(this@FacultyDashboardActivity, AssignmentManagementActivity::class.java))
+            }
+            
+            cardAttendance.setOnClickListener {
+                startActivity(Intent(this@FacultyDashboardActivity, AttendanceActivity::class.java))
+            }
+            
+            cardStudents.setOnClickListener {
+                startActivity(Intent(this@FacultyDashboardActivity, StudentPerformanceActivity::class.java))
+            }
         }
-        
-        findViewById<MaterialCardView>(R.id.card_grades)?.setOnClickListener {
-            startActivity(Intent(this, AssignmentManagementActivity::class.java))
+    }
+    
+    private fun setupHeaderActions() {
+        binding.ivProfile.setOnClickListener {
+            // TODO: Navigate to profile screen
+            Toast.makeText(this, "Opening profile", Toast.LENGTH_SHORT).show()
         }
-        
-        // Secondary Actions
-        findViewById<MaterialCardView>(R.id.card_attendance)?.setOnClickListener {
-            startActivity(Intent(this, AttendanceActivity::class.java))
-        }
-        
-        findViewById<MaterialCardView>(R.id.card_students)?.setOnClickListener {
-            startActivity(Intent(this, StudentPerformanceActivity::class.java))
-        }
-        
-        // Additional Features (Compact Cards)
-        findViewById<MaterialCardView>(R.id.card_schedule)?.setOnClickListener {
-            startActivity(Intent(this, ScheduleActivity::class.java))
-        }
-        
-        findViewById<MaterialCardView>(R.id.card_reports)?.setOnClickListener {
-            startActivity(Intent(this, LeaveRequestsActivity::class.java))
-        }
-        
-        findViewById<MaterialCardView>(R.id.card_announcements)?.setOnClickListener {
-            startActivity(Intent(this, MessagesActivity::class.java))
-        }
-        
-        findViewById<MaterialCardView>(R.id.card_profile)?.setOnClickListener {
-            startActivity(Intent(this, FacultyHubActivity::class.java))
-        }
+    }
+    
+    private fun setupBottomNavigation() {
+        BottomNavigationHelper.setupBottomNavigation(
+            activity = this,
+            bottomNav = binding.bottomNavigation,
+            currentItemId = R.id.nav_home
+        )
+    }
+    
+    private fun setupDynamicContent() {
+        // TODO: Load dynamic content like announcements, schedule, etc.
     }
     
     private fun setupObservers() {
         viewModel.isLoading.observe(this) { isLoading ->
-            loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
         viewModel.error.observe(this) { error ->
             if (error != null) {
-                Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                errorHandler.showError(ValidationError(error))
             }
         }
 
         viewModel.facultyList.observe(this) { facultyList ->
             if (facultyList.isNotEmpty()) {
                 val faculty = facultyList[0] // Get the first faculty member
-                updateFacultyInfo(faculty)
+                with(binding) {
+                    tvFacultyName.text = faculty.name
+                    tvFacultyDesignation.text = faculty.designation
+                    tvJoiningDate.text = "Joined: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(faculty.joiningDate)}"
+                }
             }
         }
     }
     
-    private fun updateFacultyInfo(faculty: com.vatty.mygbu.data.model.Faculty) {
-        // Update the faculty info card
-        facultyName.text = faculty.name
-        facultyDesignation.text = faculty.designation
-        facultyJoiningDate.text = "Joined: ${SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(faculty.joiningDate)}"
-    }
-    
-    // Test function for Enhanced TelegramLogger - Remove after testing
     private fun testTelegramLogger() {
-        Log.d("FacultyDashboard", "Testing TelegramLogger (rate-limited)...")
-        
-        // Test the enhanced TelegramLogger with a single message
-        TelegramLogger.log("🧪 Faculty Dashboard started with rate-limited monitoring", "FacultyDashboard")
-        
-        // Don't run comprehensive tests immediately to avoid rate limiting
-        Log.d("FacultyDashboard", "TelegramLogger basic test completed. Real monitoring is active.")
+        TelegramLogger.log(TAG, "Testing Telegram Logger from FacultyDashboardActivity")
     }
     
-    private fun testSystemErrorCapture() {
-        Log.d("FacultyDashboard", "System error monitoring is active in background...")
-        
-        // System monitoring runs automatically - no need to spam with tests
-        // Just send one test to confirm it's working
-        SystemErrorMonitor.reportNotificationServiceError("com.vatty.mygbu", 5)
-        
-        Log.d("FacultyDashboard", "Comprehensive error monitoring is running. Real errors will be captured automatically.")
-    }
-    
-    private fun testImprovedTelegramLogger() {
-        Log.d("FacultyDashboard", "Enhanced TelegramLogger is active...")
-        
-        // Show queue stats instead of sending multiple messages
-        val stats = TelegramLogger.getNetworkStats()
-        Log.d("FacultyDashboard", "Current queue stats: $stats")
-        
-        Toast.makeText(this, "Enhanced monitoring is active! Real errors will be captured without overwhelming Telegram API.", Toast.LENGTH_LONG).show()
-    }
+
 } 

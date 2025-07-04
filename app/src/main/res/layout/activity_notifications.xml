@@ -58,10 +58,7 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:elevation="8dp"
-        app:menu="@menu/notifications_bottom_menu"
-        app:itemIconTint="@color/primary"
-        app:itemTextColor="@color/primary" />
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </LinearLayout> 

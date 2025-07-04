@@ -15,6 +15,7 @@ import com.vatty.mygbu.data.model.SavedAssignment
 import com.vatty.mygbu.databinding.ActivityAssignmentManagementBinding
 import com.vatty.mygbu.enums.AssignmentStatus
 import com.vatty.mygbu.utils.DateUtils
+import com.vatty.mygbu.utils.ErrorHandler
 import com.vatty.mygbu.utils.LogWrapper as Log
 import java.util.*
 
@@ -25,6 +26,7 @@ class AssignmentManagementActivity : AppCompatActivity() {
     private var attachedFileName: String? = null
     private val savedAssignments = mutableListOf<SavedAssignment>()
     private lateinit var assignmentsAdapter: SavedAssignmentsAdapter
+    private lateinit var errorHandler: ErrorHandler
     
     companion object {
         private const val TAG = "AssignmentManagement"
@@ -57,40 +59,32 @@ class AssignmentManagementActivity : AppCompatActivity() {
         // Test LogWrapper - this will now be sent to Telegram automatically!
         Log.i(TAG, "AssignmentManagementActivity started - app-wide monitoring active!")
         
-        setupToolbar()
-        setupClickListeners()
+        errorHandler = ErrorHandler(this)
+        setupViews()
         setupRecyclerView()
         loadSampleAssignments()
     }
     
-    private fun setupToolbar() {
+    private fun setupViews() {
         binding.ivBack.setOnClickListener {
-            finish()
+            onBackPressed()
         }
-    }
-    
-    private fun setupClickListeners() {
-        binding.etDueDate.setOnClickListener {
-            showDatePicker()
+
+        binding.btnCreateAssignment.setOnClickListener {
+            createAssignment()
         }
-        
+
         binding.btnAttachFile.setOnClickListener {
             // Launch file picker for documents
             filePickerLauncher.launch("*/*")
         }
-        
-        binding.btnSaveAssignment.setOnClickListener {
-            saveAssignment()
+
+        binding.etDueDate.setOnClickListener {
+            showDatePicker()
         }
-        
-        binding.cardStudentSubmissions.setOnClickListener {
-            // Navigate to student submissions
-            Toast.makeText(this, getString(R.string.view_student_submissions, 15, 8), Toast.LENGTH_SHORT).show()
-        }
-        
-        binding.cardGradedAssignments.setOnClickListener {
-            // Navigate to graded assignments
-            Toast.makeText(this, "View Graded Assignments - 12 graded", Toast.LENGTH_SHORT).show()
+
+        binding.fabAddAssignment.setOnClickListener {
+            // TODO: Show assignment creation form
         }
     }
     
@@ -139,44 +133,58 @@ class AssignmentManagementActivity : AppCompatActivity() {
         datePickerDialog.show()
     }
     
-    private fun saveAssignment() {
-        val title = binding.etAssignmentTitle.text.toString().trim()
-        val description = binding.etAssignmentDescription.text.toString().trim()
-        val dueDate = binding.etDueDate.text.toString().trim()
-        
-        when {
-            title.isEmpty() -> {
-                Toast.makeText(this, getString(R.string.please_enter_assignment_title), Toast.LENGTH_SHORT).show()
-                return
+    private fun createAssignment() {
+        try {
+            errorHandler.showLoadingState()
+            val title = binding.etAssignmentTitle.text.toString().trim()
+            val description = binding.etAssignmentDescription.text.toString().trim()
+            val dueDate = binding.etDueDate.text.toString().trim()
+            
+            if (validateInput(title, description, dueDate)) {
+                // Create new assignment
+                val newAssignment = SavedAssignment(
+                    title = title,
+                    courseCode = "CS101", // Default course
+                    dueDate = dueDate,
+                    status = AssignmentStatus.DRAFT,
+                    attachmentName = attachedFileName
+                )
+                
+                // Add to saved assignments
+                savedAssignments.add(0, newAssignment) // Add at top
+                assignmentsAdapter.notifyItemInserted(0)
+                
+                Toast.makeText(this, getString(R.string.assignment_created_successfully), Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Assignment created: $title")
+                
+                // Clear form
+                clearForm()
+                
+                // TODO: Save assignment to backend
+                android.os.Handler().postDelayed({
+                    errorHandler.hideLoadingState()
+                    finish()
+                }, 1000)
             }
-            description.isEmpty() -> {
-                Toast.makeText(this, getString(R.string.please_enter_assignment_description), Toast.LENGTH_SHORT).show()
-                return
-            }
-            dueDate.isEmpty() -> {
-                Toast.makeText(this, getString(R.string.please_select_due_date), Toast.LENGTH_SHORT).show()
-                return
-            }
+        } catch (e: Exception) {
+            errorHandler.showError(e)
         }
-        
-        // Create new assignment
-        val newAssignment = SavedAssignment(
-            title = title,
-            courseCode = "CS101", // Default course
-            dueDate = dueDate,
-            status = AssignmentStatus.DRAFT,
-            attachmentName = attachedFileName
-        )
-        
-        // Add to saved assignments
-        savedAssignments.add(0, newAssignment) // Add at top
-        assignmentsAdapter.notifyItemInserted(0)
-        
-        Toast.makeText(this, getString(R.string.assignment_created_successfully), Toast.LENGTH_SHORT).show()
-        Log.d(TAG, "Assignment created: $title")
-        
-        // Clear form
-        clearForm()
+    }
+    
+    private fun validateInput(title: String, description: String, dueDate: String): Boolean {
+        if (title.isEmpty()) {
+            binding.etAssignmentTitle.error = "Title is required"
+            return false
+        }
+        if (description.isEmpty()) {
+            binding.etAssignmentDescription.error = "Description is required"
+            return false
+        }
+        if (dueDate.isEmpty()) {
+            binding.etDueDate.error = "Due date is required"
+            return false
+        }
+        return true
     }
     
     private fun clearForm() {

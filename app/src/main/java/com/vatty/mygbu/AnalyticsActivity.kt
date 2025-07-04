@@ -11,6 +11,7 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.vatty.mygbu.databinding.ActivityAnalyticsBinding
+import com.vatty.mygbu.utils.BottomNavigationHelper
 import com.vatty.mygbu.utils.LogWrapper as Log
 
 class AnalyticsActivity : AppCompatActivity() {
@@ -28,7 +29,9 @@ class AnalyticsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAnalyticsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
         Log.i(TAG, "AnalyticsActivity started - faculty analytics dashboard active")
+        
         setupViews()
         setupCharts()
         setupBottomNavigation()
@@ -42,6 +45,14 @@ class AnalyticsActivity : AppCompatActivity() {
         courseDistributionChart = binding.chartCourseDistribution
     }
 
+    private fun setupBottomNavigation() {
+        BottomNavigationHelper.setupBottomNavigation(
+            activity = this,
+            bottomNav = binding.bottomNavigation,
+            currentItemId = R.id.nav_home
+        )
+    }
+
     private fun setupCharts() {
         setupStudentPerformanceChart()
         setupAssignmentStatsChart()
@@ -49,98 +60,121 @@ class AnalyticsActivity : AppCompatActivity() {
     }
 
     private fun setupStudentPerformanceChart() {
-        val entries = listOf(
-            Entry(0f, 85f), Entry(1f, 80f), Entry(2f, 82f),
-            Entry(3f, 88f), Entry(4f, 91f), Entry(5f, 87f)
-        )
-
-        val dataSet = LineDataSet(entries, "Class Average")
-        dataSet.color = Color.BLUE
-        dataSet.setCircleColor(Color.BLUE)
-        dataSet.lineWidth = 2f
-        dataSet.circleRadius = 4f
-        dataSet.setDrawFilled(true)
-        dataSet.fillAlpha = 30
-
-        val lineData = LineData(dataSet)
-        studentPerformanceChart.data = lineData
-
-        studentPerformanceChart.xAxis.valueFormatter = IndexAxisValueFormatter(
-            arrayOf("Sep", "Oct", "Nov", "Dec", "Jan", "Feb")
-        )
-        studentPerformanceChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        studentPerformanceChart.description.isEnabled = false
-        studentPerformanceChart.legend.isEnabled = false
-        studentPerformanceChart.invalidate()
+        // Configure student performance line chart
+        studentPerformanceChart.apply {
+            description.isEnabled = false
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(true)
+            setPinchZoom(true)
+            
+            // Sample data
+            val entries = listOf(
+                Entry(0f, 75f),
+                Entry(1f, 80f),
+                Entry(2f, 85f),
+                Entry(3f, 78f),
+                Entry(4f, 88f)
+            )
+            
+            val dataSet = LineDataSet(entries, "Average Performance")
+            dataSet.apply {
+                color = Color.BLUE
+                valueTextColor = Color.BLACK
+                lineWidth = 2f
+                setCircleColor(Color.BLUE)
+                setDrawCircleHole(false)
+            }
+            
+            data = LineData(dataSet)
+            
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                valueFormatter = IndexAxisValueFormatter(arrayOf("Week 1", "Week 2", "Week 3", "Week 4", "Week 5"))
+            }
+            
+            axisLeft.apply {
+                setDrawGridLines(true)
+                axisMinimum = 0f
+                axisMaximum = 100f
+            }
+            
+            axisRight.isEnabled = false
+            
+            invalidate()
+        }
     }
 
     private fun setupAssignmentStatsChart() {
-        val entries = listOf(
-            PieEntry(25f, "Submitted"),
-            PieEntry(18f, "Pending"),
-            PieEntry(7f, "Overdue")
-        )
-
-        val dataSet = PieDataSet(entries, "Assignments")
-        dataSet.colors = listOf(
-            Color.parseColor("#4CAF50"), // Submitted
-            Color.parseColor("#FF9800"), // Pending
-            Color.parseColor("#F44336")  // Overdue
-        )
-        dataSet.valueTextSize = 12f
-        dataSet.valueTextColor = Color.WHITE
-
-        val pieData = PieData(dataSet)
-        assignmentStatsChart.data = pieData
-        assignmentStatsChart.description.isEnabled = false
-        assignmentStatsChart.centerText = "Assignment\nStatus"
-        assignmentStatsChart.setCenterTextSize(14f)
-        assignmentStatsChart.invalidate()
+        // Configure assignment statistics pie chart
+        assignmentStatsChart.apply {
+            description.isEnabled = false
+            isDrawHoleEnabled = true
+            setHoleColor(Color.WHITE)
+            setTransparentCircleColor(Color.WHITE)
+            setTransparentCircleAlpha(110)
+            holeRadius = 58f
+            transparentCircleRadius = 61f
+            setDrawCenterText(true)
+            centerText = "Assignments"
+            
+            // Sample data
+            val entries = listOf(
+                PieEntry(30f, "Submitted"),
+                PieEntry(15f, "Late"),
+                PieEntry(10f, "Missing"),
+                PieEntry(45f, "On Time")
+            )
+            
+            val dataSet = PieDataSet(entries, "Assignment Status")
+            dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+            
+            data = PieData(dataSet)
+            data.setValueTextSize(11f)
+            data.setValueTextColor(Color.WHITE)
+            
+            invalidate()
+        }
     }
 
     private fun setupCourseDistributionChart() {
-        val entries = listOf(
-            BarEntry(0f, 35f),
-            BarEntry(1f, 28f),
-            BarEntry(2f, 22f),
-            BarEntry(3f, 15f)
-        )
-
-        val dataSet = BarDataSet(entries, "Course Distribution")
-        dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
-
-        val barData = BarData(dataSet)
-        courseDistributionChart.data = barData
-
-        courseDistributionChart.xAxis.valueFormatter = IndexAxisValueFormatter(
-            arrayOf("CS101", "CS201", "CS301", "CS401")
-        )
-        courseDistributionChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        courseDistributionChart.description.isEnabled = false
-        courseDistributionChart.legend.isEnabled = false
-        courseDistributionChart.invalidate()
-    }
-
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.selectedItemId = R.id.nav_analytics
-        
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    finish()
-                    true
-                }
-                R.id.nav_analytics -> true
-                R.id.nav_reports -> {
-                    // Navigate to reports
-                    true
-                }
-                R.id.nav_profile -> {
-                    // Navigate to profile
-                    true
-                }
-                else -> false
+        // Configure course distribution bar chart
+        courseDistributionChart.apply {
+            description.isEnabled = false
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(true)
+            setPinchZoom(false)
+            
+            // Sample data
+            val entries = listOf(
+                BarEntry(0f, 45f),
+                BarEntry(1f, 38f),
+                BarEntry(2f, 42f),
+                BarEntry(3f, 35f)
+            )
+            
+            val dataSet = BarDataSet(entries, "Students per Course")
+            dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
+            
+            data = BarData(dataSet)
+            data.barWidth = 0.9f
+            
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                valueFormatter = IndexAxisValueFormatter(arrayOf("Math", "Physics", "Chemistry", "Biology"))
             }
+            
+            axisLeft.apply {
+                setDrawGridLines(true)
+                axisMinimum = 0f
+            }
+            
+            axisRight.isEnabled = false
+            
+            invalidate()
         }
     }
 } 

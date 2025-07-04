@@ -1,14 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base colors -->
+    <!-- Brand Colors -->
+    <color name="primary">#1976D2</color>
+    <color name="primary_dark">#1565C0</color>
+    <color name="primary_light">#42A5F5</color>
+    <color name="secondary">#FF5722</color>
+    <color name="secondary_dark">#E64A19</color>
+    <color name="secondary_light">#FF7043</color>
+
+    <!-- Text Colors -->
+    <color name="text1">#212121</color>
+    <color name="text2">#757575</color>
+    <color name="text_hint">#9E9E9E</color>
+
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="error">#F44336</color>
+    <color name="warning">#FFC107</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="info">#2196F3</color>
+    <color name="success_green">#4CAF50</color>
+    <color name="error_red">#F44336</color>
+
+    <!-- Common Colors -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="divider">#EEEEEE</color>
+    <color name="ripple_color">#1F000000</color>
+
+    <!-- Bottom Navigation Colors -->
+    <color name="bottom_nav_item_color">@color/primary</color>
+    <color name="bottom_nav_background">@color/white</color>
+
+    <!-- Card Colors -->
+    <color name="card_background">@color/white</color>
+    <color name="card_stroke">#E0E0E0</color>
+
+    <!-- Switch Colors -->
+    <color name="switch_track_on">@color/primary_light</color>
+    <color name="switch_track_off">#BDBDBD</color>
+    <color name="switch_thumb_on">@color/primary</color>
+    <color name="switch_thumb_off">#F5F5F5</color>
+
+    <!-- Progress Colors -->
+    <color name="progress_background">#E0E0E0</color>
+    <color name="progress_primary">@color/primary</color>
+    <color name="progress_secondary">@color/secondary</color>
 
     <!-- GBU Brand Colors -->
     <color name="gbu_primary">#E53935</color>          <!-- Red for primary elements -->
     <color name="gbu_primary_dark">#C62828</color>     <!-- Darker red for status bar -->
     <color name="gbu_primary_light">#EF5350</color>    <!-- Lighter red for highlights -->
-    
+
     <color name="gbu_secondary">#1B5E20</color>        <!-- Green for secondary elements -->
     <color name="gbu_secondary_dark">#0A3D0A</color>   <!-- Darker green -->
     <color name="gbu_secondary_light">#43A047</color>  <!-- Lighter green -->
@@ -16,29 +60,6 @@
     <!-- Background Colors -->
     <color name="gbu_background">#F5F5F5</color>       <!-- White background -->
     <color name="gbu_surface">#FFFFFF</color>         <!-- Light gray for cards -->
-
-    <!-- Text Colors -->
-    <color name="gbu_text_primary">#212121</color>    <!-- Dark gray for primary text -->
-    <color name="gbu_text_secondary">#757575</color>  <!-- Medium gray for secondary text -->
-    
-    <!-- Status Colors -->
-    <color name="success_green">#4CAF50</color>         <!-- Green for success -->
-    <color name="error_red">#F44336</color>           <!-- Red for errors -->
-    <color name="warning_orange">#FF9800</color>         <!-- Amber for warnings -->
-    <color name="info_blue">#2196F3</color>            <!-- Blue for info -->
-
-    <!-- Legacy Colors (keeping for backward compatibility) -->
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-
-    <!-- Color Aliases (for layout compatibility) -->
-    <color name="background_light">#F5F5F5</color>
-    <color name="primary">#E53935</color>
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
 
     <!-- Additional Status Colors -->
     <color name="warning_light">#FFE082</color>        <!-- Light amber for warning backgrounds -->
@@ -58,4 +79,16 @@
     <color name="card_performance">#F3E5F5</color>
     <color name="card_reports">#FBE9E7</color>
     <color name="card_leave">#F3E5F5</color>
+
+    <!-- Legacy Colors (keeping for backward compatibility) -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <!-- Color Aliases (for layout compatibility) -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
 </resources>

@@ -5,9 +5,8 @@
     <!-- Soft gradient over white -->
     <gradient
         android:angle="135"
-        android:startColor="#FFFFFF"
-        android:centerColor="#E3F2FD"
-        android:endColor="#FFFFFF"
+        android:endColor="@color/primary_dark"
+        android:startColor="@color/primary"
         android:type="linear" />
 
 </shape>

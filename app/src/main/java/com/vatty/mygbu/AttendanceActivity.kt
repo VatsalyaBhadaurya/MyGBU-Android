@@ -10,13 +10,14 @@ import com.vatty.mygbu.data.model.StudentAttendance
 import com.vatty.mygbu.databinding.ActivityAttendanceBinding
 import com.vatty.mygbu.enums.AttendanceStatus
 import com.vatty.mygbu.utils.DateUtils
+import com.vatty.mygbu.utils.ErrorHandler
 import com.vatty.mygbu.utils.LogWrapper as Log
 
 class AttendanceActivity : AppCompatActivity() {
     
-    private var _binding: ActivityAttendanceBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var studentsAdapter: StudentsAttendanceAdapter
+    private lateinit var binding: ActivityAttendanceBinding
+    private lateinit var adapter: StudentsAttendanceAdapter
+    private lateinit var errorHandler: ErrorHandler
     private val studentsList = mutableListOf<StudentAttendance>()
     
     companion object {
@@ -25,8 +26,10 @@ class AttendanceActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityAttendanceBinding.inflate(layoutInflater)
+        binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
+        errorHandler = ErrorHandler(this)
         
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,17 +40,17 @@ class AttendanceActivity : AppCompatActivity() {
         // Test LogWrapper - this will now be sent to Telegram automatically!
         Log.i(TAG, "AttendanceActivity started - monitoring enabled across the app!")
         
-        setupToolbar()
-        setupStudentsList()
-        setupRecyclerView()
-        setupClickListeners()
-        updateStats()
-        setupCurrentDate()
+        setupViews()
+        setupListeners()
+        loadAttendanceData()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+    private fun setupViews() {
+        setupToolbar()
+        setupCurrentDate()
+        setupStudentsList()
+        setupRecyclerView()
+        updateStats()
     }
     
     private fun setupToolbar() {
@@ -77,39 +80,12 @@ class AttendanceActivity : AppCompatActivity() {
             StudentAttendance("ST012", "Tanishq Bansal", rollNumber = "2021012"),
             StudentAttendance("ST013", "Urvi Shah", rollNumber = "2021013"),
             StudentAttendance("ST014", "Vihaan Nair", rollNumber = "2021014"),
-            StudentAttendance("ST015", "Zara Khan", rollNumber = "2021015", status = AttendanceStatus.ABSENT),
-            StudentAttendance("ST016", "Aditya Saxena", rollNumber = "2021016"),
-            StudentAttendance("ST017", "Bhumika Tiwari", rollNumber = "2021017"),
-            StudentAttendance("ST018", "Chirag Malhotra", rollNumber = "2021018"),
-            StudentAttendance("ST019", "Devika Pillai", rollNumber = "2021019"),
-            StudentAttendance("ST020", "Eshan Rao", rollNumber = "2021020"),
-            StudentAttendance("ST021", "Falguni Desai", rollNumber = "2021021"),
-            StudentAttendance("ST022", "Gaurav Kohli", rollNumber = "2021022"),
-            StudentAttendance("ST023", "Harini Srinivasan", rollNumber = "2021023"),
-            StudentAttendance("ST024", "Ishan Chopra", rollNumber = "2021024"),
-            StudentAttendance("ST025", "Janhvi Thakur", rollNumber = "2021025"),
-            StudentAttendance("ST026", "Karthik Bose", rollNumber = "2021026"),
-            StudentAttendance("ST027", "Lavanya Mishra", rollNumber = "2021027"),
-            StudentAttendance("ST028", "Mridul Das", rollNumber = "2021028"),
-            StudentAttendance("ST029", "Navya Kapoor", rollNumber = "2021029"),
-            StudentAttendance("ST030", "Om Pandey", rollNumber = "2021030"),
-            StudentAttendance("ST031", "Parineeti Bhatt", rollNumber = "2021031"),
-            StudentAttendance("ST032", "Quincy D'Souza", rollNumber = "2021032"),
-            StudentAttendance("ST033", "Rhea Chandra", rollNumber = "2021033"),
-            StudentAttendance("ST034", "Siddharth Joshi", rollNumber = "2021034"),
-            StudentAttendance("ST035", "Tanya Srivastava", rollNumber = "2021035"),
-            StudentAttendance("ST036", "Ujjwal Goyal", rollNumber = "2021036"),
-            StudentAttendance("ST037", "Vidhi Ahluwalia", rollNumber = "2021037"),
-            StudentAttendance("ST038", "Yash Singhal", rollNumber = "2021038"),
-            StudentAttendance("ST039", "Zoya Bajaj", rollNumber = "2021039"),
-            StudentAttendance("ST040", "Arnav Kulkarni", rollNumber = "2021040"),
-            StudentAttendance("ST041", "Bhavya Randhawa", rollNumber = "2021041"),
-            StudentAttendance("ST042", "Chinmay Ghosh", rollNumber = "2021042")
+            StudentAttendance("ST015", "Zara Khan", rollNumber = "2021015", status = AttendanceStatus.ABSENT)
         ))
     }
     
     private fun setupRecyclerView() {
-        studentsAdapter = StudentsAttendanceAdapter(studentsList) { position, isChecked ->
+        adapter = StudentsAttendanceAdapter(studentsList) { position, isChecked ->
             if (position >= 0 && position < studentsList.size) {
                 val student = studentsList[position]
                 student.updateAttendance(isChecked)
@@ -117,16 +93,16 @@ class AttendanceActivity : AppCompatActivity() {
                 Log.d(TAG, "Attendance toggled for ${student.name}: ${student.status}")
                 
                 binding.rvStudents.post {
-                    studentsAdapter.notifyItemChanged(position)
+                    adapter.notifyItemChanged(position)
                     updateStats()
                 }
             }
         }
         binding.rvStudents.layoutManager = LinearLayoutManager(this)
-        binding.rvStudents.adapter = studentsAdapter
+        binding.rvStudents.adapter = adapter
     }
     
-    private fun setupClickListeners() {
+    private fun setupListeners() {
         binding.btnMarkAllPresent.setOnClickListener {
             markAllStudents(true)
         }
@@ -136,7 +112,7 @@ class AttendanceActivity : AppCompatActivity() {
         }
         
         binding.btnSubmitAttendance.setOnClickListener {
-            submitAttendance()
+            saveAttendance()
         }
     }
     
@@ -145,7 +121,7 @@ class AttendanceActivity : AppCompatActivity() {
         
         // Post the update to avoid RecyclerView layout issues
         binding.rvStudents.post {
-            studentsAdapter.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
             updateStats()
         }
         
@@ -163,43 +139,43 @@ class AttendanceActivity : AppCompatActivity() {
         val presentCount = studentsList.count { it.isPresent }
         val absentCount = totalStudents - presentCount
         
-        binding.tvTotalStudents.text = totalStudents.toString()
-        binding.tvPresentCount.text = presentCount.toString()
-        binding.tvAbsentCount.text = absentCount.toString()
+        binding.tvTotalStudents.text = getString(R.string.total_students, totalStudents)
+        binding.tvPresentCount.text = getString(R.string.present_count, presentCount)
+        binding.tvAbsentCount.text = getString(R.string.absent_count, absentCount)
     }
     
-    private fun submitAttendance() {
-        val topicsCovered = binding.etTopicsCovered.text.toString().trim()
-        
-        if (topicsCovered.isEmpty()) {
-            // Test error logging - this will be sent to Telegram!
-            Log.w(TAG, "User tried to submit attendance without entering topics covered")
-            Toast.makeText(this, "Please enter topics covered", Toast.LENGTH_SHORT).show()
-            return
+    private fun loadAttendanceData() {
+        try {
+            errorHandler.showLoadingState()
+            // TODO: Load actual student data
+            adapter.submitList(studentsList)
+            updateStats()
+            errorHandler.hideLoadingState()
+        } catch (e: Exception) {
+            errorHandler.showError(e)
         }
-        
-        val presentCount = studentsList.count { it.isPresent }
-        val totalStudents = studentsList.size
-        val attendancePercentage = (presentCount * 100) / totalStudents
-        
-        // Test low attendance warning - this will be sent to Telegram!
-        if (attendancePercentage < 75) {
-            Log.w(TAG, "Low attendance detected: $attendancePercentage% ($presentCount/$totalStudents)")
+    }
+    
+    private fun saveAttendance() {
+        try {
+            val topicsCovered = binding.etTopicsCovered.text.toString()
+            val remarks = binding.etRemarks.text.toString()
+
+            if (topicsCovered.isEmpty()) {
+                binding.etTopicsCovered.error = "Please enter topics covered"
+                return
+            }
+
+            // TODO: Save attendance data to backend
+            errorHandler.showLoadingState()
+            // Simulate API call
+            android.os.Handler().postDelayed({
+                errorHandler.hideLoadingState()
+                finish()
+            }, 1000)
+
+        } catch (e: Exception) {
+            errorHandler.showError(e)
         }
-        
-        Toast.makeText(
-            this, 
-            getString(R.string.attendance_marked_successfully) + 
-            "\n$presentCount/$totalStudents present ($attendancePercentage%)", 
-            Toast.LENGTH_LONG
-        ).show()
-        
-        Log.d(TAG, "Attendance submitted: $presentCount/$totalStudents present ($attendancePercentage%)")
-        
-        // Clear form
-        binding.etTopicsCovered.setText("")
-        binding.etRemarks.setText("")
-        
-        finish()
     }
 } 

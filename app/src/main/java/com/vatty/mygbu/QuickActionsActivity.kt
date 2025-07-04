@@ -2,18 +2,16 @@ package com.vatty.mygbu
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.databinding.ActivityQuickActionsBinding
+import com.vatty.mygbu.utils.BottomNavigationHelper
 import com.vatty.mygbu.utils.LogWrapper as Log
 
 class QuickActionsActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var binding: ActivityQuickActionsBinding
     private lateinit var quickActionsAdapter: QuickActionsAdapter
-    private lateinit var bottomNavigation: BottomNavigationView
     
     companion object {
         private const val TAG = "QuickActionsActivity"
@@ -21,7 +19,8 @@ class QuickActionsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_quick_actions)
+        binding = ActivityQuickActionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Log activity startup - this will be sent to Telegram!
         Log.i(TAG, "QuickActionsActivity started - faculty quick actions and shortcuts active")
@@ -32,41 +31,25 @@ class QuickActionsActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        val backButton = findViewById<ImageView>(R.id.iv_back)
-        backButton.setOnClickListener { finish() }
+        binding.ivBack.setOnClickListener { finish() }
     }
 
     private fun setupRecyclerView() {
-        recyclerView = findViewById(R.id.rv_quick_actions)
         quickActionsAdapter = QuickActionsAdapter(getQuickActions()) { action ->
             handleQuickAction(action)
         }
-        recyclerView.adapter = quickActionsAdapter
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        binding.rvQuickActions.apply {
+            adapter = quickActionsAdapter
+            layoutManager = GridLayoutManager(this@QuickActionsActivity, 2)
+        }
     }
 
     private fun setupBottomNavigation() {
-        bottomNavigation = findViewById(R.id.bottom_navigation)
-        bottomNavigation.selectedItemId = R.id.nav_quick_actions
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
-                    true
-                }
-                R.id.nav_quick_actions -> true
-                R.id.nav_calendar -> {
-                    startActivity(Intent(this, ScheduleActivity::class.java))
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, FacultyHubActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(
+            activity = this,
+            bottomNav = binding.bottomNavigation,
+            currentItemId = R.id.nav_quick_actions
+        )
     }
 
     private fun getQuickActions(): List<QuickAction> {

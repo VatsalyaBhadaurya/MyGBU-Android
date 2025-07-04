@@ -58,6 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        app:menu="@menu/quick_actions_bottom_menu" />
+        app:menu="@menu/bottom_navigation_menu" />
 
 </LinearLayout> 

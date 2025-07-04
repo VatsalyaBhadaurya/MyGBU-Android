@@ -100,11 +100,13 @@
                 android:layout_marginBottom="16dp">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAttachFile"
+                    android:id="@+id/btn_attach_file"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attach File"
+                    android:text="Choose Assignment File"
                     android:textAllCaps="false"
+                    app:icon="@drawable/ic_upload"
+                    app:iconGravity="textStart"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_marginEnd="8dp" />
 
@@ -120,11 +122,14 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSaveAssignment"
+                android:id="@+id/btn_create_assignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Assignment"
+                android:layout_marginTop="16dp"
+                android:text="Create New Assignment"
                 android:textAllCaps="false"
+                app:icon="@drawable/ic_assignment"
+                app:iconGravity="textStart"
                 style="@style/Widget.MaterialComponents.Button" />
 
             <!-- Student Submissions Section -->
@@ -208,13 +213,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAdd"
+        android:id="@+id/fab_add_assignment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_assignment"
-        app:tint="@color/white"
-        app:backgroundTint="@color/gbu_primary" />
+        android:contentDescription="Create New Assignment"
+        app:srcCompat="@drawable/ic_assignment" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 
