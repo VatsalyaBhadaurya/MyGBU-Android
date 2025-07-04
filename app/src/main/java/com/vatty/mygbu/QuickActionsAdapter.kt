@@ -27,10 +27,10 @@ class QuickActionsAdapter(
     override fun getItemCount(): Int = actions.size
 
     inner class QuickActionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val cardView: MaterialCardView = itemView.findViewById(R.id.card_quick_action)
-        private val iconView: ImageView = itemView.findViewById(R.id.iv_action_icon)
-        private val titleView: TextView = itemView.findViewById(R.id.tv_action_title)
-        private val subtitleView: TextView = itemView.findViewById(R.id.tv_action_subtitle)
+        private val cardView: MaterialCardView = itemView as MaterialCardView
+        private val iconView: ImageView = itemView.findViewById(R.id.iv_icon)
+        private val titleView: TextView = itemView.findViewById(R.id.tv_title)
+        private val subtitleView: TextView = itemView.findViewById(R.id.tv_subtitle)
 
         fun bind(action: QuickAction) {
             titleView.text = action.title

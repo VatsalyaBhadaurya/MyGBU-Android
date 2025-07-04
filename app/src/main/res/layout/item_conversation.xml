@@ -10,7 +10,7 @@
     app:cardBackgroundColor="@color/white"
     android:clickable="true"
     android:focusable="true"
-    app:rippleColor="@color/primary_light">
+    app:rippleColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_height="48dp"
             android:src="@drawable/ic_profile"
             app:civ_border_width="2dp"
-            app:civ_border_color="@color/primary_light" />
+            app:civ_border_color="@color/white" />
 
         <LinearLayout
             android:layout_width="0dp"

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.vatty.mygbu"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.vatty.mygbu"

@@ -2,10 +2,13 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     
-    <solid android:color="@color/primary_light" />
+    <gradient
+        android:angle="45"
+        android:endColor="@color/gbu_primary_light"
+        android:startColor="@color/gbu_primary" />
     
     <stroke
         android:width="2dp"
-        android:color="@color/primary" />
+        android:color="@color/gbu_primary" />
 
 </shape> 

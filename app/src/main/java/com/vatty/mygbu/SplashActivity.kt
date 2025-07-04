@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 class SplashActivity : AppCompatActivity() {
     
     companion object {
-        private const val SPLASH_DURATION = 3000L // 3 seconds
+        private const val SPLASH_DURATION = 2000L // 2 seconds
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,9 +26,9 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
         
-        // Navigate to Faculty Dashboard after splash duration
+        // Navigate to Login Activity after splash duration
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, FacultyDashboardActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }, SPLASH_DURATION)
     }

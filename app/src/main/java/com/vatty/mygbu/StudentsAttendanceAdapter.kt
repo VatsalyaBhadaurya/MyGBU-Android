@@ -1,12 +1,8 @@
 package com.vatty.mygbu
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
-import com.google.android.material.materialswitch.MaterialSwitch
 import com.vatty.mygbu.data.model.StudentAttendance
 import com.vatty.mygbu.databinding.ItemStudentAttendanceBinding
 
@@ -16,19 +12,23 @@ class StudentsAttendanceAdapter(
 ) : RecyclerView.Adapter<StudentsAttendanceAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemStudentAttendanceBinding) : RecyclerView.ViewHolder(binding.root) {
+        private var isInitializing = false
+
         init {
             binding.switchAttendance.setOnCheckedChangeListener { _, isChecked ->
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
+                if (position != RecyclerView.NO_POSITION && !isInitializing) {
                     onAttendanceChanged(position, isChecked)
                 }
             }
         }
 
         fun bind(student: StudentAttendance) {
+            isInitializing = true
             binding.tvStudentName.text = student.name
             binding.tvRollNumber.text = student.rollNumber
             binding.switchAttendance.isChecked = student.isPresent
+            isInitializing = false
         }
     }
 

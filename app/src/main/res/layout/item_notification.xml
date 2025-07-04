@@ -22,7 +22,7 @@
             android:id="@+id/view_priority_indicator"
             android:layout_width="4dp"
             android:layout_height="match_parent"
-            android:background="@color/priority_high"
+            android:background="@color/error_red"
             android:layout_marginEnd="12dp" />
 
         <!-- Notification Icon -->
@@ -64,7 +64,7 @@
                     android:layout_width="8dp"
                     android:layout_height="8dp"
                     android:background="@drawable/circle_shape"
-                    android:backgroundTint="@color/notification_badge"
+                    android:backgroundTint="@color/black"
                     android:layout_marginStart="8dp" />
 
             </LinearLayout>

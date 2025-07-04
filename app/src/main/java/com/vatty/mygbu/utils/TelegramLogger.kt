@@ -2,10 +2,7 @@ package com.vatty.mygbu.utils
 
 import android.app.Application
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -17,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * TelegramLogger - Enhanced utility class to send logs to Telegram chat via Bot API
- * 
+ *
  * Features:
  * - Automatically captures and sends Error-level logs
  * - Captures uncaught exceptions and crashes
@@ -30,121 +27,128 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * - Automatic log interception and filtering
  */
 object TelegramLogger {
-    
+
     private const val TAG = "TelegramLogger"
-    
+
     // Telegram Bot Configuration
     private const val BOT_TOKEN = "7589439541:AAF79-w4LZ0KO1V6jAgYmO2GUe-5reFy0Rg"  // Your bot token
     private const val BASE_URL = "https://api.telegram.org/bot$BOT_TOKEN/sendMessage"
-    
+
     // Your actual chat ID
     private const val CHAT_ID = "-1002089861646"      // Your chat ID
-    
+
     // Configuration
     private var isEnabled = true // Set to false for release builds if needed
     private var includeDeviceInfo = true
     private var autoLogErrors = true // Automatically send Error-level logs
     private var autoLogCrashes = true // Automatically send crashes
-    
+    private var isOfflineMode = false // Track offline mode
+
     // Network retry configuration
     private const val MAX_RETRIES = 3
-    private const val RETRY_DELAY_MS = 2000L // 2 seconds between retries
-    private const val CONNECTION_TIMEOUT = 30L // 30 seconds
-    private const val READ_TIMEOUT = 30L // 30 seconds
-    private const val WRITE_TIMEOUT = 30L // 30 seconds
-    
+    private const val RETRY_DELAY_MS = 4000L // 4 seconds between retries
+    private const val CONNECTION_TIMEOUT = 10L // 10 seconds
+    private const val READ_TIMEOUT = 10L // 10 seconds
+    private const val WRITE_TIMEOUT = 10L // 10 seconds
+    private const val MAX_QUEUE_SIZE = 1000 // Maximum number of messages to queue
+
     // Rate limiting configuration
-    private const val MIN_LOG_INTERVAL = 3000L // 3 seconds between messages (increased from 1s)
-    private const val TELEGRAM_RATE_LIMIT_COOLDOWN = 15000L // 15 seconds cooldown after 429 error
+    private const val MIN_LOG_INTERVAL = 5000L // 5 seconds between messages
+    private const val TELEGRAM_RATE_LIMIT_COOLDOWN = 30000L // 30 seconds cooldown after 429 error
     private var lastRateLimitTime = 0L
     private var consecutiveRateLimits = 0
-    
+
     // Log filtering
     private val errorKeywords = setOf(
-        "error", "exception", "crash", "fail", "timeout", "network", 
+        "error", "exception", "crash", "fail", "timeout", "network",
         "null pointer", "out of memory", "security", "permission"
     )
-    
+
     // Queue to prevent spam and rate limiting
     private val logQueue = ConcurrentLinkedQueue<String>()
     private val failedQueue = ConcurrentLinkedQueue<String>() // For retry logic
     private var lastLogTime = 0L
-    
+
     // Original exception handler
     private var originalExceptionHandler: Thread.UncaughtExceptionHandler? = null
-    
-    // OkHttp client with longer timeouts
+
+    // Coroutine scope for background operations
+    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
+    // OkHttp client with better timeouts and settings
     private val client = OkHttpClient.Builder()
         .connectTimeout(CONNECTION_TIMEOUT, java.util.concurrent.TimeUnit.SECONDS)
         .writeTimeout(WRITE_TIMEOUT, java.util.concurrent.TimeUnit.SECONDS)
         .readTimeout(READ_TIMEOUT, java.util.concurrent.TimeUnit.SECONDS)
-        .retryOnConnectionFailure(true) // Enable automatic retry on connection failure
+        .retryOnConnectionFailure(true)
         .build()
-    
+
     // Date formatter for log timestamps
     private val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    
+
     /**
      * Initialize TelegramLogger with automatic error capturing
      * Call this from your Application class or MainActivity
      */
     fun initialize(application: Application? = null) {
         Log.d(TAG, "Initializing TelegramLogger with automatic error capturing")
-        
+
         // Set up global exception handler for crashes
         if (autoLogCrashes) {
             setupCrashHandler()
         }
-        
+
         // Set up automatic error log interception
         if (autoLogErrors) {
             setupLogInterception()
         }
-        
+
         // Start retry mechanism for failed messages
         startRetryProcessor()
-        
-        log("TelegramLogger initialized - Automatic error capturing enabled", "SYSTEM")
+
+        scope.launch {
+            log("TelegramLogger initialized - Automatic error capturing enabled", "SYSTEM")
+        }
     }
-    
+
     /**
      * Set up automatic crash reporting
      */
     private fun setupCrashHandler() {
         originalExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
-        
+
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            try {
-                // Send crash report to Telegram immediately
-                val crashInfo = "Thread: ${thread.name}\nApp crashed unexpectedly"
-                logCrashImmediate(crashInfo, throwable)
-                
-                // Give some time for the message to send
-                Thread.sleep(5000) // Increased from 2 to 5 seconds
-            } catch (e: Exception) {
-                Log.e(TAG, "Failed to send crash report", e)
-            } finally {
-                // Call original handler to maintain normal crash behavior
-                originalExceptionHandler?.uncaughtException(thread, throwable)
+            val crashInfo = "Thread: ${thread.name}\nApp crashed unexpectedly"
+
+            // Use runBlocking to call suspend function from non-suspend context
+            runBlocking(Dispatchers.IO) {
+                try {
+                    logCrashImmediate(crashInfo, throwable)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to send crash report", e)
+                }
             }
+
+            // Call original handler after we've logged the crash
+            originalExceptionHandler?.uncaughtException(thread, throwable)
         }
     }
-    
+
     /**
      * Set up automatic log interception (monitors Android Log calls)
      */
     private fun setupLogInterception() {
         // Start background thread to process queued logs
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             processLogQueue()
         }
     }
-    
+
     /**
      * Start retry processor for failed messages
      */
     private fun startRetryProcessor() {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             while (true) {
                 try {
                     val failedMessage = failedQueue.poll()
@@ -159,7 +163,7 @@ object TelegramLogger {
             }
         }
     }
-    
+
     /**
      * Process queued logs with rate limiting
      */
@@ -184,14 +188,14 @@ object TelegramLogger {
             }
         }
     }
-    
+
     /**
      * Intercept and automatically send Error-level logs
      * Call this method from your custom Log wrapper or when you detect important errors
      */
     fun interceptLog(level: String, tag: String, message: String, throwable: Throwable? = null) {
         if (!isEnabled || !autoLogErrors) return
-        
+
         // Check if this is an important log that should be sent to Telegram
         val shouldSend = when (level.uppercase()) {
             "E", "ERROR" -> true
@@ -199,29 +203,29 @@ object TelegramLogger {
             "I", "INFO" -> containsImportantKeywords(message, setOf("crash", "security", "permission"))
             else -> false
         }
-        
+
         if (shouldSend) {
             val logLevel = when (level.uppercase()) {
                 "E", "ERROR" -> LogLevel.ERROR
                 "W", "WARN" -> LogLevel.WARNING
                 else -> LogLevel.INFO
             }
-            
+
             val fullMessage = if (throwable != null) {
                 "$message\n\nException: ${throwable.message}\n${throwable.stackTraceToString()}"
             } else {
                 message
             }
-            
+
             val formattedMessage = formatMessage("INTERCEPTED LOG:\n$fullMessage", tag, logLevel)
-            
+
             // Add to queue to prevent spam
             if (logQueue.size < 10) { // Limit queue size
                 logQueue.offer(formattedMessage)
             }
         }
     }
-    
+
     /**
      * Check if message contains important keywords
      */
@@ -229,26 +233,26 @@ object TelegramLogger {
         val lowerText = text.lowercase()
         return keywords.any { keyword -> lowerText.contains(keyword) }
     }
-    
+
     /**
      * Monitor system notifications and errors
      * Call this when you detect system-level issues like the NotificationService errors
      */
     fun logSystemError(errorMessage: String, source: String = "SYSTEM") {
         if (!isEnabled) return
-        
+
         val formattedMessage = formatMessage(
-            "SYSTEM ERROR DETECTED:\n$errorMessage", 
-            source, 
+            "SYSTEM ERROR DETECTED:\n$errorMessage",
+            source,
             LogLevel.ERROR
         )
-        
+
         // System errors are important, send immediately with retry
         CoroutineScope(Dispatchers.IO).launch {
             sendToTelegramWithRetry(formattedMessage)
         }
     }
-    
+
     /**
      * Enable or disable automatic error logging
      */
@@ -256,7 +260,7 @@ object TelegramLogger {
         autoLogErrors = enabled
         Log.d(TAG, "Auto log errors: $enabled")
     }
-    
+
     /**
      * Enable or disable automatic crash reporting
      */
@@ -264,7 +268,7 @@ object TelegramLogger {
         autoLogCrashes = enabled
         Log.d(TAG, "Auto log crashes: $enabled")
     }
-    
+
     /**
      * Enable or disable logging
      * @param enabled true to enable logging, false to disable
@@ -273,7 +277,7 @@ object TelegramLogger {
         isEnabled = enabled
         Log.d(TAG, "TelegramLogger enabled: $enabled")
     }
-    
+
     /**
      * Set whether to include device information in logs
      * @param include true to include device info, false to exclude
@@ -281,7 +285,7 @@ object TelegramLogger {
     fun setIncludeDeviceInfo(include: Boolean) {
         includeDeviceInfo = include
     }
-    
+
     /**
      * Send a simple log message to Telegram
      * @param message The message to send
@@ -292,11 +296,11 @@ object TelegramLogger {
             Log.d(TAG, "Logging disabled, skipping message: $message")
             return
         }
-        
+
         val formattedMessage = formatMessage(message, tag, LogLevel.INFO)
         sendToTelegramAsync(formattedMessage)
     }
-    
+
     /**
      * Send an error log to Telegram
      * @param message The error message
@@ -305,17 +309,17 @@ object TelegramLogger {
      */
     fun logError(message: String, throwable: Throwable? = null, tag: String = getCallerClassName()) {
         if (!isEnabled) return
-        
+
         val errorMessage = if (throwable != null) {
             "$message\n\nStack trace:\n${throwable.stackTraceToString()}"
         } else {
             message
         }
-        
+
         val formattedMessage = formatMessage(errorMessage, tag, LogLevel.ERROR)
         sendToTelegramAsync(formattedMessage)
     }
-    
+
     /**
      * Send a warning log to Telegram
      * @param message The warning message
@@ -323,11 +327,11 @@ object TelegramLogger {
      */
     fun logWarning(message: String, tag: String = getCallerClassName()) {
         if (!isEnabled) return
-        
+
         val formattedMessage = formatMessage(message, tag, LogLevel.WARNING)
         sendToTelegramAsync(formattedMessage)
     }
-    
+
     /**
      * Send a debug log to Telegram
      * @param message The debug message
@@ -335,37 +339,47 @@ object TelegramLogger {
      */
     fun logDebug(message: String, tag: String = getCallerClassName()) {
         if (!isEnabled) return
-        
+
         val formattedMessage = formatMessage(message, tag, LogLevel.DEBUG)
         sendToTelegramAsync(formattedMessage)
     }
-    
+
     /**
      * Send a crash report to Telegram
      * @param crashInfo Crash information
      * @param throwable The throwable that caused the crash
      */
-    fun logCrash(crashInfo: String, throwable: Throwable) {
+    /*fun logCrash(crashInfo: String, throwable: Throwable) {
         logCrashImmediate(crashInfo, throwable)
-    }
-    
+    }*/
+
     /**
      * Send crash report immediately (used by crash handler)
      */
-    private fun logCrashImmediate(crashInfo: String, throwable: Throwable) {
-        val crashMessage = "🚨 CRASH REPORT 🚨\n\n$crashInfo\n\nStack trace:\n${throwable.stackTraceToString()}"
-        val formattedMessage = formatMessage(crashMessage, "CRASH", LogLevel.CRASH)
-        
-        // Send crash reports immediately, synchronously with retry logic
+    private suspend fun logCrashImmediate(message: String, throwable: Throwable? = null) {
         try {
-            sendToTelegramSyncWithRetry(formattedMessage)
+            val fullMessage = buildCrashMessage(message, throwable)
+            sendToTelegramSyncWithRetry(fullMessage)
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to send crash report after all retries", e)
-            // Add to failed queue for later retry
-            failedQueue.offer(formattedMessage)
+            Log.e(TAG, "Failed to send crash report", e)
         }
     }
-    
+
+    private fun buildCrashMessage(message: String, throwable: Throwable?): String {
+        val timestamp = dateFormatter.format(Date())
+        return buildString {
+            append("🔴 CRASH REPORT\n")
+            append("⏰ Time: $timestamp\n")
+            append("📱 Device: ${android.os.Build.MODEL}\n")
+            append("📋 Message: $message\n")
+            if (throwable != null) {
+                append("❌ Exception: ${throwable.javaClass.simpleName}\n")
+                append("📝 Details: ${throwable.message}\n")
+                append("📚 Stack Trace:\n${throwable.stackTraceToString()}")
+            }
+        }
+    }
+
     /**
      * Send message to Telegram asynchronously with retry logic
      */
@@ -374,120 +388,132 @@ object TelegramLogger {
             sendToTelegramWithRetry(message)
         }
     }
-    
+
     /**
-     * Send message to Telegram with retry logic
+     * Send message to Telegram with improved error handling
      */
     private suspend fun sendToTelegramWithRetry(message: String, isRetry: Boolean = false) {
-        // Check if we're in rate limit cooldown
-        val currentTime = System.currentTimeMillis()
-        if (currentTime - lastRateLimitTime < TELEGRAM_RATE_LIMIT_COOLDOWN) {
-            Log.d(TAG, "Skipping message due to rate limit cooldown (${(TELEGRAM_RATE_LIMIT_COOLDOWN - (currentTime - lastRateLimitTime))/1000}s remaining)")
-            // Add to failed queue for later retry
-            if (!isRetry && failedQueue.size < 10) {
-                failedQueue.offer(message)
+        if (!isEnabled) return
+        
+        // Check queue size
+        if (logQueue.size > MAX_QUEUE_SIZE) {
+            Log.w(TAG, "Log queue full, dropping oldest messages")
+            while (logQueue.size > MAX_QUEUE_SIZE * 0.8) { // Clear 20% of queue
+                logQueue.poll()
             }
+        }
+
+        // Don't retry if we're in offline mode and this is a retry attempt
+        if (isOfflineMode && isRetry) {
+            Log.d(TAG, "In offline mode, queuing message for later")
+            failedQueue.offer(message)
             return
         }
-        
-        var attempt = 0
-        var lastException: Exception? = null
-        
-        while (attempt < MAX_RETRIES) {
+
+        var retryCount = 0
+        var lastError: Exception? = null
+
+        while (retryCount < MAX_RETRIES) {
             try {
-                val result = sendToTelegramSync(message)
-                if (result.success) {
-                    // Reset rate limit tracking on success
-                    consecutiveRateLimits = 0
-                    if (isRetry) {
-                        Log.d(TAG, "✅ Retry successful! Message sent on attempt ${attempt + 1}")
-                    }
-                    return // Success, exit retry loop
-                } else {
-                    // Handle specific error codes
-                    when (result.errorCode) {
-                        429 -> {
-                            // Rate limited - respect Telegram's retry_after parameter
-                            val retryAfter = result.retryAfter ?: 15
-                            lastRateLimitTime = currentTime
-                            consecutiveRateLimits++
-                            
-                            Log.w(TAG, "Rate limited by Telegram API. Retry after ${retryAfter}s (consecutive: $consecutiveRateLimits)")
-                            
-                            // If we're getting rate limited too often, back off more
-                            val backoffMultiplier = if (consecutiveRateLimits > 3) 2 else 1
-                            val actualDelay = (retryAfter * 1000L) * backoffMultiplier
-                            
-                            if (attempt < MAX_RETRIES - 1) {
-                                Log.d(TAG, "Waiting ${actualDelay/1000}s before retry (attempt ${attempt + 1}/$MAX_RETRIES)")
-                                delay(actualDelay)
-                            }
+                val json = JSONObject().apply {
+                    put("chat_id", CHAT_ID)
+                    put("text", message)
+                    put("parse_mode", "HTML")
+                }
+
+                val request = Request.Builder()
+                    .url(BASE_URL)
+                    .post(json.toString().toRequestBody("application/json".toMediaTypeOrNull()))
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    when {
+                        response.isSuccessful -> {
+                            isOfflineMode = false // Reset offline mode on success
+                            Log.d(TAG, "Message sent successfully")
+                            return
+                        }
+                        response.code == 429 -> {
+                            handleRateLimit()
+                            retryCount++
                         }
                         else -> {
-                            // Other API errors
-                            Log.w(TAG, "Telegram API error ${result.errorCode}: ${result.errorMessage}")
+                            Log.w(TAG, "Failed to send message: ${response.code}")
+                            retryCount++
                         }
                     }
                 }
-            } catch (e: Exception) {
-                lastException = e
-                Log.w(TAG, "Attempt ${attempt + 1} failed: ${e.message}")
-            }
-            
-            attempt++
-            if (attempt < MAX_RETRIES && lastRateLimitTime == 0L) { // Don't retry if rate limited
-                val delayTime = RETRY_DELAY_MS * attempt // Exponential backoff
-                Log.d(TAG, "Retrying in ${delayTime}ms... (attempt $attempt/$MAX_RETRIES)")
-                delay(delayTime)
+            } catch (e: IOException) {
+                lastError = e
+                Log.w(TAG, "Network error (attempt ${retryCount + 1}/$MAX_RETRIES): ${e.message}")
+                isOfflineMode = true // Set offline mode on network error
+                retryCount++
+                if (retryCount < MAX_RETRIES) {
+                    delay(RETRY_DELAY_MS * (retryCount + 1)) // Exponential backoff
+                }
             }
         }
-        
-        // All retries failed
-        Log.e(TAG, "❌ Failed to send message after $MAX_RETRIES attempts", lastException)
-        
-        // Add to failed queue for later retry (unless it's already a retry)
-        if (!isRetry && failedQueue.size < 20) { // Limit failed queue size
+
+        // If all retries failed, queue for later
+        if (retryCount >= MAX_RETRIES) {
+            Log.e(TAG, "All retries failed for message", lastError)
             failedQueue.offer(message)
-            Log.d(TAG, "Added message to failed queue for later retry")
         }
     }
-    
+
+    /**
+     * Handle rate limiting with exponential backoff
+     */
+    private suspend fun handleRateLimit() {
+        consecutiveRateLimits++
+        val backoffTime = TELEGRAM_RATE_LIMIT_COOLDOWN * (1 shl consecutiveRateLimits.coerceAtMost(5))
+        lastRateLimitTime = System.currentTimeMillis()
+        Log.w(TAG, "Rate limited, backing off for ${backoffTime}ms")
+        delay(backoffTime)
+    }
+
     /**
      * Send message to Telegram synchronously with retry logic (for crash reports)
      */
-    private fun sendToTelegramSyncWithRetry(message: String) {
-        var attempt = 0
-        var lastException: Exception? = null
-        
-        while (attempt < MAX_RETRIES) {
-            try {
-                val result = sendToTelegramSync(message)
-                if (result.success) {
-                    Log.d(TAG, "✅ Crash report sent successfully on attempt ${attempt + 1}")
-                    return
-                } else if (result.errorCode == 429) {
-                    // Handle rate limiting for crash reports
-                    val retryAfter = result.retryAfter ?: 15
-                    Log.w(TAG, "Crash report rate limited. Waiting ${retryAfter}s before retry")
-                    Thread.sleep((retryAfter * 1000L))
-                } else {
-                    Log.w(TAG, "Crash report API error ${result.errorCode}: ${result.errorMessage}")
+    private suspend fun sendToTelegramSyncWithRetry(message: String) {
+        withContext(Dispatchers.IO) {
+            repeat(MAX_RETRIES) { attempt ->
+                try {
+                    val json = JSONObject().apply {
+                        put("chat_id", CHAT_ID)
+                        put("text", message)
+                        put("parse_mode", "HTML")
+                    }
+
+                    val request = Request.Builder()
+                        .url(BASE_URL)
+                        .post(json.toString().toRequestBody("application/json".toMediaTypeOrNull()))
+                        .build()
+
+                    client.newCall(request).execute().use { response ->
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "✅ Crash report sent successfully on attempt ${attempt + 1}")
+                            return@withContext
+                        } else if (response.code == 429) {
+                            // Handle rate limiting for crash reports
+                            val retryAfter = response.header("Retry-After")?.toIntOrNull() ?: 15
+                            Log.w(TAG, "Crash report rate limited. Waiting ${retryAfter}s before retry")
+                            delay((retryAfter * 1000L))
+                        } else {
+                            Log.w(TAG, "Crash report API error ${response.code}: ${response.message}")
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to send crash report (Attempt ${attempt + 1}/$MAX_RETRIES)", e)
+                    if (attempt < MAX_RETRIES - 1) {
+                        delay(RETRY_DELAY_MS)
+                    }
                 }
-            } catch (e: Exception) {
-                lastException = e
-                Log.w(TAG, "Crash report attempt ${attempt + 1} failed: ${e.message}")
             }
-            
-            attempt++
-            if (attempt < MAX_RETRIES) {
-                Thread.sleep(RETRY_DELAY_MS * attempt) // Blocking sleep for sync method
-            }
+            Log.e(TAG, "Failed to send crash report after all retries")
         }
-        
-        Log.e(TAG, "❌ Failed to send crash report after $MAX_RETRIES attempts", lastException)
-        throw lastException ?: Exception("Failed to send crash report")
     }
-    
+
     /**
      * Result class for Telegram API responses
      */
@@ -497,7 +523,7 @@ object TelegramLogger {
         val errorMessage: String? = null,
         val retryAfter: Int? = null
     )
-    
+
     /**
      * Send message to Telegram synchronously
      */
@@ -507,29 +533,29 @@ object TelegramLogger {
             put("text", message)
             put("parse_mode", "HTML")
         }
-        
+
         val requestBody = json.toString().toRequestBody("application/json".toMediaTypeOrNull())
         val request = Request.Builder().url(BASE_URL).post(requestBody).build()
-        
+
         client.newCall(request).execute().use { response ->
             val responseBody = response.body?.string()
-            
+
             if (response.isSuccessful) {
                 Log.d(TAG, "✅ Message sent to Telegram successfully")
                 return TelegramResponse(success = true)
             } else {
                 Log.e(TAG, "❌ Telegram API error: ${response.code} - ${response.message}")
                 Log.e(TAG, "Response body: $responseBody")
-                
+
                 // Parse error details from response
                 var retryAfter: Int? = null
                 var errorMessage = response.message
-                
+
                 try {
                     responseBody?.let { body ->
                         val errorJson = JSONObject(body)
                         errorMessage = errorJson.optString("description", response.message)
-                        
+
                         // Extract retry_after parameter for rate limiting
                         val parameters = errorJson.optJSONObject("parameters")
                         retryAfter = parameters?.optInt("retry_after")
@@ -537,7 +563,7 @@ object TelegramLogger {
                 } catch (e: Exception) {
                     Log.w(TAG, "Could not parse error response: ${e.message}")
                 }
-                
+
                 return TelegramResponse(
                     success = false,
                     errorCode = response.code,
@@ -547,7 +573,7 @@ object TelegramLogger {
             }
         }
     }
-    
+
     /**
      * Format the log message with timestamp, app info, and device info
      */
@@ -555,13 +581,13 @@ object TelegramLogger {
         val timestamp = dateFormatter.format(Date())
         val emoji = level.emoji
         val appInfo = "MyGBU v1.0 (1)" // You can make this dynamic if needed
-        
+
         val deviceInfo = if (includeDeviceInfo) {
             "\nDevice: ${android.os.Build.MANUFACTURER} ${android.os.Build.MODEL} (API ${android.os.Build.VERSION.SDK_INT})"
         } else {
             ""
         }
-        
+
         return """
             $emoji [$level] $tag
             📅 $timestamp
@@ -571,7 +597,7 @@ object TelegramLogger {
             $message
         """.trimIndent()
     }
-    
+
     /**
      * Get the calling class name for automatic tagging
      */
@@ -580,22 +606,22 @@ object TelegramLogger {
             val stackTrace = Thread.currentThread().stackTrace
             // Find the first stack trace element that's not from this class or Thread class
             stackTrace.firstOrNull { element ->
-                !element.className.contains("TelegramLogger") && 
-                !element.className.contains("Thread") &&
-                !element.className.contains("VMStack")
+                !element.className.contains("TelegramLogger") &&
+                        !element.className.contains("Thread") &&
+                        !element.className.contains("VMStack")
             }?.className?.substringAfterLast('.') ?: "Unknown"
         } catch (e: Exception) {
             "Unknown"
         }
     }
-    
+
     /**
      * Test the Telegram logger with a simple message
      */
     fun testConnection() {
         log("🧪 TelegramLogger test message - Connection working with improved timeout handling!", "TEST")
     }
-    
+
     /**
      * Test automatic error detection
      */
@@ -604,14 +630,14 @@ object TelegramLogger {
         interceptLog("E", "TestTag", "Simulated error for testing automatic capture")
         logSystemError("Simulated system error: Too many notifications queued", "NotificationService")
     }
-    
+
     /**
      * Get network statistics
      */
     fun getNetworkStats(): String {
         return "Queue: ${logQueue.size}, Failed: ${failedQueue.size}"
     }
-    
+
     /**
      * Log levels with emojis for better visual distinction
      */
@@ -622,4 +648,4 @@ object TelegramLogger {
         ERROR("❌"),
         CRASH("🚨")
     }
-} 
+}

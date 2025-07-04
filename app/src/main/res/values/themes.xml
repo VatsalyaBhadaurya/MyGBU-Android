@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MyGBU" parent="Theme.Material3.DayNight.NoActionBar">
@@ -5,7 +6,34 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.MyGBU" parent="Base.Theme.MyGBU" />
+    <style name="Theme.MyGBU" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/gbu_primary</item>
+        <item name="colorPrimaryVariant">@color/gbu_primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/gbu_secondary</item>
+        <item name="colorSecondaryVariant">@color/gbu_secondary_dark</item>
+        <item name="colorOnSecondary">@color/white</item>
+        
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/gbu_primary_dark</item>
+        
+        <!-- Background colors -->
+        <item name="android:windowBackground">@color/gbu_background</item>
+        <item name="colorSurface">@color/gbu_surface</item>
+        <item name="colorOnSurface">@color/gbu_text_primary</item>
+        
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/gbu_text_primary</item>
+        <item name="android:textColorSecondary">@color/gbu_text_secondary</item>
+        
+        <!-- Custom GBU styles -->
+        <item name="materialButtonStyle">@style/Widget.MyGBU.Button</item>
+        <item name="textInputStyle">@style/Widget.MyGBU.TextInputLayout</item>
+        <item name="materialCardViewStyle">@style/Widget.MyGBU.CardView</item>
+    </style>
     
     <!-- Splash Screen Theme -->
     <style name="Theme.MyGBU.NoActionBar" parent="Theme.MyGBU">
@@ -13,5 +41,33 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Custom button style -->
+    <style name="Widget.MyGBU.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/gbu_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Custom TextInputLayout style -->
+    <style name="Widget.MyGBU.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/gbu_primary</item>
+        <item name="hintTextColor">@color/gbu_primary</item>
+        <item name="endIconTint">@color/gbu_primary</item>
+        <item name="startIconTint">@color/gbu_primary</item>
+    </style>
+
+    <!-- Custom CardView style -->
+    <style name="Widget.MyGBU.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="contentPadding">16dp</item>
+        <item name="cardBackgroundColor">@color/gbu_surface</item>
+        <item name="strokeColor">@color/gbu_primary</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 </resources>

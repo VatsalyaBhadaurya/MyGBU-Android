@@ -2,7 +2,6 @@ package com.vatty.mygbu
 
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
@@ -11,15 +10,15 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.vatty.mygbu.databinding.ActivityAnalyticsBinding
 import com.vatty.mygbu.utils.LogWrapper as Log
 
 class AnalyticsActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityAnalyticsBinding
     private lateinit var studentPerformanceChart: LineChart
-    private lateinit var assignmentStatsChart: BarChart
-    private lateinit var courseDistributionChart: PieChart
-    private lateinit var bottomNavigation: BottomNavigationView
+    private lateinit var assignmentStatsChart: PieChart
+    private lateinit var courseDistributionChart: BarChart
     
     companion object {
         private const val TAG = "AnalyticsActivity"
@@ -27,23 +26,20 @@ class AnalyticsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_analytics)
-
-        // Log activity startup - this will be sent to Telegram!
+        binding = ActivityAnalyticsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         Log.i(TAG, "AnalyticsActivity started - faculty analytics dashboard active")
-
         setupViews()
         setupCharts()
         setupBottomNavigation()
     }
 
     private fun setupViews() {
-        val backButton = findViewById<ImageView>(R.id.iv_back)
-        backButton.setOnClickListener { finish() }
+        binding.ivBack.setOnClickListener { finish() }
 
-        studentPerformanceChart = findViewById(R.id.chart_student_performance)
-        assignmentStatsChart = findViewById(R.id.chart_assignment_stats)
-        courseDistributionChart = findViewById(R.id.chart_course_distribution)
+        studentPerformanceChart = binding.chartStudentPerformance
+        assignmentStatsChart = binding.chartAssignmentStats
+        courseDistributionChart = binding.chartCourseDistribution
     }
 
     private fun setupCharts() {
@@ -54,7 +50,7 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private fun setupStudentPerformanceChart() {
         val entries = listOf(
-            Entry(0f, 85f), Entry(1f, 78f), Entry(2f, 82f),
+            Entry(0f, 85f), Entry(1f, 80f), Entry(2f, 82f),
             Entry(3f, 88f), Entry(4f, 91f), Entry(5f, 87f)
         )
 
@@ -80,57 +76,58 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private fun setupAssignmentStatsChart() {
         val entries = listOf(
-            BarEntry(0f, 25f), BarEntry(1f, 18f), BarEntry(2f, 7f)
+            PieEntry(25f, "Submitted"),
+            PieEntry(18f, "Pending"),
+            PieEntry(7f, "Overdue")
         )
 
-        val dataSet = BarDataSet(entries, "Assignments")
+        val dataSet = PieDataSet(entries, "Assignments")
         dataSet.colors = listOf(
             Color.parseColor("#4CAF50"), // Submitted
             Color.parseColor("#FF9800"), // Pending
             Color.parseColor("#F44336")  // Overdue
         )
+        dataSet.valueTextSize = 12f
+        dataSet.valueTextColor = Color.WHITE
 
-        val barData = BarData(dataSet)
-        assignmentStatsChart.data = barData
-
-        assignmentStatsChart.xAxis.valueFormatter = IndexAxisValueFormatter(
-            arrayOf("Submitted", "Pending", "Overdue")
-        )
-        assignmentStatsChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        val pieData = PieData(dataSet)
+        assignmentStatsChart.data = pieData
         assignmentStatsChart.description.isEnabled = false
-        assignmentStatsChart.legend.isEnabled = false
+        assignmentStatsChart.centerText = "Assignment\nStatus"
+        assignmentStatsChart.setCenterTextSize(14f)
         assignmentStatsChart.invalidate()
     }
 
     private fun setupCourseDistributionChart() {
         val entries = listOf(
-            PieEntry(35f, "CS101"),
-            PieEntry(28f, "CS201"),
-            PieEntry(22f, "CS301"),
-            PieEntry(15f, "CS401")
+            BarEntry(0f, 35f),
+            BarEntry(1f, 28f),
+            BarEntry(2f, 22f),
+            BarEntry(3f, 15f)
         )
 
-        val dataSet = PieDataSet(entries, "Course Distribution")
+        val dataSet = BarDataSet(entries, "Course Distribution")
         dataSet.colors = ColorTemplate.MATERIAL_COLORS.toList()
-        dataSet.valueTextSize = 12f
-        dataSet.valueTextColor = Color.WHITE
 
-        val pieData = PieData(dataSet)
-        courseDistributionChart.data = pieData
+        val barData = BarData(dataSet)
+        courseDistributionChart.data = barData
+
+        courseDistributionChart.xAxis.valueFormatter = IndexAxisValueFormatter(
+            arrayOf("CS101", "CS201", "CS301", "CS401")
+        )
+        courseDistributionChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         courseDistributionChart.description.isEnabled = false
-        courseDistributionChart.centerText = "Course\nEnrollment"
-        courseDistributionChart.setCenterTextSize(14f)
+        courseDistributionChart.legend.isEnabled = false
         courseDistributionChart.invalidate()
     }
 
     private fun setupBottomNavigation() {
-        bottomNavigation = findViewById(R.id.bottom_navigation)
-        bottomNavigation.selectedItemId = R.id.nav_analytics
+        binding.bottomNavigation.selectedItemId = R.id.nav_analytics
         
-        bottomNavigation.setOnItemSelectedListener { item ->
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    // Navigate to dashboard
+                    finish()
                     true
                 }
                 R.id.nav_analytics -> true

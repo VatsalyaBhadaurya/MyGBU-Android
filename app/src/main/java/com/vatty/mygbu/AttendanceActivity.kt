@@ -14,7 +14,8 @@ import com.vatty.mygbu.utils.LogWrapper as Log
 
 class AttendanceActivity : AppCompatActivity() {
     
-    private lateinit var binding: ActivityAttendanceBinding
+    private var _binding: ActivityAttendanceBinding? = null
+    private val binding get() = _binding!!
     private lateinit var studentsAdapter: StudentsAttendanceAdapter
     private val studentsList = mutableListOf<StudentAttendance>()
     
@@ -24,7 +25,7 @@ class AttendanceActivity : AppCompatActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAttendanceBinding.inflate(layoutInflater)
+        _binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
@@ -43,9 +44,14 @@ class AttendanceActivity : AppCompatActivity() {
         updateStats()
         setupCurrentDate()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
     
     private fun setupToolbar() {
-        binding.ivBack.setOnClickListener {
+        binding.ivBack?.setOnClickListener {
             finish()
         }
     }

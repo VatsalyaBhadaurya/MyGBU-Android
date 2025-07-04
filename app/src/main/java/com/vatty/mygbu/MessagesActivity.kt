@@ -1,5 +1,7 @@
 package com.vatty.mygbu
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.ImageView
@@ -20,6 +22,7 @@ class MessagesActivity : AppCompatActivity() {
     private lateinit var ivBack: ImageView
     private lateinit var btnCompose: MaterialButton
     private lateinit var rvConversations: RecyclerView
+    private lateinit var clipboardManager: ClipboardManager
     
     companion object {
         private const val TAG = "MessagesActivity"
@@ -30,7 +33,10 @@ class MessagesActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_messages)
         
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        // Initialize clipboard manager
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -84,6 +90,28 @@ class MessagesActivity : AppCompatActivity() {
         val etRecipient = dialogView.findViewById<TextInputEditText>(R.id.et_recipient)
         val etSubject = dialogView.findViewById<TextInputEditText>(R.id.et_subject)
         val etMessage = dialogView.findViewById<TextInputEditText>(R.id.et_message)
+        
+        // Set custom text change listeners to handle clipboard operations only when dialog is showing
+        val textWatcher = object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                // Only attempt clipboard operations when the dialog is showing and app is in foreground
+                if (window?.isActive == true) {
+                    try {
+                        clipboardManager.primaryClip?.let { clip ->
+                            // Handle clipboard content if needed
+                        }
+                    } catch (e: SecurityException) {
+                        Log.w(TAG, "Clipboard access denied: ${e.message}")
+                    }
+                }
+            }
+        }
+        
+        etRecipient.addTextChangedListener(textWatcher)
+        etSubject.addTextChangedListener(textWatcher)
+        etMessage.addTextChangedListener(textWatcher)
         
         AlertDialog.Builder(this)
             .setTitle("Compose Message")

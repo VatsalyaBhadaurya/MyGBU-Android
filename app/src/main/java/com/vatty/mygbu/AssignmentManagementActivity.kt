@@ -48,7 +48,7 @@ class AssignmentManagementActivity : AppCompatActivity() {
         binding = ActivityAssignmentManagementBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -198,7 +198,7 @@ class AssignmentManagementActivity : AppCompatActivity() {
                 } else getString(R.string.unknown_file)
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error getting file name", e)
+            Log.e(TAG, "Error getting file name: ${e.message}")
             getString(R.string.unknown_file)
         }
     }

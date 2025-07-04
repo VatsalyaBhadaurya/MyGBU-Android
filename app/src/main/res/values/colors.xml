@@ -1,64 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Base colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- GBU Brand Colors -->
+    <color name="gbu_primary">#E53935</color>          <!-- Red for primary elements -->
+    <color name="gbu_primary_dark">#C62828</color>     <!-- Darker red for status bar -->
+    <color name="gbu_primary_light">#EF5350</color>    <!-- Lighter red for highlights -->
     
-    <!-- Primary Colors -->
-    <color name="primary">#1976D2</color>
-    <color name="primary_dark">#1565C0</color>
-    <color name="primary_light">#BBDEFB</color>
-    
+    <color name="gbu_secondary">#1B5E20</color>        <!-- Green for secondary elements -->
+    <color name="gbu_secondary_dark">#0A3D0A</color>   <!-- Darker green -->
+    <color name="gbu_secondary_light">#43A047</color>  <!-- Lighter green -->
+
     <!-- Background Colors -->
-    <color name="background_light">#F5F5F5</color>
-    <color name="background_dark">#303030</color>
-    
+    <color name="gbu_background">#F5F5F5</color>       <!-- White background -->
+    <color name="gbu_surface">#FFFFFF</color>         <!-- Light gray for cards -->
+
     <!-- Text Colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="gbu_text_primary">#212121</color>    <!-- Dark gray for primary text -->
+    <color name="gbu_text_secondary">#757575</color>  <!-- Medium gray for secondary text -->
     
     <!-- Status Colors -->
-    <color name="success_green">#4CAF50</color>
-    <color name="success_light">#E8F5E8</color>
-    <color name="error_red">#F44336</color>
-    <color name="error_light">#FFEBEE</color>
-    <color name="warning_orange">#FF9800</color>
-    <color name="warning_light">#FFF3E0</color>
-    
-    <!-- Priority Colors for Notifications -->
-    <color name="priority_high">#F44336</color>
-    <color name="priority_medium">#FF9800</color>
-    <color name="priority_low">#4CAF50</color>
-    
-    <!-- Notification Colors -->
-    <color name="notification_unread">#1976D2</color>
-    <color name="notification_read">#757575</color>
-    <color name="notification_badge">#F44336</color>
-    
-    <!-- Switch Colors -->
-    <color name="switch_track_color">#CCCCCC</color>
-    
-    <!-- Dashboard Card Colors -->
-    <color name="card_courses">#4CAF50</color>
-    <color name="card_attendance">#FF9800</color>
-    <color name="card_students">#2196F3</color>
-    <color name="card_grades">#9C27B0</color>
-    <color name="card_schedule">#00BCD4</color>
-    <color name="card_announcements">#FF5722</color>
-    <color name="card_reports">#795548</color>
-    <color name="card_profile">#607D8B</color>
-    <color name="card_assignments">#673AB7</color>
-    <color name="card_performance">#E91E63</color>
-    <color name="card_leave">#009688</color>
-    
-    <!-- Analytics Colors -->
-    <color name="chart_primary">#1976D2</color>
-    <color name="chart_secondary">#FF9800</color>
-    <color name="chart_accent">#4CAF50</color>
-    <color name="chart_background">#F5F5F5</color>
-    
-    <!-- Quick Action Colors -->
-    <color name="action_urgent">#F44336</color>
-    <color name="action_important">#FF9800</color>
-    <color name="action_normal">#2196F3</color>
-    <color name="action_low">#4CAF50</color>
+    <color name="success_green">#4CAF50</color>         <!-- Green for success -->
+    <color name="error_red">#F44336</color>           <!-- Red for errors -->
+    <color name="warning_orange">#FF9800</color>         <!-- Amber for warnings -->
+    <color name="info_blue">#2196F3</color>            <!-- Blue for info -->
+
+    <!-- Legacy Colors (keeping for backward compatibility) -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <!-- Color Aliases (for layout compatibility) -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="primary">#E53935</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+
+    <!-- Additional Status Colors -->
+    <color name="warning_light">#FFE082</color>        <!-- Light amber for warning backgrounds -->
+    <color name="success_light">#A5D6A7</color>        <!-- Light green for success backgrounds -->
+    <color name="priority_high">#FFEBEE</color>
+    <color name="priority_medium">#FFF3E0</color>
+    <color name="priority_low">#E8F5E9</color>
+
+    <!-- Schedule Card Colors -->
+    <color name="card_courses">#E0F2F1</color>         <!-- Blue for courses -->
+    <color name="card_students">#7B1FA2</color>        <!-- Purple for students -->
+    <color name="card_attendance">#E8F5E9</color>      <!-- Green for attendance -->
+    <color name="card_grades">#F57C00</color>         <!-- Orange for grades -->
+    <color name="card_schedule">#00796B</color>       <!-- Teal for schedule -->
+    <color name="card_announcements">#E3F2FD</color>  <!-- Red for announcements -->
+    <color name="card_assignments">#FFF3E0</color>
+    <color name="card_performance">#F3E5F5</color>
+    <color name="card_reports">#FBE9E7</color>
+    <color name="card_leave">#F3E5F5</color>
 </resources>

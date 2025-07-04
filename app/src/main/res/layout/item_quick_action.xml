@@ -1,58 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_quick_action"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardBackgroundColor="@color/primary">
+    style="@style/Widget.MaterialComponents.CardView">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center">
+        android:padding="16dp">
 
-        <!-- Action Icon -->
         <ImageView
-            android:id="@+id/iv_action_icon"
+            android:id="@+id/iv_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_assignment"
-            app:tint="@color/white"
-            android:layout_marginBottom="12dp" />
+            android:layout_gravity="center_horizontal"
+            app:tint="?attr/colorPrimary" />
 
-        <!-- Action Title -->
         <TextView
-            android:id="@+id/tv_action_title"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mark Attendance"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:maxLines="1"
-            android:ellipsize="end" />
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.MyGBU.Body"
+            android:textStyle="bold" />
 
-        <!-- Action Subtitle -->
         <TextView
-            android:id="@+id/tv_action_subtitle"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Quick attendance marking"
-            android:textSize="12sp"
-            android:textColor="@color/white"
-            android:gravity="center"
             android:layout_marginTop="4dp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:alpha="0.8" />
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.MyGBU.Caption"
+            android:textColor="?attr/colorSecondary" />
 
     </LinearLayout>
 

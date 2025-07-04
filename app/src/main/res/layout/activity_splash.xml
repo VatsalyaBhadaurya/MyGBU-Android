@@ -25,7 +25,7 @@
         android:text="MyGBU"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/error_red"
         android:layout_marginBottom="16dp" />
 
     <!-- University Name -->
@@ -35,24 +35,17 @@
         android:text="Gautam Buddha University"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:textColor="@color/error_red"
         android:alpha="0.9"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="50dp" />
 
     <!-- Faculty Portal Subtitle -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Faculty Portal"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:alpha="0.8"
-        android:layout_marginBottom="64dp" />
+
 
     <!-- Loading Animation -->
     <ProgressBar
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:indeterminateTint="@color/white" />
+        android:indeterminateTint="@color/black" />
 
 </LinearLayout> 
