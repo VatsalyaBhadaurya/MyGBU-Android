@@ -265,14 +265,27 @@
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 
-            <ImageView
-                android:id="@+id/iv_notifications"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:padding="4dp"
-                android:src="@drawable/ic_notifications"
-                app:tint="@color/white" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_notifications"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_notifications"
+                    app:tint="@color/white" />
+
+                <View
+                    android:id="@+id/notification_badge"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="top|end"
+                    android:background="@drawable/badge_background"
+                    android:visibility="gone" />
+            </FrameLayout>
 
         </LinearLayout>
 

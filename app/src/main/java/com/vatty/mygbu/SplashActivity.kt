@@ -26,9 +26,9 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
         
-        // Navigate to Faculty Dashboard after splash duration
+        // Navigate to LoginActivity after splash duration
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, FacultyDashboardActivity::class.java))
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }, SPLASH_DURATION)
     }

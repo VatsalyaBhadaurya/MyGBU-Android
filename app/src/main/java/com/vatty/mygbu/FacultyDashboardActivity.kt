@@ -38,6 +38,7 @@ class FacultyDashboardActivity : AppCompatActivity() {
 
     // Dynamic content containers
     private lateinit var quickStatsContainer: View
+    private lateinit var notificationBadge: View
 
     private val timeHandler = Handler(Looper.getMainLooper())
     private val timeUpdateRunnable = object : Runnable {
@@ -79,6 +80,7 @@ class FacultyDashboardActivity : AppCompatActivity() {
         loadDashboardData()
         startTimeUpdates()
         setupDynamicContent()
+        showNotificationBadgeAnimated()
 
 
     }
@@ -99,6 +101,7 @@ class FacultyDashboardActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottom_navigation)
 
         quickStatsContainer = findViewById(R.id.quick_stats_container)
+        notificationBadge = findViewById(R.id.notification_badge)
     }
 
     private fun loadDashboardData() {
@@ -236,5 +239,15 @@ class FacultyDashboardActivity : AppCompatActivity() {
         tvFacultyName.text = faculty.name
     }
 
+    private fun showNotificationBadgeAnimated() {
+        notificationBadge.visibility = View.VISIBLE
+        notificationBadge.scaleX = 0f
+        notificationBadge.scaleY = 0f
+        notificationBadge.animate()
+            .scaleX(1f)
+            .scaleY(1f)
+            .setDuration(400)
+            .start()
+    }
 
 }
