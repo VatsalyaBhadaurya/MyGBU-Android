@@ -6,7 +6,7 @@
     android:background="@drawable/header_gradient">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/login_card"
+        android:id="@+id/register_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -38,29 +38,57 @@
                 android:layout_marginBottom="16dp" />
 
             <TextView
-                android:id="@+id/tv_login_title"
+                android:id="@+id/tv_register_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="Register"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/university_primary"
                 android:layout_marginBottom="24dp" />
 
-            <Spinner
-                android:id="@+id/spinner_user_type"
+            <EditText
+                android:id="@+id/et_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="First Name"
+                android:inputType="textPersonName"
                 android:background="@drawable/rounded_background"
-                android:padding="8dp"
-                android:layout_marginBottom="16dp" />
+                android:padding="12dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:layout_marginBottom="12dp" />
 
             <EditText
-                android:id="@+id/et_username"
+                android:id="@+id/et_last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
-                android:inputType="text"
+                android:hint="Last Name"
+                android:inputType="textPersonName"
+                android:background="@drawable/rounded_background"
+                android:padding="12dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/rounded_background"
+                android:padding="12dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone"
+                android:inputType="phone"
                 android:background="@drawable/rounded_background"
                 android:padding="12dp"
                 android:textColor="@color/text_primary"
@@ -77,32 +105,27 @@
                 android:padding="12dp"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
+                android:layout_marginBottom="12dp" />
+
+            <Spinner
+                android:id="@+id/spinner_user_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_background"
+                android:padding="8dp"
                 android:layout_marginBottom="20dp" />
 
             <Button
-                android:id="@+id/btn_login"
+                android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="Register"
                 android:backgroundTint="@color/university_primary"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:elevation="2dp" />
-
-            <Button
-                android:id="@+id/btn_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Register"
-                android:background="@android:color/transparent"
-                android:textColor="@color/university_primary"
-                android:textStyle="bold"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
-                android:elevation="0dp" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

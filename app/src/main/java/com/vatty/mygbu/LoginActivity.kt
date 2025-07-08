@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         val etUsername = findViewById<EditText>(R.id.et_username)
         val etPassword = findViewById<EditText>(R.id.et_password)
         val btnLogin = findViewById<Button>(R.id.btn_login)
+        val btnRegister = findViewById<Button>(R.id.btn_register)
         val progressBar = ProgressBar(this)
         addContentView(progressBar, android.widget.FrameLayout.LayoutParams(100, 100))
         progressBar.visibility = View.GONE
@@ -88,6 +89,10 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+
+        btnRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 } 
