@@ -15,7 +15,7 @@ import com.vatty.mygbu.data.model.SavedAssignment
 import com.vatty.mygbu.databinding.ActivityAssignmentManagementBinding
 import com.vatty.mygbu.enums.AssignmentStatus
 import com.vatty.mygbu.utils.DateUtils
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 import java.util.*
 
 class AssignmentManagementActivity : AppCompatActivity() {
@@ -54,8 +54,8 @@ class AssignmentManagementActivity : AppCompatActivity() {
             insets
         }
         
-        // Test LogWrapper - this will now be sent to Telegram automatically!
-        Log.i(TAG, "AssignmentManagementActivity started - app-wide monitoring active!")
+        // Log activity startup
+        Log.i(TAG, "AssignmentManagementActivity started")
         
         setupToolbar()
         setupClickListeners()

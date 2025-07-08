@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 
 class MessagesActivity : AppCompatActivity() {
     
@@ -36,7 +36,7 @@ class MessagesActivity : AppCompatActivity() {
             insets
         }
         
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "MessagesActivity started - faculty messaging system active")
         
         initializeViews()

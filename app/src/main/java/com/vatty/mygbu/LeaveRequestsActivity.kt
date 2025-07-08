@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.util.Log
+import com.vatty.mygbu.utils.BottomNavigationHelper
 
 class LeaveRequestsActivity : AppCompatActivity() {
     
@@ -100,34 +102,7 @@ class LeaveRequestsActivity : AppCompatActivity() {
     }
     
     private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_students
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_courses -> {
-                    startActivity(Intent(this, CoursesActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_attendance -> {
-                    startActivity(Intent(this, AttendanceActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_students -> true
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, FacultyHubActivity::class.java))
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, LeaveRequestsActivity::class.java)
     }
 }
 

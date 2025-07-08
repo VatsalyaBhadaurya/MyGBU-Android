@@ -109,8 +109,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:itemIconTint="@color/primary"
-        app:itemTextColor="@color/primary"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:itemIconTint="@color/university_primary"
+        app:itemTextColor="@color/university_primary"
+        app:menu="@menu/unified_bottom_navigation_menu" />
 
 </LinearLayout> 

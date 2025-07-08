@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.vatty.mygbu.data.model.Course
 import com.vatty.mygbu.data.model.TimetableItem
 import com.vatty.mygbu.databinding.ActivityCoursesBinding
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
+import com.vatty.mygbu.utils.BottomNavigationHelper
 
 class CoursesActivity : AppCompatActivity() {
     
@@ -31,7 +32,7 @@ class CoursesActivity : AppCompatActivity() {
             insets
         }
         
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "CoursesActivity started - faculty courses management active")
         
         setupToolbar()
@@ -94,28 +95,6 @@ class CoursesActivity : AppCompatActivity() {
     }
     
     private fun setupBottomNavigation() {
-        binding.bottomNavigation.selectedItemId = R.id.nav_courses
-        
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_courses -> true
-                R.id.nav_attendance -> {
-                    startActivity(Intent(this, AttendanceActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, FacultyHubActivity::class.java))
-                    finish()
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(this, binding.bottomNavigation, CoursesActivity::class.java)
     }
 } 

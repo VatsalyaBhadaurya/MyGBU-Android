@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
+import com.vatty.mygbu.utils.BottomNavigationHelper
 
 class FacultyHubActivity : AppCompatActivity() {
     
@@ -30,7 +31,7 @@ class FacultyHubActivity : AppCompatActivity() {
             insets
         }
         
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "FacultyHubActivity started - faculty profile hub active")
         
         initializeViews()
@@ -53,30 +54,7 @@ class FacultyHubActivity : AppCompatActivity() {
     }
     
     private fun setupBottomNavigation() {
-        bottomNavigation.selectedItemId = R.id.nav_profile
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
-                    finish()
-                    true
-                }
-
-                R.id.nav_courses -> {
-                    startActivity(Intent(this, CoursesActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_research -> {
-                    startActivity(Intent(this, AssignmentManagementActivity::class.java))
-                    finish()
-                    true
-                }
-                R.id.nav_profile -> true
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, FacultyHubActivity::class.java)
     }
 }
 

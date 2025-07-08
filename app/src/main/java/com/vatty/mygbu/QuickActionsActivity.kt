@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
+import com.vatty.mygbu.utils.BottomNavigationHelper
 
 class QuickActionsActivity : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class QuickActionsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quick_actions)
 
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "QuickActionsActivity started - faculty quick actions and shortcuts active")
 
         setupViews()
@@ -47,26 +48,7 @@ class QuickActionsActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         bottomNavigation = findViewById(R.id.bottom_navigation)
-        bottomNavigation.selectedItemId = R.id.nav_quick_actions
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, FacultyDashboardActivity::class.java))
-                    true
-                }
-                R.id.nav_quick_actions -> true
-                R.id.nav_calendar -> {
-                    startActivity(Intent(this, ScheduleActivity::class.java))
-                    true
-                }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, FacultyHubActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, QuickActionsActivity::class.java)
     }
 
     private fun getQuickActions(): List<QuickAction> {

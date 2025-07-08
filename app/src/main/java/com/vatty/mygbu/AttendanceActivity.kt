@@ -10,7 +10,7 @@ import com.vatty.mygbu.data.model.StudentAttendance
 import com.vatty.mygbu.databinding.ActivityAttendanceBinding
 import com.vatty.mygbu.enums.AttendanceStatus
 import com.vatty.mygbu.utils.DateUtils
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 
 class AttendanceActivity : AppCompatActivity() {
     
@@ -33,8 +33,8 @@ class AttendanceActivity : AppCompatActivity() {
             insets
         }
         
-        // Test LogWrapper - this will now be sent to Telegram automatically!
-        Log.i(TAG, "AttendanceActivity started - monitoring enabled across the app!")
+        // Log activity startup
+        Log.i(TAG, "AttendanceActivity started")
         
         setupToolbar()
         setupStudentsList()
@@ -166,7 +166,7 @@ class AttendanceActivity : AppCompatActivity() {
         val topicsCovered = binding.etTopicsCovered.text.toString().trim()
         
         if (topicsCovered.isEmpty()) {
-            // Test error logging - this will be sent to Telegram!
+            // Test error logging
             Log.w(TAG, "User tried to submit attendance without entering topics covered")
             Toast.makeText(this, "Please enter topics covered", Toast.LENGTH_SHORT).show()
             return
@@ -176,7 +176,7 @@ class AttendanceActivity : AppCompatActivity() {
         val totalStudents = studentsList.size
         val attendancePercentage = (presentCount * 100) / totalStudents
         
-        // Test low attendance warning - this will be sent to Telegram!
+        // Test low attendance warning
         if (attendancePercentage < 75) {
             Log.w(TAG, "Low attendance detected: $attendancePercentage% ($presentCount/$totalStudents)")
         }

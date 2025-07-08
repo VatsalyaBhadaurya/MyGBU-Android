@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
     
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         
-        // Log main activity startup - this will be sent to Telegram!
+        // Log main activity startup
         Log.i(TAG, "MainActivity started - main entry point active")
         
         // Navigate to Faculty Dashboard

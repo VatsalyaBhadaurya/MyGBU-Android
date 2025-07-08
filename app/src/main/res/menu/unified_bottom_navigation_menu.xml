@@ -11,9 +11,14 @@
         android:title="Courses" />
     
     <item
-        android:id="@+id/nav_research"
-        android:icon="@drawable/ic_reports"
-        android:title="Research" />
+        android:id="@+id/nav_quick_actions"
+        android:icon="@drawable/ic_quick_actions"
+        android:title="Quick Actions" />
+    
+    <item
+        android:id="@+id/nav_analytics"
+        android:icon="@drawable/ic_chart"
+        android:title="Analytics" />
     
     <item
         android:id="@+id/nav_profile"

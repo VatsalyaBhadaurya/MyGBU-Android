@@ -12,7 +12,8 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
+import com.vatty.mygbu.utils.BottomNavigationHelper
 
 class AnalyticsActivity : AppCompatActivity() {
 
@@ -29,7 +30,7 @@ class AnalyticsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_analytics)
 
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "AnalyticsActivity started - faculty analytics dashboard active")
 
         setupViews()
@@ -125,25 +126,6 @@ class AnalyticsActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         bottomNavigation = findViewById(R.id.bottom_navigation)
-        bottomNavigation.selectedItemId = R.id.nav_analytics
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    // Navigate to dashboard
-                    true
-                }
-                R.id.nav_analytics -> true
-                R.id.nav_reports -> {
-                    // Navigate to reports
-                    true
-                }
-                R.id.nav_profile -> {
-                    // Navigate to profile
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, AnalyticsActivity::class.java)
     }
 } 

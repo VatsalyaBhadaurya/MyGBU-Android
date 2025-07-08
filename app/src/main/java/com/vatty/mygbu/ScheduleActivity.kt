@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 
 class ScheduleActivity : AppCompatActivity() {
     
@@ -32,7 +32,7 @@ class ScheduleActivity : AppCompatActivity() {
             insets
         }
         
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "ScheduleActivity started - faculty schedule and timetable management active")
         
         initializeViews()

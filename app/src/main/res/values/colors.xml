@@ -3,62 +3,74 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- Primary Colors -->
-    <color name="primary">#1976D2</color>
-    <color name="primary_dark">#1565C0</color>
-    <color name="primary_light">#BBDEFB</color>
+    <!-- University Brand Colors -->
+    <color name="university_primary">#1B365D</color>      <!-- Deep Navy Blue -->
+    <color name="university_secondary">#8B0000</color>    <!-- Dark Red/Maroon -->
+    <color name="university_accent">#D4AF37</color>       <!-- Gold Accent -->
+    <color name="university_light">#E8E8E8</color>        <!-- Light Gray -->
+    
+    <!-- Primary Colors (Updated to match university branding) -->
+    <color name="primary">#1B365D</color>                 <!-- Deep Navy Blue -->
+    <color name="primary_dark">#0F1F2E</color>            <!-- Darker Navy -->
+    <color name="primary_light">#4A5F7A</color>           <!-- Lighter Navy -->
     
     <!-- Background Colors -->
-    <color name="background_light">#F5F5F5</color>
-    <color name="background_dark">#303030</color>
+    <color name="background_light">#FAFAFA</color>        <!-- Very Light Gray -->
+    <color name="background_dark">#2C2C2C</color>         <!-- Dark Gray -->
     
     <!-- Text Colors -->
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <color name="text_primary">#1B365D</color>            <!-- Navy for primary text -->
+    <color name="text_secondary">#666666</color>          <!-- Medium Gray for secondary text -->
+    <color name="text_tertiary">#999999</color>           <!-- Light Gray for tertiary text -->
     
     <!-- Status Colors -->
-    <color name="success_green">#4CAF50</color>
-    <color name="success_light">#E8F5E8</color>
-    <color name="error_red">#F44336</color>
-    <color name="error_light">#FFEBEE</color>
-    <color name="warning_orange">#FF9800</color>
-    <color name="warning_light">#FFF3E0</color>
+    <color name="success_green">#2E7D32</color>           <!-- Dark Green -->
+    <color name="success_light">#E8F5E8</color>           <!-- Light Green Background -->
+    <color name="error_red">#8B0000</color>               <!-- Dark Red (University Secondary) -->
+    <color name="error_light">#FFEBEE</color>             <!-- Light Red Background -->
+    <color name="warning_orange">#F57C00</color>          <!-- Orange -->
+    <color name="warning_light">#FFF3E0</color>           <!-- Light Orange Background -->
     
     <!-- Priority Colors for Notifications -->
-    <color name="priority_high">#F44336</color>
-    <color name="priority_medium">#FF9800</color>
-    <color name="priority_low">#4CAF50</color>
+    <color name="priority_high">#8B0000</color>           <!-- Dark Red -->
+    <color name="priority_medium">#F57C00</color>         <!-- Orange -->
+    <color name="priority_low">#2E7D32</color>            <!-- Dark Green -->
     
     <!-- Notification Colors -->
-    <color name="notification_unread">#1976D2</color>
-    <color name="notification_read">#757575</color>
-    <color name="notification_badge">#F44336</color>
+    <color name="notification_unread">#1B365D</color>     <!-- Navy -->
+    <color name="notification_read">#666666</color>       <!-- Gray -->
+    <color name="notification_badge">#8B0000</color>      <!-- Dark Red -->
     
     <!-- Switch Colors -->
-    <color name="switch_track_color">#CCCCCC</color>
+    <color name="switch_track_color">#CCCCCC</color>      <!-- Light Gray -->
     
-    <!-- Dashboard Card Colors -->
-    <color name="card_courses">#4CAF50</color>
-    <color name="card_attendance">#FF9800</color>
-    <color name="card_students">#2196F3</color>
-    <color name="card_grades">#9C27B0</color>
-    <color name="card_schedule">#00BCD4</color>
-    <color name="card_announcements">#FF5722</color>
-    <color name="card_reports">#795548</color>
-    <color name="card_profile">#607D8B</color>
-    <color name="card_assignments">#673AB7</color>
-    <color name="card_performance">#E91E63</color>
-    <color name="card_leave">#009688</color>
+    <!-- Dashboard Card Colors (Updated to match university theme) -->
+    <color name="card_courses">#1B365D</color>            <!-- Navy -->
+    <color name="card_attendance">#8B0000</color>         <!-- Dark Red -->
+    <color name="card_students">#2E7D32</color>           <!-- Dark Green -->
+    <color name="card_grades">#D4AF37</color>             <!-- Gold -->
+    <color name="card_schedule">#4A5F7A</color>           <!-- Light Navy -->
+    <color name="card_announcements">#8B0000</color>      <!-- Dark Red -->
+    <color name="card_reports">#795548</color>            <!-- Brown -->
+    <color name="card_profile">#607D8B</color>            <!-- Blue Gray -->
+    <color name="card_assignments">#1B365D</color>        <!-- Navy -->
+    <color name="card_performance">#D4AF37</color>        <!-- Gold -->
+    <color name="card_leave">#2E7D32</color>              <!-- Dark Green -->
     
     <!-- Analytics Colors -->
-    <color name="chart_primary">#1976D2</color>
-    <color name="chart_secondary">#FF9800</color>
-    <color name="chart_accent">#4CAF50</color>
-    <color name="chart_background">#F5F5F5</color>
+    <color name="chart_primary">#1B365D</color>           <!-- Navy -->
+    <color name="chart_secondary">#8B0000</color>         <!-- Dark Red -->
+    <color name="chart_accent">#D4AF37</color>            <!-- Gold -->
+    <color name="chart_background">#FAFAFA</color>        <!-- Light Gray -->
     
     <!-- Quick Action Colors -->
-    <color name="action_urgent">#F44336</color>
-    <color name="action_important">#FF9800</color>
-    <color name="action_normal">#2196F3</color>
-    <color name="action_low">#4CAF50</color>
+    <color name="action_urgent">#8B0000</color>           <!-- Dark Red -->
+    <color name="action_important">#F57C00</color>        <!-- Orange -->
+    <color name="action_normal">#1B365D</color>           <!-- Navy -->
+    <color name="action_low">#2E7D32</color>              <!-- Dark Green -->
+    
+    <!-- Legacy Colors (for backward compatibility) -->
+    <color name="university_red">#8B0000</color>          <!-- Dark Red -->
+    <color name="university_blue">#1B365D</color>         <!-- Navy Blue -->
+    <color name="university_gold">#D4AF37</color>         <!-- Gold -->
 </resources>

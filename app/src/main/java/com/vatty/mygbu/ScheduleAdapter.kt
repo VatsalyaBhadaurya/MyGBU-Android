@@ -83,7 +83,7 @@ class TimeSlotsAdapter(
             "Lecture" -> R.color.primary
             "Practical" -> R.color.success_green
             "Tutorial" -> R.color.warning_orange
-            "Meeting" -> R.color.error_red
+            "Meeting" -> R.color.university_secondary
             else -> R.color.text_secondary
         }
         holder.tvType.setTextColor(holder.itemView.context.getColor(typeColor))

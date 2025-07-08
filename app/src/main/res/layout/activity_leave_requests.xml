@@ -13,7 +13,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
+        android:background="@color/university_primary"
         app:titleTextColor="@color/white"
         app:navigationIcon="@drawable/ic_arrow_back" />
 
@@ -63,6 +63,10 @@
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_menu" />
+        android:background="@color/white"
+        app:elevation="8dp"
+        app:menu="@menu/unified_bottom_navigation_menu"
+        app:itemIconTint="@color/university_primary"
+        app:itemTextColor="@color/university_primary" />
 
 </LinearLayout> 

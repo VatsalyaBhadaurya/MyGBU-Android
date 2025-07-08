@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vatty.mygbu.data.model.Faculty
 import com.vatty.mygbu.data.repository.FacultyRepository
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 import kotlinx.coroutines.launch
 
 class FacultyDashboardViewModel : ViewModel() {

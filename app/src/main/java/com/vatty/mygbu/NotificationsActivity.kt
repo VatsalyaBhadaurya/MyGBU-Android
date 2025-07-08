@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
+import com.vatty.mygbu.utils.BottomNavigationHelper
 
 class NotificationsActivity : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class NotificationsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notifications)
 
-        // Log activity startup - this will be sent to Telegram!
+        // Log activity startup
         Log.i(TAG, "NotificationsActivity started - faculty notifications active")
 
         setupViews()
@@ -49,26 +50,7 @@ class NotificationsActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         bottomNavigation = findViewById(R.id.bottom_navigation)
-        bottomNavigation.selectedItemId = R.id.nav_notifications
-        
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    // Navigate to dashboard
-                    true
-                }
-                R.id.nav_messages -> {
-                    // Navigate to messages
-                    true
-                }
-                R.id.nav_notifications -> true
-                R.id.nav_profile -> {
-                    // Navigate to profile
-                    true
-                }
-                else -> false
-            }
-        }
+        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, NotificationsActivity::class.java)
     }
 
     private fun loadNotifications() {

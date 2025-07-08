@@ -67,6 +67,5 @@ dependencies {
     // MPAndroidChart for analytics charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     
-    // OkHttp for TelegramLogger
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
 } 

@@ -1,7 +1,7 @@
 package com.vatty.mygbu.data.repository
 
 import com.vatty.mygbu.data.model.Faculty
-import com.vatty.mygbu.utils.LogWrapper as Log
+import android.util.Log
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET

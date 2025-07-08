@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="@drawable/university_background"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -33,7 +33,7 @@
             android:text="MyGBU App"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="@color/primary"
+            android:textColor="@color/university_primary"
             android:layout_marginBottom="8dp" />
 
         <TextView

@@ -61,18 +61,19 @@
             android:padding="20dp">
 
             <!-- Compose Message Button -->
+
+            <!-- Conversations List -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_compose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:text="Compose Message"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="24dp"
                 app:icon="@drawable/ic_announcements"
                 app:iconGravity="start" />
 
-            <!-- Conversations List -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
