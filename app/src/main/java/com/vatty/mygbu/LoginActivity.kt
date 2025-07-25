@@ -70,8 +70,8 @@ class LoginActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE
                         if (response.isSuccessful && response.body() != null) {
-                            val tokens = response.body()!!
                             // TODO: Save tokens securely (SharedPreferences)
+                            // val tokens = response.body()!!
                             when (userType) {
                                 "Faculty" -> startActivity(Intent(this@LoginActivity, FacultyDashboardActivity::class.java))
                                 "Student" -> startActivity(Intent(this@LoginActivity, MainActivity::class.java))

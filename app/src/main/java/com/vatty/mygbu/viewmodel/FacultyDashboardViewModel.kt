@@ -16,8 +16,8 @@ class FacultyDashboardViewModel : ViewModel() {
     private val _facultyList = MutableLiveData<List<Faculty>>()
     val facultyList: LiveData<List<Faculty>> = _facultyList
     
-    private val _currentFaculty = MutableLiveData<Faculty>()
-    val currentFaculty: LiveData<Faculty> = _currentFaculty
+    private val _currentFaculty = MutableLiveData<Faculty?>()
+    val currentFaculty: LiveData<Faculty?> = _currentFaculty
     
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
