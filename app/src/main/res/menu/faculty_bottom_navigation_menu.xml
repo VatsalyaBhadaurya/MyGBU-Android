@@ -25,30 +25,4 @@
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />
-    
-    <!-- Student Navigation Items -->
-    <item
-        android:id="@+id/nav_student_dashboard"
-        android:icon="@drawable/ic_home"
-        android:title="Dashboard" />
-    
-    <item
-        android:id="@+id/nav_student_academic"
-        android:icon="@drawable/ic_courses"
-        android:title="Academic" />
-    
-    <item
-        android:id="@+id/nav_student_assignments"
-        android:icon="@drawable/ic_assignment"
-        android:title="Assignments" />
-    
-    <item
-        android:id="@+id/nav_student_exams"
-        android:icon="@drawable/ic_grade"
-        android:title="Exams" />
-    
-    <item
-        android:id="@+id/nav_student_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile" />
 </menu> 

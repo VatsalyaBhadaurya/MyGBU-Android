@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Student Navigation Items -->
+    <item
+        android:id="@+id/nav_student_dashboard"
+        android:icon="@drawable/ic_home"
+        android:title="Dashboard" />
+    
+    <item
+        android:id="@+id/nav_student_assignments"
+        android:icon="@drawable/ic_assignment"
+        android:title="Assignments" />
+    
+    <item
+        android:id="@+id/nav_student_exams"
+        android:icon="@drawable/ic_grade"
+        android:title="Exams" />
+    
+    <item
+        android:id="@+id/nav_student_fees"
+        android:icon="@drawable/ic_document"
+        android:title="Fees" />
+    
+    <item
+        android:id="@+id/nav_student_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+</menu>

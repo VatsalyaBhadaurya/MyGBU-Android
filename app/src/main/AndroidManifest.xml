@@ -27,6 +27,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        
+        <!-- Faculty Activities -->
         <activity
             android:name=".FacultyDashboardActivity"
             android:exported="false" />
@@ -68,6 +70,38 @@
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
+            android:exported="false" />
+        
+        <!-- Student Activities -->
+        <activity
+            android:name=".StudentDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentAssignmentsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentAttendanceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentExamsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentFeesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentScheduleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentPlacementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentHostelActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentGrievanceActivity"
             android:exported="false" />
     </application>
 

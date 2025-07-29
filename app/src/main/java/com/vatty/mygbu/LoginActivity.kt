@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
                             // val tokens = response.body()!!
                             when (userType) {
                                 "Faculty" -> startActivity(Intent(this@LoginActivity, FacultyDashboardActivity::class.java))
-                                "Student" -> startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                "Student" -> startActivity(Intent(this@LoginActivity, StudentDashboardActivity::class.java))
                                 "Admin" -> startActivity(Intent(this@LoginActivity, FacultyHubActivity::class.java))
                             }
                             finish()

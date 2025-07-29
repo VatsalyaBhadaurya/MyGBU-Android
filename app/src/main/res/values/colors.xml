@@ -73,4 +73,12 @@
     <color name="university_red">#8B0000</color>          <!-- Dark Red -->
     <color name="university_blue">#1B365D</color>         <!-- Navy Blue -->
     <color name="university_gold">#D4AF37</color>         <!-- Gold -->
+    
+    <!-- Android System Colors (for backward compatibility) -->
+    <color name="holo_red_light">#FFCDD2</color>          <!-- Light Red -->
+    <color name="holo_green_light">#C8E6C9</color>        <!-- Light Green -->
+    <color name="holo_blue_light">#BBDEFB</color>         <!-- Light Blue -->
+    <color name="holo_orange_light">#FFE0B2</color>       <!-- Light Orange -->
+    <color name="holo_green_dark">#388E3C</color>         <!-- Dark Green -->
+    <color name="holo_blue_dark">#1976D2</color>          <!-- Dark Blue -->
 </resources>

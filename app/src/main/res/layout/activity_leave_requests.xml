@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:elevation="8dp"
-        app:menu="@menu/unified_bottom_navigation_menu"
+        app:menu="@menu/faculty_bottom_navigation_menu"
         app:itemIconTint="@color/university_primary"
         app:itemTextColor="@color/university_primary" />
 

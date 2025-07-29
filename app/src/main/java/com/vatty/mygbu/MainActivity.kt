@@ -34,5 +34,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, FacultyDashboardActivity::class.java)
             startActivity(intent)
         }
+        
+        // Navigate to Student Dashboard
+        findViewById<Button>(R.id.btn_student_dashboard).setOnClickListener {
+            Log.i(TAG, "User clicked Student Dashboard button")
+            val intent = Intent(this, StudentDashboardActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
