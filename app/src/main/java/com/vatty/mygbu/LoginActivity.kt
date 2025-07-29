@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                             when (userType) {
                                 "Faculty" -> startActivity(Intent(this@LoginActivity, FacultyDashboardActivity::class.java))
                                 "Student" -> startActivity(Intent(this@LoginActivity, StudentDashboardActivity::class.java))
-                                "Admin" -> startActivity(Intent(this@LoginActivity, FacultyHubActivity::class.java))
+                                "Admin" -> startActivity(Intent(this@LoginActivity, AdminDashboardActivity::class.java))
                             }
                             finish()
                         } else {

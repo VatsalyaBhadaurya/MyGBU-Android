@@ -99,6 +99,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- Apply Leave Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_apply_leave"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Apply for Leave"
+                android:textSize="16sp"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/white" />
+
         </LinearLayout>
     </ScrollView>
 

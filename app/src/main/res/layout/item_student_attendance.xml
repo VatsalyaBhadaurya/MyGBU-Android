@@ -1,65 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_student"
+    android:id="@+id/card_attendance"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    android:foreground="?android:attr/selectableItemBackground">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Student Avatar Circle -->
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circular_background"
-            android:backgroundTint="@color/primary_light"
-            android:layout_marginEnd="16dp" />
-
-        <!-- Student Information -->
+        <!-- Subject and Percentage Row -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
 
             <TextView
-                android:id="@+id/tv_student_name"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_subject"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Student Name"
+                android:layout_weight="1"
+                android:text="Data Structures"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_roll_number"
+                android:id="@+id/tv_percentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Roll Number"
-                android:textSize="14sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginTop="2dp" />
-
+                android:text="85.5%"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Attendance Switch -->
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/switch_attendance"
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginBottom="8dp"
+            android:progress="85"
+            android:progressTint="@color/holo_green_light" />
+
+        <!-- Classes Info -->
+        <TextView
+            android:id="@+id/tv_classes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            app:thumbTint="@color/white"
-            app:trackTint="@color/switch_track_color" />
+            android:text="17/20 classes"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:drawableStart="@drawable/ic_attendance"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical" />
 
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView> 

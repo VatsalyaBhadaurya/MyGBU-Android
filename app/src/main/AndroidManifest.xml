@@ -103,6 +103,35 @@
         <activity
             android:name=".StudentGrievanceActivity"
             android:exported="false" />
+        
+        <!-- Admin Activities -->
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminOnboardingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminCourseMappingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminExamManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminDegreeAuditActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminApprovalsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminProjectTrackingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminFileTrackingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminOperationsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

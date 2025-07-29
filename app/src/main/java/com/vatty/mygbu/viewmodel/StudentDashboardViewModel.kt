@@ -84,6 +84,11 @@ class StudentDashboardViewModel : ViewModel() {
         loadStudentDashboardData()
     }
     
+    fun updateStudentProfile(updatedStudent: Student) {
+        _studentProfile.value = updatedStudent
+        // In a real app, this would also save to the repository/API
+    }
+    
     fun getGreeting(): String {
         val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
         return when {

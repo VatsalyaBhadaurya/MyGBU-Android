@@ -3,104 +3,90 @@ package com.vatty.mygbu
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.textfield.TextInputEditText
+import com.vatty.mygbu.data.model.Student
 import com.vatty.mygbu.utils.BottomNavigationHelper
 import com.vatty.mygbu.viewmodel.StudentDashboardViewModel
-import de.hdodenhof.circleimageview.CircleImageView
 
 class StudentProfileActivity : AppCompatActivity() {
-
+    
     private lateinit var viewModel: StudentDashboardViewModel
     private lateinit var bottomNavigation: BottomNavigationView
     
-    // Profile views
-    private lateinit var ivProfileImage: CircleImageView
+    // UI Elements
     private lateinit var tvStudentName: TextView
     private lateinit var tvRollNumber: TextView
-    private lateinit var tvEmail: TextView
-    private lateinit var tvPhone: TextView
-    private lateinit var tvProgram: TextView
     private lateinit var tvDepartment: TextView
     private lateinit var tvYear: TextView
     private lateinit var tvSemester: TextView
-    private lateinit var tvAddress: TextView
-    private lateinit var tvEmergencyContact: TextView
+    private lateinit var tvEmail: TextView
     private lateinit var tvDateOfBirth: TextView
     private lateinit var tvGender: TextView
     private lateinit var tvBloodGroup: TextView
-    private lateinit var tvParentName: TextView
-    private lateinit var tvParentPhone: TextView
     
     // Editable fields
-    private lateinit var etPhone: EditText
-    private lateinit var etAddress: EditText
-    private lateinit var etEmergencyContact: EditText
-    private lateinit var etParentPhone: EditText
+    private lateinit var etPhone: TextInputEditText
+    private lateinit var etAddress: TextInputEditText
+    private lateinit var etEmergencyContact: TextInputEditText
+    private lateinit var etParentPhone: TextInputEditText
     
+    // Layout containers
+    private lateinit var layoutReadonlyFields: LinearLayout
+    private lateinit var layoutEditableFields: LinearLayout
+    
+    // Buttons
     private lateinit var btnEdit: Button
     private lateinit var btnSave: Button
     private lateinit var btnCancel: Button
     
     private var isEditMode = false
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_student_profile)
-
+        
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[StudentDashboardViewModel::class.java]
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
+        
         initializeViews()
+        setupClickListeners()
         setupBottomNavigation()
         setupObservers()
-        setupClickListeners()
-        loadProfileData()
+        
+        // Load student data
+        viewModel.loadStudentDashboardData()
     }
-
+    
     private fun initializeViews() {
         bottomNavigation = findViewById(R.id.bottom_navigation)
         
-        // Profile image and basic info
-        ivProfileImage = findViewById(R.id.iv_profile_image)
+        // Read-only fields
         tvStudentName = findViewById(R.id.tv_student_name)
         tvRollNumber = findViewById(R.id.tv_roll_number)
-        tvEmail = findViewById(R.id.tv_email)
-        tvPhone = findViewById(R.id.tv_phone)
-        tvProgram = findViewById(R.id.tv_program)
         tvDepartment = findViewById(R.id.tv_department)
         tvYear = findViewById(R.id.tv_year)
         tvSemester = findViewById(R.id.tv_semester)
-        
-        // Personal details
-        tvAddress = findViewById(R.id.tv_address)
-        tvEmergencyContact = findViewById(R.id.tv_emergency_contact)
+        tvEmail = findViewById(R.id.tv_email)
         tvDateOfBirth = findViewById(R.id.tv_date_of_birth)
         tvGender = findViewById(R.id.tv_gender)
         tvBloodGroup = findViewById(R.id.tv_blood_group)
-        tvParentName = findViewById(R.id.tv_parent_name)
-        tvParentPhone = findViewById(R.id.tv_parent_phone)
         
         // Editable fields
         etPhone = findViewById(R.id.et_phone)
         etAddress = findViewById(R.id.et_address)
         etEmergencyContact = findViewById(R.id.et_emergency_contact)
         etParentPhone = findViewById(R.id.et_parent_phone)
+        
+        // Layout containers
+        layoutReadonlyFields = findViewById(R.id.layout_readonly_fields)
+        layoutEditableFields = findViewById(R.id.layout_editable_fields)
         
         // Buttons
         btnEdit = findViewById(R.id.btn_edit)
@@ -112,17 +98,7 @@ class StudentProfileActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-
-    private fun setupBottomNavigation() {
-        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, StudentProfileActivity::class.java)
-    }
-
-    private fun setupObservers() {
-        viewModel.studentProfile.observe(this) { student ->
-            displayProfileData(student)
-        }
-    }
-
+    
     private fun setupClickListeners() {
         btnEdit.setOnClickListener {
             enableEditMode()
@@ -136,65 +112,54 @@ class StudentProfileActivity : AppCompatActivity() {
             cancelEditMode()
         }
     }
-
-    private fun loadProfileData() {
-        // Profile data is already loaded in ViewModel
+    
+    private fun setupBottomNavigation() {
+        BottomNavigationHelper.setupBottomNavigation(this, bottomNavigation, StudentProfileActivity::class.java)
     }
-
-    private fun displayProfileData(student: com.vatty.mygbu.data.model.Student) {
+    
+    private fun setupObservers() {
+        viewModel.studentProfile.observe(this) { student ->
+            displayStudentData(student)
+        }
+    }
+    
+    private fun displayStudentData(student: Student) {
+        // Display read-only information
         tvStudentName.text = student.name
-        tvRollNumber.text = "Roll No: ${student.rollNumber}"
-        tvEmail.text = student.email
-        tvPhone.text = student.phone
-        tvProgram.text = student.program
+        tvRollNumber.text = student.rollNumber
         tvDepartment.text = student.department
-        tvYear.text = "${student.year}${getOrdinalSuffix(student.year)} Year"
-        tvSemester.text = "${student.semester}${getOrdinalSuffix(student.semester)} Semester"
-        tvAddress.text = student.address
-        tvEmergencyContact.text = student.emergencyContact
+        tvYear.text = "${student.year} Year"
+        tvSemester.text = "${student.semester} Semester"
+        tvEmail.text = student.email
         tvDateOfBirth.text = student.dateOfBirth
         tvGender.text = student.gender
         tvBloodGroup.text = student.bloodGroup
-        tvParentName.text = student.parentName
-        tvParentPhone.text = student.parentPhone
         
-        // Set editable fields
+        // Set editable fields with current values
         etPhone.setText(student.phone)
         etAddress.setText(student.address)
         etEmergencyContact.setText(student.emergencyContact)
         etParentPhone.setText(student.parentPhone)
     }
-
+    
     private fun enableEditMode() {
         isEditMode = true
-        
-        // Show editable fields
-        findViewById<View>(R.id.layout_editable_fields).visibility = View.VISIBLE
-        
-        // Hide read-only fields
-        findViewById<View>(R.id.layout_readonly_fields).visibility = View.GONE
-        
-        // Show save/cancel buttons, hide edit button
+        layoutEditableFields.visibility = View.VISIBLE
+        layoutReadonlyFields.visibility = View.GONE
         btnEdit.visibility = View.GONE
         btnSave.visibility = View.VISIBLE
         btnCancel.visibility = View.VISIBLE
     }
-
+    
     private fun cancelEditMode() {
         isEditMode = false
-        
-        // Hide editable fields
-        findViewById<View>(R.id.layout_editable_fields).visibility = View.GONE
-        
-        // Show read-only fields
-        findViewById<View>(R.id.layout_readonly_fields).visibility = View.VISIBLE
-        
-        // Show edit button, hide save/cancel buttons
+        layoutEditableFields.visibility = View.GONE
+        layoutReadonlyFields.visibility = View.VISIBLE
         btnEdit.visibility = View.VISIBLE
         btnSave.visibility = View.GONE
         btnCancel.visibility = View.GONE
         
-        // Reset editable fields to original values
+        // Reset fields to original values
         viewModel.studentProfile.value?.let { student ->
             etPhone.setText(student.phone)
             etAddress.setText(student.address)
@@ -202,33 +167,53 @@ class StudentProfileActivity : AppCompatActivity() {
             etParentPhone.setText(student.parentPhone)
         }
     }
-
+    
     private fun saveProfileChanges() {
+        val phone = etPhone.text.toString().trim()
+        val address = etAddress.text.toString().trim()
+        val emergencyContact = etEmergencyContact.text.toString().trim()
+        val parentPhone = etParentPhone.text.toString().trim()
+        
         // Validate input
-        if (etPhone.text.isNullOrBlank() || etAddress.text.isNullOrBlank() || 
-            etEmergencyContact.text.isNullOrBlank() || etParentPhone.text.isNullOrBlank()) {
-            Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
+        if (phone.isEmpty() || address.isEmpty() || emergencyContact.isEmpty() || parentPhone.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             return
         }
         
-        // Here you would typically save to backend
-        // For now, just update the UI
-        tvPhone.text = etPhone.text.toString()
-        tvAddress.text = etAddress.text.toString()
-        tvEmergencyContact.text = etEmergencyContact.text.toString()
-        tvParentPhone.text = etParentPhone.text.toString()
+        if (phone.length < 10) {
+            Toast.makeText(this, "Please enter a valid phone number", Toast.LENGTH_SHORT).show()
+            return
+        }
         
-        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-        cancelEditMode()
+        // Save changes (in a real app, this would call an API)
+        viewModel.studentProfile.value?.let { student ->
+            val updatedStudent = student.copy(
+                phone = phone,
+                address = address,
+                emergencyContact = emergencyContact,
+                parentPhone = parentPhone
+            )
+            
+            // Update the ViewModel
+            viewModel.updateStudentProfile(updatedStudent)
+            
+            // Exit edit mode
+            isEditMode = false
+            layoutEditableFields.visibility = View.GONE
+            layoutReadonlyFields.visibility = View.VISIBLE
+            btnEdit.visibility = View.VISIBLE
+            btnSave.visibility = View.GONE
+            btnCancel.visibility = View.GONE
+            
+            Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+        }
     }
-
-    private fun getOrdinalSuffix(number: Int): String {
-        return when {
-            number % 100 in 11..13 -> "th"
-            number % 10 == 1 -> "st"
-            number % 10 == 2 -> "nd"
-            number % 10 == 3 -> "rd"
-            else -> "th"
+    
+    override fun onBackPressed() {
+        if (isEditMode) {
+            cancelEditMode()
+        } else {
+            super.onBackPressed()
         }
     }
 }

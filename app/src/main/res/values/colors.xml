@@ -81,4 +81,15 @@
     <color name="holo_orange_light">#FFE0B2</color>       <!-- Light Orange -->
     <color name="holo_green_dark">#388E3C</color>         <!-- Dark Green -->
     <color name="holo_blue_dark">#1976D2</color>          <!-- Dark Blue -->
+    
+    <!-- Additional Colors for Fees Activity -->
+    <color name="light_gray">#E0E0E0</color>              <!-- Light Gray for progress track -->
+    
+    <!-- Admin Module Colors -->
+    <color name="primary_color">#1B365D</color>           <!-- Primary color for admin -->
+    <color name="accent_color">#D4AF37</color>            <!-- Accent color for admin -->
+    <color name="background_color">#FAFAFA</color>        <!-- Background color -->
+    <color name="warning_color">#F57C00</color>           <!-- Warning color -->
+    <color name="success_color">#2E7D32</color>           <!-- Success color -->
+    <color name="error_color">#8B0000</color>             <!-- Error color -->
 </resources>

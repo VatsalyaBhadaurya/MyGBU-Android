@@ -35,6 +35,14 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Tab Layout -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/header" />
+
     <!-- Content -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -42,8 +50,41 @@
         android:layout_height="0dp"
         android:padding="16dp"
         android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_download_hall_ticket"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Download Hall Ticket"
+            android:textSize="14sp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_download_grade_card"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="Download Grade Card"
+            android:textSize="14sp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/card_students"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
     <!-- No Exams Message -->
     <TextView

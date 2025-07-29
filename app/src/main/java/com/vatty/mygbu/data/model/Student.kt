@@ -5,6 +5,7 @@ import com.vatty.mygbu.enums.AssignmentStatus
 import com.vatty.mygbu.enums.LeaveStatus
 import com.vatty.mygbu.enums.PlacementStatus
 import com.vatty.mygbu.enums.GrievanceStatus
+import com.vatty.mygbu.enums.ExamStatus
 
 // Main Student data class
 data class Student(
@@ -47,6 +48,14 @@ data class StudentAttendance(
         status = if (present) AttendanceStatus.PRESENT else AttendanceStatus.ABSENT
     }
 }
+
+// Student Attendance by Subject
+data class StudentSubjectAttendance(
+    val subject: String,
+    val percentage: Double,
+    val classesAttended: Int,
+    val totalClasses: Int
+)
 
 // Student Academic Performance
 data class StudentPerformance(
@@ -111,6 +120,32 @@ data class StudentExam(
     val duration: String,
     val hallNumber: String,
     val seatNumber: String
+)
+
+// Student Exam Result
+data class StudentExamResult(
+    val id: String,
+    val courseId: String,
+    val courseName: String,
+    val examType: String,
+    val date: String,
+    val time: String,
+    val venue: String,
+    val status: ExamStatus,
+    val grade: String?,
+    val marks: Int?,
+    val totalMarks: Int?
+)
+
+// Student Timetable Item
+data class StudentTimetableItem(
+    val id: String,
+    val day: String,
+    val time: String,
+    val subject: String,
+    val teacher: String,
+    val room: String,
+    val type: String
 )
 
 // Student Result
