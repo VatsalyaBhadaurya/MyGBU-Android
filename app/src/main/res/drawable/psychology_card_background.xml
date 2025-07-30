@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Card shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#20000000" />
+            <corners android:radius="16dp" />
+            <padding
+                android:left="2dp"
+                android:top="2dp"
+                android:right="2dp"
+                android:bottom="2dp" />
+        </shape>
+    </item>
+    
+    <!-- Card background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+    
+    <!-- Subtle top accent -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/university_primary" />
+            <corners
+                android:topLeftRadius="16dp"
+                android:topRightRadius="16dp" />
+            <size android:height="4dp" />
+        </shape>
+    </item>
+</layer-list> 

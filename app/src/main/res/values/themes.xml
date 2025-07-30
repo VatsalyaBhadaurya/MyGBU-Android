@@ -1,8 +1,66 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MyGBU" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary Brand Colors -->
+        <item name="colorPrimary">@color/university_primary</item>
+        <item name="colorPrimaryContainer">@color/primary_ultra_light</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/university_primary</item>
+        
+        <!-- Secondary Brand Colors -->
+        <item name="colorSecondary">@color/university_secondary</item>
+        <item name="colorSecondaryContainer">@color/error_light</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/university_secondary</item>
+        
+        <!-- Tertiary/Accent Colors -->
+        <item name="colorTertiary">@color/university_accent</item>
+        <item name="colorTertiaryContainer">@color/warning_light</item>
+        <item name="colorOnTertiary">@color/black</item>
+        <item name="colorOnTertiaryContainer">@color/university_accent</item>
+        
+        <!-- Surface Colors -->
+        <item name="colorSurface">@color/background_light</item>
+        <item name="colorSurfaceVariant">@color/background_cool</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        
+        <!-- Background Colors -->
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+        
+        <!-- Error Colors -->
+        <item name="colorError">@color/error_red</item>
+        <item name="colorErrorContainer">@color/error_light</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="colorOnErrorContainer">@color/error_red</item>
+        
+        <!-- Outline Colors -->
+        <item name="colorOutline">@color/divider_color</item>
+        <item name="colorOutlineVariant">@color/text_tertiary</item>
+        
+        <!-- Status Bar and Navigation Bar -->
+        <item name="android:statusBarColor">@color/university_primary</item>
+        <item name="android:navigationBarColor">@color/university_primary</item>
+        <item name="android:windowLightStatusBar">false</item>
+        
+        <!-- Typography -->
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorTertiary">@color/text_tertiary</item>
+        
+        <!-- Ripple and Selection -->
+        <item name="colorControlHighlight">@color/ripple_color</item>
+        <item name="android:colorControlNormal">@color/university_primary</item>
+        
+        <!-- Card and Dialog Styling -->
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        
+        <!-- Button Styling -->
+        <item name="materialButtonStyle">@style/Widget.MyGBU.Button</item>
+        <item name="textInputStyle">@style/Widget.MyGBU.TextInputLayout</item>
     </style>
 
     <style name="Theme.MyGBU" parent="Base.Theme.MyGBU" />
@@ -13,5 +71,40 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/header_gradient</item>
+    </style>
+    
+    <!-- Custom Button Style -->
+    <style name="Widget.MyGBU.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/university_primary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <!-- Custom Text Input Style -->
+    <style name="Widget.MyGBU.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/university_primary</item>
+        <item name="hintTextColor">@color/university_primary</item>
+        <item name="android:textColorHint">@color/text_tertiary</item>
+    </style>
+    
+    <!-- Student Dashboard Theme -->
+    <style name="Theme.MyGBU.Student" parent="Theme.MyGBU">
+        <item name="colorPrimary">@color/student_primary</item>
+        <item name="colorSecondary">@color/student_accent</item>
+    </style>
+    
+    <!-- Faculty Dashboard Theme -->
+    <style name="Theme.MyGBU.Faculty" parent="Theme.MyGBU">
+        <item name="colorPrimary">@color/faculty_primary</item>
+        <item name="colorSecondary">@color/faculty_accent</item>
+    </style>
+    
+    <!-- Admin Dashboard Theme -->
+    <style name="Theme.MyGBU.Admin" parent="Theme.MyGBU">
+        <item name="colorPrimary">@color/admin_primary</item>
+        <item name="colorSecondary">@color/admin_accent</item>
     </style>
 </resources>

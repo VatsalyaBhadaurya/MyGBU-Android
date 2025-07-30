@@ -3,78 +3,122 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
-    <!-- University Brand Colors -->
-    <color name="university_primary">#1B365D</color>      <!-- Deep Navy Blue -->
-    <color name="university_secondary">#8B0000</color>    <!-- Dark Red/Maroon -->
-    <color name="university_accent">#D4AF37</color>       <!-- Gold Accent -->
-    <color name="university_light">#E8E8E8</color>        <!-- Light Gray -->
+    <!-- ===== UNIVERSITY BRAND COLORS (Core Identity) ===== -->
+    <color name="university_primary">#1B365D</color>      <!-- Deep Navy Blue - Trust, Stability, Intelligence -->
+    <color name="university_secondary">#8B0000</color>    <!-- Dark Red/Maroon - Authority, Tradition, Excellence -->
+    <color name="university_accent">#D4AF37</color>       <!-- Gold Accent - Achievement, Prestige, Success -->
+    <color name="university_light">#E8E8E8</color>        <!-- Light Gray - Neutrality, Balance -->
     
-    <!-- Primary Colors (Updated to match university branding) -->
-    <color name="primary">#1B365D</color>                 <!-- Deep Navy Blue -->
-    <color name="primary_dark">#0F1F2E</color>            <!-- Darker Navy -->
-    <color name="primary_light">#4A5F7A</color>           <!-- Lighter Navy -->
+    <!-- ===== ENHANCED PRIMARY COLORS (Psychological Design) ===== -->
+    <color name="primary">#1B365D</color>                 <!-- Deep Navy Blue - Primary brand color -->
+    <color name="primary_dark">#0F1F2E</color>            <!-- Darker Navy - For pressed states -->
+    <color name="primary_light">#4A5F7A</color>           <!-- Lighter Navy - For hover states -->
+    <color name="primary_ultra_light">#E8ECF2</color>     <!-- Ultra light navy - For backgrounds -->
     
-    <!-- Background Colors -->
-    <color name="background_light">#FAFAFA</color>        <!-- Very Light Gray -->
-    <color name="background_dark">#2C2C2C</color>         <!-- Dark Gray -->
+    <!-- ===== PSYCHOLOGICAL BACKGROUND COLORS ===== -->
+    <color name="background_light">#FAFAFA</color>        <!-- Very Light Gray - Clean, Professional -->
+    <color name="background_dark">#2C2C2C</color>         <!-- Dark Gray - For dark mode -->
+    <color name="background_warm">#FEFEFE</color>         <!-- Warm white - Soothing, Academic -->
+    <color name="background_cool">#F8F9FA</color>         <!-- Cool white - Modern, Clean -->
     
-    <!-- Text Colors -->
-    <color name="text_primary">#1B365D</color>            <!-- Navy for primary text -->
-    <color name="text_secondary">#666666</color>          <!-- Medium Gray for secondary text -->
-    <color name="text_tertiary">#999999</color>           <!-- Light Gray for tertiary text -->
+    <!-- ===== ENHANCED TEXT COLORS (Accessibility Focused) ===== -->
+    <color name="text_primary">#1B365D</color>            <!-- Navy for primary text - High contrast -->
+    <color name="text_secondary">#5A6C7D</color>          <!-- Medium Blue-Gray - Better readability -->
+    <color name="text_tertiary">#8A9BA8</color>           <!-- Light Blue-Gray - Subtle information -->
+    <color name="text_disabled">#B8C2CC</color>           <!-- Disabled text - Clear distinction -->
+    <color name="text_inverse">#FFFFFF</color>            <!-- White text for dark backgrounds -->
     
-    <!-- Status Colors -->
-    <color name="success_green">#2E7D32</color>           <!-- Dark Green -->
-    <color name="success_light">#E8F5E8</color>           <!-- Light Green Background -->
-    <color name="error_red">#8B0000</color>               <!-- Dark Red (University Secondary) -->
-    <color name="error_light">#FFEBEE</color>             <!-- Light Red Background -->
-    <color name="warning_orange">#F57C00</color>          <!-- Orange -->
-    <color name="warning_light">#FFF3E0</color>           <!-- Light Orange Background -->
+    <!-- ===== PSYCHOLOGICAL STATUS COLORS ===== -->
+    <color name="success_green">#2E7D32</color>           <!-- Dark Green - Success, Growth, Learning -->
+    <color name="success_light">#E8F5E8</color>           <!-- Light Green Background - Positive feedback -->
+    <color name="success_accent">#4CAF50</color>          <!-- Bright Green - Active success states -->
     
-    <!-- Priority Colors for Notifications -->
-    <color name="priority_high">#8B0000</color>           <!-- Dark Red -->
-    <color name="priority_medium">#F57C00</color>         <!-- Orange -->
-    <color name="priority_low">#2E7D32</color>            <!-- Dark Green -->
+    <color name="error_red">#8B0000</color>               <!-- Dark Red - Matches university secondary -->
+    <color name="error_light">#FFEBEE</color>             <!-- Light Red Background - Gentle error indication -->
+    <color name="error_accent">#D32F2F</color>            <!-- Bright Red - Critical errors -->
     
-    <!-- Notification Colors -->
-    <color name="notification_unread">#1B365D</color>     <!-- Navy -->
-    <color name="notification_read">#666666</color>       <!-- Gray -->
-    <color name="notification_badge">#8B0000</color>      <!-- Dark Red -->
+    <color name="warning_orange">#F57C00</color>          <!-- Orange - Attention, caution -->
+    <color name="warning_light">#FFF3E0</color>           <!-- Light Orange Background - Gentle warning -->
+    <color name="warning_accent">#FF9800</color>          <!-- Bright Orange - Active warnings -->
     
-    <!-- Switch Colors -->
-    <color name="switch_track_color">#CCCCCC</color>      <!-- Light Gray -->
+    <color name="info_blue">#1976D2</color>               <!-- Blue - Information, guidance -->
+    <color name="info_light">#E3F2FD</color>              <!-- Light Blue Background - Informational content -->
     
-    <!-- Dashboard Card Colors (Updated to match university theme) -->
-    <color name="card_courses">#1B365D</color>            <!-- Navy -->
-    <color name="card_attendance">#8B0000</color>         <!-- Dark Red -->
-    <color name="card_students">#2E7D32</color>           <!-- Dark Green -->
-    <color name="card_grades">#D4AF37</color>             <!-- Gold -->
-    <color name="card_schedule">#4A5F7A</color>           <!-- Light Navy -->
-    <color name="card_announcements">#8B0000</color>      <!-- Dark Red -->
-    <color name="card_reports">#795548</color>            <!-- Brown -->
-    <color name="card_profile">#607D8B</color>            <!-- Blue Gray -->
-    <color name="card_assignments">#1B365D</color>        <!-- Navy -->
-    <color name="card_performance">#D4AF37</color>        <!-- Gold -->
-    <color name="card_leave">#2E7D32</color>              <!-- Dark Green -->
+    <!-- ===== PSYCHOLOGICAL PRIORITY COLORS ===== -->
+    <color name="priority_high">#8B0000</color>           <!-- Dark Red - Urgent, important -->
+    <color name="priority_medium">#F57C00</color>         <!-- Orange - Moderate priority -->
+    <color name="priority_low">#2E7D32</color>            <!-- Dark Green - Low priority -->
+    <color name="priority_info">#1976D2</color>           <!-- Blue - Informational priority -->
     
-    <!-- Analytics Colors -->
-    <color name="chart_primary">#1B365D</color>           <!-- Navy -->
-    <color name="chart_secondary">#8B0000</color>         <!-- Dark Red -->
-    <color name="chart_accent">#D4AF37</color>            <!-- Gold -->
-    <color name="chart_background">#FAFAFA</color>        <!-- Light Gray -->
+    <!-- ===== ENHANCED NOTIFICATION COLORS ===== -->
+    <color name="notification_unread">#1B365D</color>     <!-- Navy - Unread notifications -->
+    <color name="notification_read">#8A9BA8</color>       <!-- Light Blue-Gray - Read notifications -->
+    <color name="notification_badge">#8B0000</color>      <!-- Dark Red - Badge indicator -->
+    <color name="notification_urgent">#D32F2F</color>     <!-- Bright Red - Urgent notifications -->
     
-    <!-- Quick Action Colors -->
-    <color name="action_urgent">#8B0000</color>           <!-- Dark Red -->
-    <color name="action_important">#F57C00</color>        <!-- Orange -->
-    <color name="action_normal">#1B365D</color>           <!-- Navy -->
-    <color name="action_low">#2E7D32</color>              <!-- Dark Green -->
+    <!-- ===== PSYCHOLOGICAL INTERACTION COLORS ===== -->
+    <color name="switch_track_color">#E0E0E0</color>      <!-- Light Gray - Switch track -->
+    <color name="switch_thumb_color">#1B365D</color>      <!-- Navy - Switch thumb -->
+    <color name="ripple_color">#1B365D</color>            <!-- Navy - Ripple effect -->
+    <color name="divider_color">#E0E0E0</color>           <!-- Light Gray - Dividers -->
     
-    <!-- Legacy Colors (for backward compatibility) -->
+    <!-- ===== PSYCHOLOGICAL DASHBOARD CARD COLORS ===== -->
+    <!-- Academic Performance -->
+    <color name="card_courses">#1B365D</color>            <!-- Navy - Learning, Knowledge -->
+    <color name="card_attendance">#8B0000</color>         <!-- Dark Red - Discipline, Responsibility -->
+    <color name="card_grades">#D4AF37</color>             <!-- Gold - Achievement, Excellence -->
+    <color name="card_performance">#D4AF37</color>        <!-- Gold - Performance metrics -->
+    
+    <!-- Administrative -->
+    <color name="card_students">#2E7D32</color>           <!-- Dark Green - Growth, Community -->
+    <color name="card_schedule">#4A5F7A</color>           <!-- Light Navy - Organization, Planning -->
+    <color name="card_announcements">#8B0000</color>      <!-- Dark Red - Important information -->
+    <color name="card_assignments">#1B365D</color>        <!-- Navy - Academic work -->
+    
+    <!-- Support Services -->
+    <color name="card_reports">#795548</color>            <!-- Brown - Documentation, Reports -->
+    <color name="card_profile">#607D8B</color>            <!-- Blue Gray - Personal information -->
+    <color name="card_leave">#2E7D32</color>              <!-- Dark Green - Approval, Permission -->
+    <color name="card_fees">#1976D2</color>               <!-- Blue - Financial information -->
+    
+    <!-- ===== PSYCHOLOGICAL ANALYTICS COLORS ===== -->
+    <color name="chart_primary">#1B365D</color>           <!-- Navy - Primary data -->
+    <color name="chart_secondary">#8B0000</color>         <!-- Dark Red - Secondary data -->
+    <color name="chart_accent">#D4AF37</color>            <!-- Gold - Highlighted data -->
+    <color name="chart_background">#FAFAFA</color>        <!-- Light Gray - Chart background -->
+    <color name="chart_grid">#E0E0E0</color>              <!-- Light Gray - Grid lines -->
+    
+    <!-- ===== PSYCHOLOGICAL QUICK ACTION COLORS ===== -->
+    <color name="action_urgent">#8B0000</color>           <!-- Dark Red - Immediate action needed -->
+    <color name="action_important">#F57C00</color>        <!-- Orange - Important but not urgent -->
+    <color name="action_normal">#1B365D</color>           <!-- Navy - Standard actions -->
+    <color name="action_low">#2E7D32</color>              <!-- Dark Green - Low priority actions -->
+    <color name="action_info">#1976D2</color>             <!-- Blue - Informational actions -->
+    
+    <!-- ===== PSYCHOLOGICAL MODULE COLORS ===== -->
+    <!-- Student Module -->
+    <color name="student_primary">#1B365D</color>         <!-- Navy - Student identity -->
+    <color name="student_accent">#D4AF37</color>          <!-- Gold - Student achievements -->
+    
+    <!-- Faculty Module -->
+    <color name="faculty_primary">#8B0000</color>         <!-- Dark Red - Faculty authority -->
+    <color name="faculty_accent">#D4AF37</color>          <!-- Gold - Faculty excellence -->
+    
+    <!-- Admin Module -->
+    <color name="admin_primary">#1B365D</color>           <!-- Navy - Administrative authority -->
+    <color name="admin_accent">#8B0000</color>            <!-- Dark Red - Administrative control -->
+    
+    <!-- ===== ACCESSIBILITY ENHANCED COLORS ===== -->
+    <color name="accessibility_high_contrast_text">#000000</color>  <!-- Black - High contrast text -->
+    <color name="accessibility_high_contrast_bg">#FFFFFF</color>   <!-- White - High contrast background -->
+    <color name="accessibility_focus">#D4AF37</color>              <!-- Gold - Focus indicator -->
+    
+    <!-- ===== LEGACY COLORS (Backward Compatibility) ===== -->
     <color name="university_red">#8B0000</color>          <!-- Dark Red -->
     <color name="university_blue">#1B365D</color>         <!-- Navy Blue -->
     <color name="university_gold">#D4AF37</color>         <!-- Gold -->
     
-    <!-- Android System Colors (for backward compatibility) -->
+    <!-- Android System Colors (Backward Compatibility) -->
     <color name="holo_red_light">#FFCDD2</color>          <!-- Light Red -->
     <color name="holo_green_light">#C8E6C9</color>        <!-- Light Green -->
     <color name="holo_blue_light">#BBDEFB</color>         <!-- Light Blue -->

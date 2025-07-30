@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Base background -->
+    <!-- Base background - Warm, academic feel -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#FAFAFA" />
+            <solid android:color="@color/background_warm" />
         </shape>
     </item>
     
-    <!-- Subtle pattern overlay -->
+    <!-- Subtle university pattern overlay - More sophisticated -->
     <item>
         <shape android:shape="rectangle">
             <gradient
                 android:angle="135"
                 android:startColor="#00000000"
                 android:centerColor="#00000000"
-                android:endColor="#1B365D"
+                android:endColor="@color/primary_ultra_light"
                 android:centerX="0.8"
                 android:centerY="0.2"
-                android:gradientRadius="800dp"
+                android:gradientRadius="1000dp"
                 android:type="radial" />
+        </shape>
+    </item>
+    
+    <!-- Additional subtle accent -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="45"
+                android:startColor="#00000000"
+                android:centerColor="#00000000"
+                android:endColor="@color/university_accent"
+                android:centerX="0.2"
+                android:centerY="0.8"
+                android:gradientRadius="1200dp"
+                android:type="radial"
+                android:alpha="0.1" />
         </shape>
     </item>
 </layer-list> 
