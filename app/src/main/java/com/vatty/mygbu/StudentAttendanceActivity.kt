@@ -231,16 +231,21 @@ class StudentAttendanceAdapter(
         private val onAttendanceClick: (StudentSubjectAttendance) -> Unit
     ) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
         
-        private val tvSubject: TextView = itemView.findViewById(R.id.tv_subject)
-        private val tvPercentage: TextView = itemView.findViewById(R.id.tv_percentage)
-        private val tvClasses: TextView = itemView.findViewById(R.id.tv_classes)
+        private val tvStudentName: TextView = itemView.findViewById(R.id.tv_student_name)
+        private val tvRollNumber: TextView = itemView.findViewById(R.id.tv_roll_number)
+        private val tvAttendancePercentage: TextView = itemView.findViewById(R.id.tv_attendance_percentage)
+        private val tvCgpa: TextView = itemView.findViewById(R.id.tv_cgpa)
+        private val tvClassesAttended: TextView = itemView.findViewById(R.id.tv_classes_attended)
         private val progressBar: android.widget.ProgressBar = itemView.findViewById(R.id.progress_bar)
         private val cardView: com.google.android.material.card.MaterialCardView = itemView.findViewById(R.id.card_attendance)
         
         fun bind(attendance: StudentSubjectAttendance) {
-            tvSubject.text = attendance.subject
-            tvPercentage.text = "${attendance.percentage}%"
-            tvClasses.text = "${attendance.classesAttended}/${attendance.totalClasses} classes"
+            // For student attendance view, we'll use the subject as student name and show attendance details
+            tvStudentName.text = attendance.subject
+            tvRollNumber.text = "Subject: ${attendance.subject}"
+            tvAttendancePercentage.text = "${attendance.percentage}%"
+            tvCgpa.text = "N/A" // CGPA not available for subject attendance
+            tvClassesAttended.text = "${attendance.classesAttended}/${attendance.totalClasses} classes"
             
             // Set progress bar
             progressBar.max = 100

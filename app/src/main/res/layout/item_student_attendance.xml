@@ -15,55 +15,212 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Subject and Percentage Row -->
+        <!-- Student Details Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:id="@+id/tv_subject"
+            <!-- Student Avatar -->
+            <ImageView
+                android:id="@+id/iv_student_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_profile"
+                android:background="@drawable/circular_background"
+                android:padding="12dp"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/primary" />
+
+            <!-- Student Info -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Data Structures"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_percentage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="85.5%"
-                android:textColor="@color/primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_student_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rahul Kumar"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_roll_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Roll No: 2024CS001"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        <!-- Attendance and CGPA Stats Row -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:layout_marginBottom="8dp"
-            android:progress="85"
-            android:progressTint="@color/holo_green_light" />
-
-        <!-- Classes Info -->
-        <TextView
-            android:id="@+id/tv_classes"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="17/20 classes"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            android:drawableStart="@drawable/ic_attendance"
-            android:drawablePadding="4dp"
-            android:gravity="center_vertical" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <!-- Overall Attendance -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/attendance_card_bg"
+                android:padding="12dp"
+                android:layout_marginEnd="8dp">
+
+                <TextView
+                    android:id="@+id/tv_attendance_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="85.5%"
+                    android:textColor="@color/primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attendance"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- CGPA -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/grades_card_bg"
+                android:padding="12dp"
+                android:layout_marginStart="8dp">
+
+                <TextView
+                    android:id="@+id/tv_cgpa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8.75"
+                    android:textColor="@color/university_secondary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CGPA"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Attendance Progress Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Class Attendance"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_classes_attended"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="17/20 classes"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:gravity="end" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:progress="85"
+                android:progressTint="@color/primary"
+                android:progressBackgroundTint="@color/background_light" />
+
+        </LinearLayout>
+
+        <!-- Attendance Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- Present Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_present"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="Present"
+                android:textSize="12sp"
+                android:backgroundTint="@color/success_green"
+                android:textColor="@color/white"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+            <!-- Late Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_late"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="Late"
+                android:textSize="12sp"
+                android:backgroundTint="@color/warning_orange"
+                android:textColor="@color/white"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+            <!-- Absent Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_absent"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="Absent"
+                android:textSize="12sp"
+                android:backgroundTint="@color/university_secondary"
+                android:textColor="@color/white"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView> 

@@ -103,12 +103,13 @@ class AttendanceActivity : AppCompatActivity() {
     }
     
     private fun setupRecyclerView() {
-        studentsAdapter = StudentsAttendanceAdapter(studentsList) { position, isChecked ->
+        studentsAdapter = StudentsAttendanceAdapter(studentsList) { position, status ->
             if (position >= 0 && position < studentsList.size) {
                 val student = studentsList[position]
-                student.updateAttendance(isChecked)
+                student.status = status
+                student.isPresent = status == AttendanceStatus.PRESENT
                 
-                Log.d(TAG, "Attendance toggled for ${student.name}: ${student.status}")
+                Log.d(TAG, "Attendance updated for ${student.name}: ${student.status}")
                 
                 binding.rvStudents.post {
                     studentsAdapter.notifyItemChanged(position)
@@ -135,7 +136,10 @@ class AttendanceActivity : AppCompatActivity() {
     }
     
     private fun markAllStudents(isPresent: Boolean) {
-        studentsList.forEach { it.updateAttendance(isPresent) }
+        studentsList.forEach { 
+            it.status = if (isPresent) AttendanceStatus.PRESENT else AttendanceStatus.ABSENT
+            it.isPresent = isPresent
+        }
         
         // Post the update to avoid RecyclerView layout issues
         binding.rvStudents.post {
@@ -154,11 +158,12 @@ class AttendanceActivity : AppCompatActivity() {
     
     private fun updateStats() {
         val totalStudents = studentsList.size
-        val presentCount = studentsList.count { it.isPresent }
-        val absentCount = totalStudents - presentCount
+        val presentCount = studentsList.count { it.status == AttendanceStatus.PRESENT }
+        val lateCount = studentsList.count { it.status == AttendanceStatus.LATE }
+        val absentCount = studentsList.count { it.status == AttendanceStatus.ABSENT }
         
         binding.tvTotalStudents.text = totalStudents.toString()
-        binding.tvPresentCount.text = presentCount.toString()
+        binding.tvPresentCount.text = (presentCount + lateCount).toString() // Include late as present
         binding.tvAbsentCount.text = absentCount.toString()
     }
     
@@ -172,23 +177,24 @@ class AttendanceActivity : AppCompatActivity() {
             return
         }
         
-        val presentCount = studentsList.count { it.isPresent }
+        val presentCount = studentsList.count { it.status == AttendanceStatus.PRESENT }
+        val lateCount = studentsList.count { it.status == AttendanceStatus.LATE }
         val totalStudents = studentsList.size
-        val attendancePercentage = (presentCount * 100) / totalStudents
+        val attendancePercentage = ((presentCount + lateCount) * 100) / totalStudents
         
         // Test low attendance warning
         if (attendancePercentage < 75) {
-            Log.w(TAG, "Low attendance detected: $attendancePercentage% ($presentCount/$totalStudents)")
+            Log.w(TAG, "Low attendance detected: $attendancePercentage% (${presentCount + lateCount}/$totalStudents)")
         }
         
         Toast.makeText(
             this, 
             getString(R.string.attendance_marked_successfully) + 
-            "\n$presentCount/$totalStudents present ($attendancePercentage%)", 
+            "\n${presentCount + lateCount}/$totalStudents present ($attendancePercentage%)", 
             Toast.LENGTH_LONG
         ).show()
         
-        Log.d(TAG, "Attendance submitted: $presentCount/$totalStudents present ($attendancePercentage%)")
+        Log.d(TAG, "Attendance submitted: ${presentCount + lateCount}/$totalStudents present ($attendancePercentage%)")
         
         // Clear form
         binding.etTopicsCovered.setText("")
