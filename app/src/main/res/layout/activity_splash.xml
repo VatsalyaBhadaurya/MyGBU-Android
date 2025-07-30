@@ -33,21 +33,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Gautam Buddha University"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:textColor="@color/university_red"
         android:alpha="0.9"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="15dp" />
 
     <!-- Faculty Portal Subtitle -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Faculty Portal"
-        android:textSize="16sp"
-        android:textColor="@color/error_red"
-        android:alpha="0.8"
-        android:layout_marginBottom="64dp" />
+
 
     <!-- Loading Animation -->
     <ProgressBar

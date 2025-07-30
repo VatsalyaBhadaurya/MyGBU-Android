@@ -197,14 +197,14 @@ class StudentExamsActivity : AppCompatActivity() {
     
     private fun showUpcomingExamDetails(exam: StudentExamResult) {
         AlertDialog.Builder(this)
-            .setTitle("${exam.courseName} - ${exam.examType}")
+            .setTitle("📝 ${exam.courseName} - ${exam.examType}")
             .setMessage("""
-                Date: ${exam.date}
-                Time: ${exam.time}
-                Venue: ${exam.venue}
-                Status: ${exam.status}
+                📅 Date: ${exam.date}
+                ⏰ Time: ${exam.time}
+                🏢 Venue: ${exam.venue}
+                📊 Status: ${exam.status}
                 
-                Please download your hall ticket before the exam.
+                💡 Please download your hall ticket before the exam.
             """.trimIndent())
             .setPositiveButton("Download Hall Ticket") { _, _ ->
                 downloadHallTicket(exam)
@@ -215,14 +215,14 @@ class StudentExamsActivity : AppCompatActivity() {
     
     private fun showCompletedExamDetails(exam: StudentExamResult) {
         AlertDialog.Builder(this)
-            .setTitle("${exam.courseName} - ${exam.examType}")
+            .setTitle("📝 ${exam.courseName} - ${exam.examType}")
             .setMessage("""
-                Date: ${exam.date}
-                Time: ${exam.time}
-                Venue: ${exam.venue}
-                Status: ${exam.status}
-                Grade: ${exam.grade}
-                Marks: ${exam.marks}/${exam.totalMarks}
+                📅 Date: ${exam.date}
+                ⏰ Time: ${exam.time}
+                🏢 Venue: ${exam.venue}
+                📊 Status: ${exam.status}
+                🎯 Grade: ${exam.grade}
+                📊 Marks: ${exam.marks}/${exam.totalMarks}
             """.trimIndent())
             .setPositiveButton("View Result", null)
             .setNegativeButton("Close", null)
@@ -231,12 +231,12 @@ class StudentExamsActivity : AppCompatActivity() {
     
     private fun showExamDetails(exam: StudentExamResult) {
         AlertDialog.Builder(this)
-            .setTitle("${exam.courseName} - ${exam.examType}")
+            .setTitle("📝 ${exam.courseName} - ${exam.examType}")
             .setMessage("""
-                Date: ${exam.date}
-                Time: ${exam.time}
-                Venue: ${exam.venue}
-                Status: ${exam.status}
+                📅 Date: ${exam.date}
+                ⏰ Time: ${exam.time}
+                🏢 Venue: ${exam.venue}
+                📊 Status: ${exam.status}
             """.trimIndent())
             .setPositiveButton("OK", null)
             .show()

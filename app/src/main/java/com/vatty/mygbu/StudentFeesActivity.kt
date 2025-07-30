@@ -183,14 +183,20 @@ class StudentFeesActivity : AppCompatActivity() {
         if (fees.isNotEmpty()) {
             val formatter = NumberFormat.getCurrencyInstance(Locale("en", "IN"))
             val historyText = fees.joinToString("\n\n") { fee ->
-                "Semester ${fee.semester}:\n" +
-                "Total: ${formatter.format(fee.totalAmount)}\n" +
-                "Paid: ${formatter.format(fee.paidAmount)}\n" +
-                "Status: ${if (fee.isPaid) "Paid" else "Pending"}"
+                val status = if (fee.isPaid) "✅ Paid" else "⏳ Pending"
+                val dueStatus = if (fee.isPaid) "Paid on: ${fee.dueDate}" else "Due: ${fee.dueDate}"
+                
+                """
+                📚 Semester ${fee.semester}
+                💰 Total: ${formatter.format(fee.totalAmount)}
+                💳 Paid: ${formatter.format(fee.paidAmount)}
+                ⏰ $dueStatus
+                📊 Status: $status
+                """.trimIndent()
             }
-            
+
             androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Payment History")
+                .setTitle("📋 Complete Payment History")
                 .setMessage(historyText)
                 .setPositiveButton("OK", null)
                 .show()

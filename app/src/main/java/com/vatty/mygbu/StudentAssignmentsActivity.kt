@@ -130,15 +130,22 @@ class StudentAssignmentsActivity : AppCompatActivity() {
     }
     
     private fun showAssignmentDetailsDialog(assignment: StudentAssignment) {
+        val statusIcon = when (assignment.status) {
+            AssignmentStatus.PENDING -> "⏳"
+            AssignmentStatus.SUBMITTED -> "📤"
+            AssignmentStatus.GRADED -> "✅"
+            else -> "📋"
+        }
+        
         AlertDialog.Builder(this)
-            .setTitle("Assignment Details")
+            .setTitle("📚 Assignment Details")
             .setMessage("""
-                Title: ${assignment.title}
-                Description: ${assignment.description}
-                Due Date: ${assignment.dueDate}
-                Status: ${assignment.status}
+                $statusIcon Title: ${assignment.title}
+                📝 Description: ${assignment.description}
+                📅 Due Date: ${assignment.dueDate}
+                📊 Status: ${assignment.status}
                 
-                ${if (assignment.status == AssignmentStatus.PENDING) "Click Submit to upload your assignment file." else ""}
+                ${if (assignment.status == AssignmentStatus.PENDING) "💡 Click Submit to upload your assignment file." else ""}
             """.trimIndent())
             .setPositiveButton("Submit") { _, _ ->
                 if (assignment.status == AssignmentStatus.PENDING) {
@@ -151,13 +158,13 @@ class StudentAssignmentsActivity : AppCompatActivity() {
     
     private fun showSubmissionDetailsDialog(assignment: StudentAssignment) {
         AlertDialog.Builder(this)
-            .setTitle("Submission Details")
+            .setTitle("📤 Submission Details")
             .setMessage("""
-                Title: ${assignment.title}
-                Submitted On: ${assignment.submittedDate ?: "N/A"}
-                Status: ${assignment.status}
+                📚 Title: ${assignment.title}
+                📅 Submitted On: ${assignment.submittedDate ?: "N/A"}
+                📊 Status: ${assignment.status}
                 
-                Your assignment has been submitted successfully.
+                ✅ Your assignment has been submitted successfully!
             """.trimIndent())
             .setPositiveButton("OK", null)
             .show()
@@ -165,11 +172,11 @@ class StudentAssignmentsActivity : AppCompatActivity() {
     
     private fun showGradeDetailsDialog(assignment: StudentAssignment) {
         AlertDialog.Builder(this)
-            .setTitle("Grade Details")
+            .setTitle("📊 Grade Details")
             .setMessage("""
-                Title: ${assignment.title}
-                Score: ${assignment.score ?: "N/A"}
-                Feedback: ${assignment.feedback ?: "No feedback available"}
+                📚 Title: ${assignment.title}
+                🎯 Score: ${assignment.score ?: "N/A"}
+                💬 Feedback: ${assignment.feedback ?: "No feedback available"}
             """.trimIndent())
             .setPositiveButton("OK", null)
             .show()

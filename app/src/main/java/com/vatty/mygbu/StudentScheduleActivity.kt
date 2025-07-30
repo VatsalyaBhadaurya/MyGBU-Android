@@ -165,6 +165,150 @@ class StudentScheduleActivity : AppCompatActivity() {
                 teacher = "Dr. Amit Kumar",
                 room = "Lab-1",
                 type = "Practical"
+            ),
+            StudentTimetableItem(
+                id = "TT005",
+                day = "Tuesday",
+                time = "09:00 - 10:00",
+                subject = "Operating Systems",
+                teacher = "Dr. Meera Patel",
+                room = "A-102",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT006",
+                day = "Tuesday",
+                time = "10:00 - 11:00",
+                subject = "Software Engineering",
+                teacher = "Dr. Sanjay Verma",
+                room = "B-206",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT007",
+                day = "Tuesday",
+                time = "11:15 - 12:15",
+                subject = "Web Technologies",
+                teacher = "Dr. Anjali Gupta",
+                room = "C-302",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT008",
+                day = "Tuesday",
+                time = "14:00 - 16:00",
+                subject = "Database Lab",
+                teacher = "Dr. Priya Sharma",
+                room = "Lab-2",
+                type = "Practical"
+            ),
+            StudentTimetableItem(
+                id = "TT009",
+                day = "Wednesday",
+                time = "09:00 - 10:00",
+                subject = "Data Structures",
+                teacher = "Dr. Amit Kumar",
+                room = "A-101",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT010",
+                day = "Wednesday",
+                time = "10:00 - 11:00",
+                subject = "Database Systems",
+                teacher = "Dr. Priya Sharma",
+                room = "B-205",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT011",
+                day = "Wednesday",
+                time = "11:15 - 12:15",
+                subject = "Computer Networks",
+                teacher = "Dr. Rajesh Singh",
+                room = "C-301",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT012",
+                day = "Wednesday",
+                time = "14:00 - 16:00",
+                subject = "Networks Lab",
+                teacher = "Dr. Rajesh Singh",
+                room = "Lab-3",
+                type = "Practical"
+            ),
+            StudentTimetableItem(
+                id = "TT013",
+                day = "Thursday",
+                time = "09:00 - 10:00",
+                subject = "Operating Systems",
+                teacher = "Dr. Meera Patel",
+                room = "A-102",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT014",
+                day = "Thursday",
+                time = "10:00 - 11:00",
+                subject = "Software Engineering",
+                teacher = "Dr. Sanjay Verma",
+                room = "B-206",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT015",
+                day = "Thursday",
+                time = "11:15 - 12:15",
+                subject = "Web Technologies",
+                teacher = "Dr. Anjali Gupta",
+                room = "C-302",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT016",
+                day = "Thursday",
+                time = "14:00 - 16:00",
+                subject = "Web Development Lab",
+                teacher = "Dr. Anjali Gupta",
+                room = "Lab-1",
+                type = "Practical"
+            ),
+            StudentTimetableItem(
+                id = "TT017",
+                day = "Friday",
+                time = "09:00 - 10:00",
+                subject = "Data Structures",
+                teacher = "Dr. Amit Kumar",
+                room = "A-101",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT018",
+                day = "Friday",
+                time = "10:00 - 11:00",
+                subject = "Database Systems",
+                teacher = "Dr. Priya Sharma",
+                room = "B-205",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT019",
+                day = "Friday",
+                time = "11:15 - 12:15",
+                subject = "Computer Networks",
+                teacher = "Dr. Rajesh Singh",
+                room = "C-301",
+                type = "Lecture"
+            ),
+            StudentTimetableItem(
+                id = "TT020",
+                day = "Friday",
+                time = "14:00 - 16:00",
+                subject = "Project Work",
+                teacher = "Dr. Sanjay Verma",
+                room = "Lab-2",
+                type = "Project"
             )
         )
     }
@@ -173,19 +317,26 @@ class StudentScheduleActivity : AppCompatActivity() {
         // For now, we'll show in a dialog
         // In a real app, you would use a RecyclerView adapter
         val timetableText = timetable.joinToString("\n\n") { item ->
+            val typeIcon = when (item.type) {
+                "Lecture" -> "📚"
+                "Practical" -> "🔬"
+                "Project" -> "💻"
+                else -> "📖"
+            }
+            
             """
-            ${item.subject}
-            Time: ${item.time}
-            Teacher: ${item.teacher}
-            Room: ${item.room}
-            Type: ${item.type}
+            $typeIcon ${item.subject}
+            ⏰ Time: ${item.time}
+            👨‍🏫 Teacher: ${item.teacher}
+            🏢 Room: ${item.room}
+            📋 Type: ${item.type}
             """.trimIndent()
         }
-        
+
         // Show in a simple dialog for now
         if (tabLayout.selectedTabPosition == 0) {
             androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Today's Timetable")
+                .setTitle("📅 Today's Timetable")
                 .setMessage(timetableText)
                 .setPositiveButton("OK", null)
                 .show()
@@ -196,19 +347,19 @@ class StudentScheduleActivity : AppCompatActivity() {
         if (exams.isNotEmpty()) {
             val examText = exams.joinToString("\n\n") { exam ->
                 """
-                ${exam.courseName}
-                Type: ${exam.examType}
-                Date: ${exam.date}
-                Time: ${exam.time}
-                Duration: ${exam.duration}
-                Hall: ${exam.hallNumber}
-                Seat: ${exam.seatNumber}
+                📝 ${exam.courseName}
+                🏷️ Type: ${exam.examType}
+                📅 Date: ${exam.date}
+                ⏰ Time: ${exam.time}
+                ⏱️ Duration: ${exam.duration}
+                🏢 Hall: ${exam.hallNumber}
+                🪑 Seat: ${exam.seatNumber}
                 """.trimIndent()
             }
-            
+
             if (tabLayout.selectedTabPosition == 1) {
                 androidx.appcompat.app.AlertDialog.Builder(this)
-                    .setTitle("Upcoming Exams")
+                    .setTitle("📋 Upcoming Exams")
                     .setMessage(examText)
                     .setPositiveButton("OK", null)
                     .show()

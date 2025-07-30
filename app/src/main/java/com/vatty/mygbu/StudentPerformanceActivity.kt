@@ -166,20 +166,29 @@ class StudentPerformanceActivity : AppCompatActivity() {
     private fun showDetailedReport() {
         val performance = repository.getStudentPerformance("STU001")
         if (performance.isNotEmpty()) {
-            val report = performance.joinToString("\n\n") { perf ->
+            val reportText = performance.joinToString("\n\n") { perf ->
+                val gradeIcon = when (perf.grade) {
+                    "A+" -> "🏆"
+                    "A" -> "🥇"
+                    "A-" -> "🥈"
+                    "B+" -> "🥉"
+                    "B" -> "📊"
+                    else -> "📈"
+                }
+                
                 """
-                Course: ${perf.courseName}
-                Attendance: ${perf.attendancePercentage}%
-                Assignment Score: ${perf.assignmentScore}
-                Exam Score: ${perf.examScore}
-                Total Score: ${perf.totalScore}
-                Grade: ${perf.grade}
+                $gradeIcon ${perf.courseName}
+                📊 Attendance: ${perf.attendancePercentage}%
+                📝 Assignment Score: ${perf.assignmentScore}%
+                📋 Exam Score: ${perf.examScore}%
+                🎯 Total Score: ${perf.totalScore}%
+                🏅 Grade: ${perf.grade}
                 """.trimIndent()
             }
-            
+
             androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Detailed Performance Report")
-                .setMessage(report)
+                .setTitle("📊 Detailed Performance Report")
+                .setMessage(reportText)
                 .setPositiveButton("OK", null)
                 .show()
         } else {

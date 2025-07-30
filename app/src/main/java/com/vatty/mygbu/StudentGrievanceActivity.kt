@@ -97,19 +97,35 @@ class StudentGrievanceActivity : AppCompatActivity() {
         // For now, we'll show them in a dialog
         // In a real app, you would use a RecyclerView adapter
         val grievanceText = grievances.joinToString("\n\n") { grievance ->
+            val statusIcon = when (grievance.status) {
+                GrievanceStatus.PENDING -> "⏳"
+                GrievanceStatus.IN_PROGRESS -> "🔄"
+                GrievanceStatus.RESOLVED -> "✅"
+                GrievanceStatus.REJECTED -> "❌"
+                else -> "📋"
+            }
+            
+            val categoryIcon = when (grievance.category) {
+                "Academic" -> "📚"
+                "Hostel" -> "🏠"
+                "Mess" -> "🍽️"
+                "Technical" -> "💻"
+                else -> "📋"
+            }
+            
             """
-            ID: ${grievance.id}
-            Category: ${grievance.category}
-            Subject: ${grievance.subject}
-            Status: ${grievance.status}
-            Submitted: ${grievance.submittedDate}
-            ${if (grievance.response != null) "Response: ${grievance.response}" else ""}
+            $statusIcon Grievance ID: ${grievance.id}
+            $categoryIcon Category: ${grievance.category}
+            📝 Subject: ${grievance.subject}
+            📊 Status: ${grievance.status}
+            📅 Submitted: ${grievance.submittedDate}
+            ${if (grievance.response != null) "💬 Response: ${grievance.response}" else ""}
             """.trimIndent()
         }
-        
+
         // Show in a simple dialog for now
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Your Grievances")
+            .setTitle("📋 Your Grievances")
             .setMessage(grievanceText)
             .setPositiveButton("OK", null)
             .show()

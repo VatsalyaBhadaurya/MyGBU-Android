@@ -153,18 +153,26 @@ class StudentPlacementActivity : AppCompatActivity() {
         val placements = repository.getStudentPlacements("STU001")
         if (placements.isNotEmpty()) {
             val applicationsText = placements.joinToString("\n\n") { placement ->
+                val statusIcon = when (placement.status) {
+                    PlacementStatus.APPLIED -> "📤"
+                    PlacementStatus.INTERVIEW_SCHEDULED -> "📅"
+                    PlacementStatus.SELECTED -> "✅"
+                    PlacementStatus.REJECTED -> "❌"
+                    else -> "📋"
+                }
+                
                 """
-                Company: ${placement.companyName}
-                Position: ${placement.position}
-                Package: ${placement.packageAmount}
-                Status: ${placement.status}
-                Applied: ${placement.appliedDate}
-                ${if (placement.interviewDate != null) "Interview: ${placement.interviewDate}" else ""}
+                $statusIcon Company: ${placement.companyName}
+                💼 Position: ${placement.position}
+                💰 Package: ${placement.packageAmount}
+                📊 Status: ${placement.status}
+                📅 Applied: ${placement.appliedDate}
+                ${if (placement.interviewDate != null) "🎯 Interview: ${placement.interviewDate}" else ""}
                 """.trimIndent()
             }
-            
+
             androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("My Applications")
+                .setTitle("📋 My Applications")
                 .setMessage(applicationsText)
                 .setPositiveButton("OK", null)
                 .show()
